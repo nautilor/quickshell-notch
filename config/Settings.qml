@@ -23,6 +23,9 @@ Singleton {
 	property alias weekStartsMonday: adapter.weekStartsMonday
 	property alias use24h: adapter.use24h
 	property alias showClock: adapter.showClock
+	property alias showDate: adapter.showDate
+	property alias showBattery: adapter.showBattery
+	property alias showDateHome: adapter.showDateHome
 	property alias caffeineOnMessage: adapter.caffeineOnMessage
 	property alias caffeineOffMessage: adapter.caffeineOffMessage
 	property alias micOnMessage: adapter.micOnMessage
@@ -63,6 +66,9 @@ Singleton {
 			property bool weekStartsMonday: true
 			property bool use24h: true
 			property bool showClock: false
+			property bool showDate: false
+			property bool showBattery: false
+			property bool showDateHome: false
 			property string caffeineOnMessage: "Caffeine on · staying awake"
 			property string caffeineOffMessage: "Caffeine off"
 			property string micOnMessage: "Microphone live"

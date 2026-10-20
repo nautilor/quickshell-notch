@@ -71,7 +71,7 @@ Caffeine, microphone, volume and brightness changes show in the notch. The caffe
 - Opens when you hover it, when you click it, or through IPC and keybinds. Closes when the pointer leaves, unless pinned. The pin button in the header keeps it open; Escape or a click outside closes a pinned notch.
 - "Home on hover": hovering always opens the Home tab (default on). Keybinds and IPC open the tab you asked for.
 - Autohide: the idle notch slides off the top edge; hover the top edge to bring it back. Notifications and on-screen messages still appear.
-- Optional clock in the middle of the closed notch.
+- Optional clock, date and battery percentage on the closed notch (each its own setting). The battery icon is green while charging, accent-coloured when full, red when low.
 - Multi-monitor: show on one screen (the first, or the one named by `screenName`) or on all screens. With several notches, hover opens only the one you hovered, and keybinds open the one on the focused monitor.
 - Rounded screen corners on every screen (click-through overlay, adjustable radius).
 - Springy open/close animation, with concave "ears" at the top corners like a hardware notch.
@@ -80,7 +80,8 @@ Caffeine, microphone, volume and brightness changes show in the notch. The caffe
 - Media player (any MPRIS player, for example Spotify or a browser): album art with rounded corners that squares up when paused, title, artist, seek bar, previous, play/pause, next.
 - Hyprland workspaces: shows the existing ones, highlights the active one as a wide pill, click to switch.
 - Quick toggles that morph shape when switched on: Wi-Fi, Bluetooth, Caffeine, Mic, Silent (do not disturb).
-- Power profile switch for power-profiles-daemon: Saver, Balanced, Boost (Boost only if the hardware offers it).
+- Power profile for power-profiles-daemon as one segmented control: Saver, Balanced, Performance (Performance only if the hardware offers it).
+- Optional date next to the clock in the header (Settings → Date on Home tab).
 - System tray (StatusNotifier): left click activates, middle click triggers the secondary action, right click opens the app's menu inside the notch, including submenus.
 - Next event card from Google Calendar; click it to open the Calendar tab.
 
@@ -97,7 +98,7 @@ Caffeine, microphone, volume and brightness changes show in the notch. The caffe
 - Week view with day headers, an all-day row, an hourly grid, a "now" line, and today highlighted. Previous / next week, Today and refresh buttons. Refreshes every 10 minutes.
 - Overlapping events are laid out in side-by-side lanes. Events use their Google calendar colour.
 - Click an event for details (time, location, calendar).
-- Manage events: **New** button, or click an empty slot to create an event at that hour. Edit and delete from the event card. The editor has title, calendar, all-day, start and end, location, and validates dates and times.
+- Manage events: the **Create** button in the bottom right corner, or click an empty slot to create an event at that hour. Edit and delete from the event card. The editor has title, calendar, all-day, start and end, location, and validates dates and times.
 - Sign in and out of Google, with a clear message if setup is missing.
 
 **Notifications**
@@ -112,7 +113,8 @@ Caffeine, microphone, volume and brightness changes show in the notch. The caffe
 - Volume and brightness show a slider with the percentage. They react to changes made by anything: PipeWire for volume, a udev monitor for brightness, so existing `wpctl` and `brightnessctl` keybinds just work.
 
 **Power tab**
-- Lock (hyprlock), log out, reboot, power off. Everything except Lock needs a second tap within three seconds.
+- Lock (hyprlock), log out, reboot, power off. Everything except Lock needs a second press or tap within three seconds.
+- Keyboard: Left/Right (or Tab) to move, Enter or Space to activate, 1 to 4 to jump straight to an action.
 
 ## Settings
 Open the Settings tab. Everything is saved to `~/.config/quickshell-notch/settings.json`.
@@ -125,6 +127,9 @@ Open the Settings tab. Everything is saved to `~/.config/quickshell-notch/settin
 | Rounded screen corners | Round every screen corner |
 | Show on all screens | One notch per screen |
 | Clock on closed notch | Time in the middle of the idle notch |
+| Date on closed notch | Date in the middle of the idle notch |
+| Battery on closed notch | Battery percentage on the idle notch |
+| Date on Home tab | Date next to the clock in the header |
 | Autohide | Slide the idle notch off screen |
 | Do not disturb | Keep notifications, do not show them |
 | Notification time | How long a notification stays out |

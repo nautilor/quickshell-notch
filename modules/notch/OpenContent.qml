@@ -144,15 +144,21 @@ Item {
 				name: Battery.icon
 				size: 18
 				fill: 1
-				color: Theme.surfaceVariantFg
+				color: Battery.color
 				anchors.verticalCenter: parent.verticalCenter
 			}
 			Txt {
 				text: Battery.percent + "%"
 				font.pixelSize: 12
-				color: Theme.surfaceVariantFg
+				color: Battery.color
 				anchors.verticalCenter: parent.verticalCenter
 			}
+		}
+		Txt {
+			visible: Settings.showDateHome && NotchCtl.tab === "home"
+			text: Qt.formatDate(clock.now, "dddd d MMMM")
+			color: Theme.surfaceVariantFg
+			anchors.verticalCenter: parent.verticalCenter
 		}
 		Txt {
 			id: clock
