@@ -13,6 +13,8 @@ A [Boring Notch](https://github.com/TheBoredTeam/boring.notch)-style island for 
 - [Keybinds and IPC](#keybinds-and-ipc)
 - [Project layout](#project-layout)
 
+The reasoning behind the look and behaviour is in [DESIGN.md](DESIGN.md).
+
 ## Install and run
 Requirements: Quickshell 0.3+, Hyprland, PipeWire, UPower, power-profiles-daemon, NetworkManager, BlueZ, `brightnessctl`, `clipse` + `wl-clipboard`, `systemd` (for caffeine and power actions), `hyprlock`, Python 3, and the JetBrainsMono Nerd Font.
 
