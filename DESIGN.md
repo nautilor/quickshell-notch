@@ -69,7 +69,7 @@ The look is Material 3 Expressive: very rounded shapes, tonal colour, big touch-
 
 - **Header + body.** Every open tab shares a header: tab pills on the left, status on the right (caffeine, mic, battery, date and clock, pin). The body is below.
 - **Tab bar.** Icons only, except the active tab, which expands to show its label. This keeps eight tabs in a narrow bar and still names where you are.
-- **Home** is a two-column dashboard. Left: the media card. Right: workspaces and tray, five equal toggles, the power-profile control, the next event. The player takes the left because it is the most visual element, and the right side is dense but regular.
+- **Home** is a user-editable grid (8 columns, up to 6 rows, 82 × 66 cells with 8 px gaps), so the 8 px rhythm holds however it is rearranged. Edit mode dims the widgets, outlines each one, and shows a ghost of the snapped drop spot, green-tinted when it fits and red when it collides. The default is a two-column dashboard. Left: the media card. Right: workspaces and tray, five equal toggles, the power-profile control, the next event. The player takes the left because it is the most visual element, and the right side is dense but regular.
 - **Equal weights.** Toggles share the width equally (`preferredWidth` set to the same value), so labels of different lengths do not make tiles of different sizes.
 - **Spacing.** An 8 px base grid: 8 between related items, 10–12 between groups, 12–14 around cards and panels. Right and left margins are the same everywhere, and the tab content has extra room at the bottom to clear the rounded corners.
 - **Compact notifications.** The peek uses a 40 px icon, tight text and 28–32 px buttons. It is a glance, not a card, so it stays slim.

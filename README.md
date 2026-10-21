@@ -33,6 +33,10 @@ Media player with seek bar, workspace switcher, quick toggles (Wi-Fi, Bluetooth,
 
 ![Home tab](docs/screenshots/home.png)
 
+Edit mode: move, resize, configure or remove widgets, add new ones.
+
+![Home edit mode](docs/screenshots/home-edit.png)
+
 ### Apps
 Application launcher: type to search, arrows to move, Enter to launch. Apps you launch often rise to the top.
 
@@ -78,7 +82,11 @@ Caffeine, microphone, volume and brightness changes show in the notch. The caffe
 - Rounded screen corners on every screen (click-through overlay, adjustable radius).
 - Springy open/close animation, with concave "ears" at the top corners like a hardware notch.
 
-**Home tab**
+**Home tab (customisable)**
+- The Home dashboard is a grid of widgets. Press the pencil in the header to edit: drag a widget to move it, drag its corner handle to resize it, use the gear to configure it or the cross to remove it. Dropping onto an occupied spot: hold still for a moment and the widget underneath swaps places with yours (when it fits) or the others shuffle aside to the nearest free space; the preview turns green when it works and stays red when it can't. **Add** opens the widget catalogue and **Reset** restores the default layout. The layout is saved in `settings.json`.
+- Widgets: media player, workspaces, system tray, quick toggle (Wi-Fi, Bluetooth, caffeine, mic, do not disturb; pick which and its label), power profile, next event, clock (time, seconds, date, date format), battery, volume or brightness slider, note, command button, command output, and your own QML file.
+- Custom widgets: a **command button** runs a shell command (choose icon and label); **command output** shows a command's output, refreshed every N seconds, with an optional click command; **QML file** loads any file from `~/.config/quickshell-notch/widgets/` (see `docs/examples/Hello.qml`).
+- Home tab contents (previous fixed layout, now the default):
 - Media player (any MPRIS player, for example Spotify or a browser): album art with rounded corners that squares up when paused, title, artist, seek bar, previous, play/pause, next.
 - Hyprland workspaces: shows the existing ones, highlights the active one as a wide pill, click to switch.
 - Quick toggles that morph shape when switched on: Wi-Fi, Bluetooth, Caffeine, Mic, Silent (do not disturb).
@@ -166,6 +174,7 @@ All calls go to the `notch` target:
 | `toggle`, `close` | Open (Home) or close |
 | `open <tab>` | `home`, `apps`, `clipboard`, `calendar`, `notifications`, `power`, `settings` |
 | `launcher`, `clipboard`, `calendar`, `notifications`, `power` | Toggle that tab |
+| `homeEdit` | Open Home and toggle edit mode |
 | `caffeine`, `mic`, `dnd` | Toggle caffeine, microphone mute, do not disturb |
 | `volumeUp`, `volumeDown`, `volumeMute` | Change volume (5% steps) and show the slider |
 | `brightnessUp`, `brightnessDown` | Change brightness (5% steps) and show the slider |

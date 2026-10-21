@@ -13,6 +13,7 @@ Singleton {
 	property alias hue: adapter.hue
 	property alias hoverOpen: adapter.hoverOpen
 	property alias dnd: adapter.dnd
+	property alias homeLayout: adapter.homeLayout
 	property alias homeOnHover: adapter.homeOnHover
 	property alias screenCorners: adapter.screenCorners
 	property alias cornerRadius: adapter.cornerRadius
@@ -56,6 +57,8 @@ Singleton {
 			property real hue: 0.53
 			property bool hoverOpen: true
 			property bool dnd: false
+			// customised Home dashboard: {v: 1, items: [...]}; empty = built-in default
+			property var homeLayout: ({})
 			property bool homeOnHover: true
 			property bool screenCorners: true
 			property real cornerRadius: 20
