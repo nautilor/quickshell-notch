@@ -10,6 +10,7 @@ A [Boring Notch](https://github.com/TheBoredTeam/boring.notch)-style island for 
 - [Everything it does](#everything-it-does)
 - [Settings](#settings)
 - [Google Calendar setup](#google-calendar-setup)
+- [Lock screen](#lock-screen)
 - [Keybinds and IPC](#keybinds-and-ipc)
 - [Project layout](#project-layout)
 
@@ -123,7 +124,7 @@ Caffeine, microphone, volume and brightness changes show in the notch. The caffe
 - Volume and brightness show a slider with the percentage. They react to changes made by anything: PipeWire for volume, a udev monitor for brightness, so existing `wpctl` and `brightnessctl` keybinds just work.
 
 **Power tab**
-- Lock (hyprlock), log out, reboot, power off. Everything except Lock needs a second press or tap within three seconds.
+- Lock (the built-in lock screen, or hyprlock if you turn that off), log out, reboot, power off. Everything except Lock needs a second press or tap within three seconds.
 - Keyboard: Left/Right (or Tab) to move, Enter or Space to activate, 1 to 4 to jump straight to an action.
 
 ## Settings
@@ -146,9 +147,10 @@ Open the Settings tab. Everything is saved to `~/.config/quickshell-notch/settin
 | 24-hour clock | Clock and calendar time format |
 | Week starts on Monday | Calendar week layout |
 | Custom messages | Texts for caffeine on/off and mic live/muted |
+| Built-in lock screen | Lock button uses the built-in lock screen instead of hyprlock |
 | Google Calendar | Sign in / sign out |
 
-Only in `settings.json`: `screenName` (which screen to use when not showing on all) and `cornerRadius` (screen corner size, default 20).
+Only in `settings.json`: `lockWallpaper` and `lockAvatar` (image paths for the lock screen), `lockPam` (PAM service, default `hyprlock`), `lockPamDir` (folder with your own PAM service file), `screenName` (which screen to use when not showing on all) and `cornerRadius` (screen corner size, default 20).
 
 ## Google Calendar setup
 Uses `scripts/gcal.py` (Python standard library only, OAuth with PKCE on a local loopback port).
@@ -157,6 +159,28 @@ Uses `scripts/gcal.py` (Python standard library only, OAuth with PKCE on a local
 3. Open the Calendar tab and press **Sign in with Google**. The token is stored in `~/.local/share/quickshell-island/gcal-token.json` (mode 600).
 
 Editing needs the calendar.events scope. If the tab asks you to sign in again, an older read-only token was found.
+
+## Lock screen
+The notch includes an Expressive Material lock screen (`modules/lock/`) that replaces hyprlock. It uses the Wayland session-lock protocol, so the compositor shows nothing else until you authenticate, and it checks the password through PAM. It shows a blurred wallpaper, a big clock, your avatar and name, a password field with animated dots (wrong passwords shake the card), and Sleep, Restart and Power off buttons. Typing works straight away; Enter or the arrow unlocks, Escape or Ctrl+Backspace clears the field. It follows your accent colour and appears on every screen.
+
+![Lock screen](docs/screenshots/lock.png)
+
+### Moving from hyprlock
+1. **Quickshell must be running before you lock**, because the lock lives inside it. If it is not running, `qs ipc call notch lock` fails and nothing locks.
+2. **Safety net.** If Quickshell crashes while locked, Hyprland stays locked and shows its "lockscreen died" screen. Add this to your Hyprland config so that starting Quickshell again (from a TTY: `quickshell -p <this folder>`) can take over the lock and let you in:
+   - `hyprland.conf`: `misc { allow_session_lock_restore = true }`
+   - Lua config: `misc = { allow_session_lock_restore = true }`
+
+   Without it, the recovery is the command Hyprland prints on that screen: from a TTY, `hyprctl --instance 0 eval 'hl.clear_crashed_lockscreen()'`.
+3. **Check the PAM service.** Passwords are checked with the PAM service named in `lockPam` (default `hyprlock`, which exists while hyprlock is installed or enabled, for example `programs.hyprlock.enable = true` on NixOS). If you remove hyprlock, set `lockPam` to another service in `/etc/pam.d` (`login`, `system-auth`, `swaylock`), or put your own file in a folder and point `lockPamDir` at it, with `lockPam` set to the file name. A service that does not exist makes unlocking fail with "Authentication service ... is not usable", so test it first.
+4. **Set the images** (optional) in `~/.config/quickshell-notch/settings.json`: `"lockWallpaper": "/home/you/.config/hypr/assets/wallpaper.png"` and `"lockAvatar": "/home/you/.config/hypr/assets/profile.jpg"`. Without them you get a plain background and the first letter of your name.
+5. **Point the triggers at it.**
+   - A keybind that ran `hyprlock`: `bind = SUPER, L, exec, qs ipc call notch lock`. In a Lua config: `bind(SHIFT .. " + M", run("qs ipc call notch lock"))`.
+   - hypridle: change `lock_cmd = pidof hyprlock || hyprlock` to `lock_cmd = qs ipc call notch lock`. Keep `before_sleep_cmd = loginctl lock-session` and `on-timeout = loginctl lock-session`; they call `lock_cmd`. Locking twice is harmless.
+   - The Power tab's Lock button uses the built-in screen by default. Turn off Settings → Built-in lock screen to go back to hyprlock.
+6. **Try it** with `qs ipc call notch lock` while you can still reach a TTY, and check that your password unlocks it before you rely on it.
+
+Limits: password only (no fingerprint or other PAM prompts), no keyboard layout or caps-lock indicator, no notifications on the lock screen.
 
 ## Keybinds and IPC
 ```
@@ -174,6 +198,7 @@ All calls go to the `notch` target:
 | `toggle`, `close` | Open (Home) or close |
 | `open <tab>` | `home`, `apps`, `clipboard`, `calendar`, `notifications`, `power`, `settings` |
 | `launcher`, `clipboard`, `calendar`, `notifications`, `power` | Toggle that tab |
+| `lock` | Lock the session with the built-in lock screen |
 | `homeEdit` | Open Home and toggle edit mode |
 | `caffeine`, `mic`, `dnd` | Toggle caffeine, microphone mute, do not disturb |
 | `volumeUp`, `volumeDown`, `volumeMute` | Change volume (5% steps) and show the slider |
@@ -184,6 +209,7 @@ Opened this way the notch stays until you press Escape, click outside, or toggle
 ## Project layout
 - `shell.qml`: entry point, creates the notches, screen corners and IPC handler.
 - `config/`: `Settings` (persisted settings), `Theme` (colours, shapes, motion), `Glyphs` (icon name to Nerd Font code point).
+- `modules/lock/`: the lock screen (`LockScreen` session lock, `LockSurface` per-screen UI); `services/LockCtl` holds its state and the PAM conversation.
 - `services/`: singletons for the notch state, notifications, media, audio, brightness, battery, caffeine, mic, clipboard (clipse), apps, Google Calendar, power actions and on-screen messages.
 - `components/`: reusable widgets (buttons, switches, text fields, icons, rounded images, media card, workspace row, quick toggles, tray, event editor...).
 - `modules/notch/`: the notch window, its shape, idle/peek/message content and the tabs.
