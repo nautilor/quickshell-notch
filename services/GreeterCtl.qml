@@ -20,7 +20,7 @@ Singleton {
 	// [{name, full}]
 	property var users: []
 	// [{name, command}]
-	property var sessions: [{ name: "Hyprland", command: "Hyprland" }]
+	property var sessions: [{ name: "Hyprland", command: "start-hyprland" }]
 	property string user: ""
 	property int sessionIndex: 0
 	readonly property var session: sessions[Math.min(sessionIndex, sessions.length - 1)]

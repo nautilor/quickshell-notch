@@ -9,6 +9,8 @@ let
   src = builtins.path { path = cfg.src; name = "quickshell-notch"; };
   greeterJson = pkgs.writeText "greeter.json" (builtins.toJSON {
     inherit (cfg) hue user session;
+    # Hyprland must be started through start-hyprland, a bare Hyprland exits at once
+    sessions = [ { name = "Hyprland"; command = "${pkgs.hyprland}/bin/start-hyprland"; } ];
     wallpaper = if cfg.wallpaper == null then "" else "${cfg.wallpaper}";
     avatars = lib.mapAttrs (_: p: "${p}") cfg.avatars;
   });
@@ -41,7 +43,7 @@ in
       enable = true;
       settings.default_session = {
         user = "greeter";
-        command = "${pkgs.hyprland}/bin/Hyprland --config ${hyprConf}";
+        command = "${pkgs.hyprland}/bin/start-hyprland -- --config ${hyprConf}";
       };
     };
 
