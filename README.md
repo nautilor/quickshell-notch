@@ -11,6 +11,7 @@ A [Boring Notch](https://github.com/TheBoredTeam/boring.notch)-style island for 
 - [Settings](#settings)
 - [Google Calendar setup](#google-calendar-setup)
 - [Lock screen](#lock-screen)
+- [Login screen (greetd)](#login-screen-greetd)
 - [Keybinds and IPC](#keybinds-and-ipc)
 - [Project layout](#project-layout)
 
@@ -182,6 +183,106 @@ The notch includes an Expressive Material lock screen (`modules/lock/`) that rep
 
 Limits: password only (no fingerprint or other PAM prompts), no keyboard layout or caps-lock indicator, no notifications on the lock screen.
 
+## Login screen (greetd)
+`greeter.qml` is the same Expressive Material look as a login screen for [greetd](https://sr.ht/~kennylevinsen/greetd/): blurred wallpaper, clock, the user's avatar and name, a password field, a session picker (Hyprland, or any session with a `.desktop` file in `wayland-sessions`), a user picker when there is more than one user, and Sleep, Restart and Power off. It remembers the last user and session. Wrong passwords shake the card and show greetd's message; extra PAM questions (a one-time code) appear as a new prompt.
+
+![Login screen](docs/screenshots/greeter.png)
+
+How it runs: greetd starts a small Wayland compositor as the `greeter` user, the compositor starts `quickshell -p greeter.qml`, and when you log in the greeter hands over to your session and the compositor exits. The compositor must support layer-shell: Hyprland (used below), sway or niri work; `cage` does not. Everything the greeter reads must be readable by the `greeter` user, so the repo cannot stay in your home folder.
+
+Settings live in `/etc/quickshell-notch/greeter.json` (or the file named by `$QS_GREETER_CONFIG`); all keys are optional:
+
+| Key | Meaning |
+| --- | --- |
+| `wallpaper` | Background image, readable by `greeter` |
+| `hue` | Accent hue, 0 to 1 (same as Accent colour in Settings) |
+| `user` | User selected when nothing is remembered |
+| `session` | Session name selected when nothing is remembered |
+| `sessions` | `[{ "name": "Hyprland", "command": "start-hyprland" }]`, to skip scanning `wayland-sessions` |
+| `avatars` | `{ "alice": "/etc/quickshell-notch/alice.png" }`; otherwise `/var/lib/AccountsService/icons/<user>`, then the first letter of the name |
+| `use24h` | 24-hour clock |
+| `env` | Environment for the session, default `["XDG_SESSION_TYPE=wayland"]` |
+
+### Set it up (any distribution)
+Needs `greetd`, Hyprland, Quickshell 0.3+ and the JetBrainsMono Nerd Font installed system-wide (the greeter user cannot see fonts in your home folder).
+1. **Keep a way back.** Know how to reach a TTY (Ctrl+Alt+F3) and how to switch back to your old display manager (`sudo systemctl enable --now sddm`). Do not restart greetd from inside your session while testing: it ends the session.
+2. **Copy the repo and settings** where the greeter can read them:
+   ```
+   sudo mkdir -p /etc/quickshell-notch
+   sudo cp -r . /etc/quickshell-notch/
+   sudo cp greeter/greeter.json /etc/quickshell-notch/greeter.json
+   sudo cp ~/Pictures/wallpaper.png /etc/quickshell-notch/wallpaper.png
+   sudo install -d -o greeter -g greeter /var/cache/quickshell-notch
+   ```
+   Edit `/etc/quickshell-notch/greeter.json` (wallpaper path, hue, user).
+3. **Point greetd at it.** Use `/etc/quickshell-notch/greeter/hyprland.lua` if your Hyprland uses a Lua config (0.55+), or `hyprland.conf` otherwise (that format is removed in 0.57). In `/etc/greetd/config.toml`:
+   ```
+   [terminal]
+   vt = 1
+
+   [default_session]
+   command = "start-hyprland -- --config /etc/quickshell-notch/greeter/hyprland.lua"
+   user = "greeter"
+   ```
+   If your Hyprland has no `start-hyprland`, use `Hyprland --config <file>`. The `greeter` user must exist (`sudo useradd -M -G video greeter` if the package did not create it).
+4. **Switch display manager and reboot.**
+   ```
+   sudo systemctl disable sddm      # or gdm, lightdm...
+   sudo systemctl enable greetd
+   sudo reboot
+   ```
+5. **If the screen stays black**, press Ctrl+Alt+F3, log in, and read `journalctl -u greetd -b`. Re-enable your old display manager with `sudo systemctl disable greetd && sudo systemctl enable sddm`.
+
+To update later, copy the repo again (`sudo cp -r . /etc/quickshell-notch/`).
+
+### Set it up (NixOS, with the flake)
+The repo is a flake that exports the greeter as a NixOS module, so you reference it from your own flake and nothing is copied by hand. The module copies the repo, the wallpaper and the avatar into the Nix store (readable by the `greeter` user), installs greetd with a Hyprland greeter session, writes `greeter.json`, creates the cache folder and installs the font.
+1. **Make the files visible to Nix.** Flakes only see files tracked by git, so in this repo run `git add flake.nix assets greeter greeter.qml services components` (and commit). `assets/wallpaper.png` and `assets/profile.png` are the default background and avatar.
+2. **Add the repo as an input** in your `flake.nix` and import the module:
+   ```nix
+   {
+     inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+     # a local checkout; a git URL such as github:you/quickshell-notch works too
+     inputs.quickshell-notch.url = "git+file:///home/alice/Sources/PERSONAL/quickshell-notch";
+     inputs.quickshell-notch.inputs.nixpkgs.follows = "nixpkgs";   # optional
+
+     outputs = { nixpkgs, quickshell-notch, ... }: {
+       nixosConfigurations.myhost = nixpkgs.lib.nixosSystem {
+         system = "x86_64-linux";
+         modules = [
+           ./configuration.nix
+           quickshell-notch.nixosModules.greeter
+           ({ ... }: {
+             services.quickshellNotchGreeter = {
+               enable = true;
+               user = "alice";                                              # first selected user
+               avatars.alice = quickshell-notch + "/assets/profile.png";    # picture shown for alice
+               # wallpaper defaults to assets/wallpaper.png of the repo; override with any path:
+               # wallpaper = ./wallpaper.png;
+               # hue = 0.53;
+             };
+             services.displayManager.sddm.enable = false;   # or gdm / lightdm: only one display manager
+           })
+         ];
+       };
+     };
+   }
+   ```
+   There is no `$HOME` in Nix: paths are real paths (`./file`, `inputs.x + "/file"`), never strings like `"$HOME/..."`.
+3. **Update the input and build for the next boot** (switching does not restart a running display manager, and a login screen is safest to try from the boot menu):
+   ```
+   nix flake update quickshell-notch
+   sudo nixos-rebuild boot --flake .#myhost
+   sudo reboot
+   ```
+4. If something is wrong, pick the previous generation in the boot menu. That brings back your old login screen.
+
+Module options: `enable`, `src` (the repo, default is the flake itself), `wallpaper` (default `assets/wallpaper.png`), `avatars` (`{ user = path; }`), `hue`, `user`, `session`.
+
+Without the flake: `imports = [ /path/to/quickshell-notch/greeter/nixos.nix ];` works the same, with `src` pointing at the repo.
+
+Limits: password only (no fingerprint prompts as a first step), no on-screen keyboard, and the user picker lists accounts with a UID of 1000 to 59999 and a real shell.
+
 ## Keybinds and IPC
 ```
 bind = SUPER, Space,  exec, qs ipc call notch launcher
@@ -209,6 +310,9 @@ Opened this way the notch stays until you press Escape, click outside, or toggle
 ## Project layout
 - `shell.qml`: entry point, creates the notches, screen corners and IPC handler.
 - `config/`: `Settings` (persisted settings), `Theme` (colours, shapes, motion), `Glyphs` (icon name to Nerd Font code point).
+- `flake.nix`: exports the login screen as a NixOS module (`nixosModules.greeter`).
+- `greeter.qml`, `services/GreeterCtl.qml`, `greeter/`: the greetd login screen, its state and its example configs (Hyprland Lua and classic, greetd, NixOS module).
+- `components/AuthScreen.qml`: the card, clock and password field shared by the lock screen and the login screen.
 - `modules/lock/`: the lock screen (`LockScreen` session lock, `LockSurface` per-screen UI); `services/LockCtl` holds its state and the PAM conversation.
 - `services/`: singletons for the notch state, notifications, media, audio, brightness, battery, caffeine, mic, clipboard (clipse), apps, Google Calendar, power actions and on-screen messages.
 - `components/`: reusable widgets (buttons, switches, text fields, icons, rounded images, media card, workspace row, quick toggles, tray, event editor...).

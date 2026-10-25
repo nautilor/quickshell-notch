@@ -1,0 +1,8 @@
+# /etc/greetd/config.toml
+[terminal]
+vt = 1
+
+[default_session]
+# Lua config (Hyprland 0.55+). With the classic format use /etc/quickshell-notch/greeter/hyprland.conf.
+command = "start-hyprland -- --config /etc/quickshell-notch/greeter/hyprland.lua"
+user = "greeter"

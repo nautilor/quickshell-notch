@@ -1,0 +1,9 @@
+{
+    "wallpaper": "/etc/quickshell-notch/wallpaper.png",
+    "hue": 0.53,
+    "user": "",
+    "session": "Hyprland",
+    "use24h": true,
+    "avatars": {},
+    "env": ["XDG_SESSION_TYPE=wayland"]
+}
