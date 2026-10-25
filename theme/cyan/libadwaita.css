@@ -1,0 +1,110 @@
+/* quickshell-notch: cyan, for ~/.config/gtk-4.0/gtk.css */
+/* libadwaita named colours, derived from the quickshell-notch palette */
+@define-color accent_color #a0d7e3;
+@define-color accent_bg_color #a0d7e3;
+@define-color accent_fg_color #0c333b;
+@define-color destructive_color #f2b8b5;
+@define-color destructive_bg_color #8c1d18;
+@define-color destructive_fg_color #f9dedc;
+@define-color success_color #7bd88f;
+@define-color success_bg_color #7bd88f;
+@define-color success_fg_color #0b2d14;
+@define-color warning_color #e8c26a;
+@define-color warning_bg_color #e8c26a;
+@define-color warning_fg_color #2e2200;
+@define-color error_color #f2b8b5;
+@define-color error_bg_color #8c1d18;
+@define-color error_fg_color #f9dedc;
+@define-color window_bg_color #121819;
+@define-color window_fg_color #e9eced;
+@define-color view_bg_color #0d1112;
+@define-color view_fg_color #e9eced;
+@define-color headerbar_bg_color #182122;
+@define-color headerbar_fg_color #e9eced;
+@define-color headerbar_border_color #394446;
+@define-color headerbar_backdrop_color #121819;
+@define-color headerbar_shade_color rgba(0, 0, 0, 0.36);
+@define-color headerbar_darker_shade_color rgba(0, 0, 0, 0.36);
+@define-color sidebar_bg_color #151c1e;
+@define-color sidebar_fg_color #e9eced;
+@define-color sidebar_backdrop_color #121819;
+@define-color sidebar_border_color #394446;
+@define-color sidebar_shade_color rgba(0, 0, 0, 0.36);
+@define-color secondary_sidebar_bg_color #121819;
+@define-color secondary_sidebar_fg_color #e9eced;
+@define-color secondary_sidebar_backdrop_color #121819;
+@define-color secondary_sidebar_border_color #394446;
+@define-color secondary_sidebar_shade_color rgba(0, 0, 0, 0.36);
+@define-color card_bg_color #1c2527;
+@define-color card_fg_color #e9eced;
+@define-color card_shade_color rgba(0, 0, 0, 0.36);
+@define-color dialog_bg_color #1f2b2d;
+@define-color dialog_fg_color #e9eced;
+@define-color popover_bg_color #1f2b2d;
+@define-color popover_fg_color #e9eced;
+@define-color popover_shade_color rgba(0, 0, 0, 0.36);
+@define-color shade_color rgba(0, 0, 0, 0.36);
+@define-color scrollbar_outline_color #121819;
+@define-color thumbnail_bg_color #1f2b2d;
+@define-color thumbnail_fg_color #e9eced;
+
+:root {
+  --accent-color: #a0d7e3;
+  --accent-bg-color: #a0d7e3;
+  --accent-fg-color: #0c333b;
+  --destructive-color: #f2b8b5;
+  --destructive-bg-color: #8c1d18;
+  --destructive-fg-color: #f9dedc;
+  --success-color: #7bd88f;
+  --success-bg-color: #7bd88f;
+  --success-fg-color: #0b2d14;
+  --warning-color: #e8c26a;
+  --warning-bg-color: #e8c26a;
+  --warning-fg-color: #2e2200;
+  --error-color: #f2b8b5;
+  --error-bg-color: #8c1d18;
+  --error-fg-color: #f9dedc;
+  --window-bg-color: #121819;
+  --window-fg-color: #e9eced;
+  --view-bg-color: #0d1112;
+  --view-fg-color: #e9eced;
+  --headerbar-bg-color: #182122;
+  --headerbar-fg-color: #e9eced;
+  --headerbar-border-color: #394446;
+  --headerbar-backdrop-color: #121819;
+  --headerbar-shade-color: rgba(0, 0, 0, 0.36);
+  --headerbar-darker-shade-color: rgba(0, 0, 0, 0.36);
+  --sidebar-bg-color: #151c1e;
+  --sidebar-fg-color: #e9eced;
+  --sidebar-backdrop-color: #121819;
+  --sidebar-border-color: #394446;
+  --sidebar-shade-color: rgba(0, 0, 0, 0.36);
+  --secondary-sidebar-bg-color: #121819;
+  --secondary-sidebar-fg-color: #e9eced;
+  --secondary-sidebar-backdrop-color: #121819;
+  --secondary-sidebar-border-color: #394446;
+  --secondary-sidebar-shade-color: rgba(0, 0, 0, 0.36);
+  --card-bg-color: #1c2527;
+  --card-fg-color: #e9eced;
+  --card-shade-color: rgba(0, 0, 0, 0.36);
+  --dialog-bg-color: #1f2b2d;
+  --dialog-fg-color: #e9eced;
+  --popover-bg-color: #1f2b2d;
+  --popover-fg-color: #e9eced;
+  --popover-shade-color: rgba(0, 0, 0, 0.36);
+  --shade-color: rgba(0, 0, 0, 0.36);
+  --scrollbar-outline-color: #121819;
+  --thumbnail-bg-color: #1f2b2d;
+  --thumbnail-fg-color: #e9eced;
+}
+
+/* Expressive shapes */
+button, entry, spinbutton, searchbar entry, dropdown > button, combobox button { border-radius: 999px; }
+button.circular, button.image-button.circular { border-radius: 999px; }
+.card, .boxed-list, list.boxed-list, preferencesgroup > box > list { border-radius: 22px; }
+popover > contents, popover.menu > contents { border-radius: 22px; }
+window.csd, window.csd decoration, window.csd.background { border-radius: 26px; }
+.dialog window.csd, window.dialog.csd { border-radius: 28px; }
+tooltip, tooltip.background { border-radius: 14px; }
+switch { border-radius: 999px; }
+progressbar trough, progressbar progress, scale trough { border-radius: 999px; }

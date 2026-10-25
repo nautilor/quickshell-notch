@@ -12,6 +12,7 @@ A [Boring Notch](https://github.com/TheBoredTeam/boring.notch)-style island for 
 - [Google Calendar setup](#google-calendar-setup)
 - [Lock screen](#lock-screen)
 - [Login screen (greetd)](#login-screen-greetd)
+- [GTK and Qt theme](#gtk-and-qt-theme)
 - [Keybinds and IPC](#keybinds-and-ipc)
 - [Project layout](#project-layout)
 
@@ -285,6 +286,54 @@ Without the flake: `imports = [ /path/to/quickshell-notch/greeter/nixos.nix ];` 
 
 Limits: password only (no fingerprint prompts as a first step), no on-screen keyboard, and the user picker lists accounts with a UID of 1000 to 59999 and a real shell.
 
+## GTK and Qt theme
+Apps can match the shell: a GTK 3, GTK 4 / libadwaita and Kvantum (Qt 5 and 6) theme in the same palette as `config/Theme.qml`. Dark surfaces tinted with the accent, the accent on selections, switches and sliders, pill-shaped buttons and entries, large radii on cards and popovers.
+
+There is one ready-made set per accent colour, the same swatches as Accent colour in the shell settings: `cyan` (default), `blue`, `purple`, `pink`, `coral`, `amber`, `green`. They are plain files in `theme/<accent>/`:
+
+| File | Used for |
+| --- | --- |
+| `gtk-3.0.css`, `gtk-4.0.css` | Colours and shapes added on top of [adw-gtk3](https://github.com/lassekongo83/adw-gtk3) for GTK 3 and GTK 4 |
+| `libadwaita.css` | The same for libadwaita apps (`~/.config/gtk-4.0/gtk.css`), which ignore theme folders |
+| `QuickshellNotch.kvconfig`, `QuickshellNotch.svg` | The Kvantum theme (KvFlat recoloured) |
+
+The theme name is `QuickshellNotch` for every accent.
+
+### Install with Home Manager and the flake
+The flake exports a Home Manager module, `homeManagerModules.theme`. You choose the accent; it builds the theme and selects it for GTK 3, GTK 4, libadwaita and Qt.
+1. Add the repo as an input of your flake (as for the login screen) and pass `inputs` to Home Manager, for example with `extraSpecialArgs = { inherit inputs; };`.
+2. Import the module and pick an accent:
+   ```nix
+   { inputs, ... }: {
+     imports = [ inputs.quickshell-notch.homeManagerModules.theme ];
+
+     programs.quickshellNotchTheme = {
+       enable = true;
+       accent = "cyan";     # cyan, blue, purple, pink, coral, amber or green
+       # gtk.enable = true; # GTK 3, GTK 4 and libadwaita
+       # qt.enable = true;  # Qt through Kvantum
+     };
+   }
+   ```
+3. Rebuild (`home-manager switch --flake .#you`, or `nixos-rebuild switch` when Home Manager is a NixOS module) and restart the apps. Changing `accent` and rebuilding switches the colour.
+
+What the module sets, so you can remove your own versions first (otherwise Home Manager reports a conflict):
+- `gtk.theme` (`QuickshellNotch`), the dark preference in the GTK 3 and 4 `settings.ini`, and `org/gnome/desktop/interface` in dconf (`gtk-theme`, `color-scheme`).
+- `~/.config/gtk-4.0/gtk.css`: the colours for libadwaita apps. Delete any `gtk-4.0` files you manage yourself (`gtk.css`, `libadwaita*.css`, `colors.css`, a matugen setup).
+- `qt.enable`, `qt.platformTheme.name = "kvantum"`, `qt.style.name = "kvantum"`, `~/.config/Kvantum/QuickshellNotch` and `~/.config/Kvantum/kvantum.kvconfig`. Remove other Kvantum themes or `kvantum.kvconfig` definitions you manage.
+
+The built package is `programs.quickshellNotchTheme.package`. Without Home Manager, `inputs.quickshell-notch.lib.mkTheme pkgs { accent = "cyan"; }` returns it, with `share/themes/QuickshellNotch` and `share/Kvantum/QuickshellNotch` for you to place yourself.
+
+### Install without Nix
+Take the files of one accent folder and put them together by hand:
+1. Install adw-gtk3, then copy its `adw-gtk3-dark` theme folder to `~/.local/share/themes/QuickshellNotch`. In its `index.theme` replace `adw-gtk3-dark` and `adw-gtk3` with `QuickshellNotch`.
+2. Append `theme/<accent>/gtk-3.0.css` to `gtk-3.0/gtk.css` and `gtk-3.0/gtk-dark.css`, and `theme/<accent>/gtk-4.0.css` to `gtk-4.0/gtk.css` and `gtk-4.0/gtk-dark.css`.
+3. Copy `theme/<accent>/libadwaita.css` to `~/.config/gtk-4.0/gtk.css`.
+4. Copy `QuickshellNotch.kvconfig` and `QuickshellNotch.svg` to `~/.config/Kvantum/QuickshellNotch/`, and put `theme=QuickshellNotch` under `[General]` in `~/.config/Kvantum/kvantum.kvconfig`.
+5. Select `QuickshellNotch` in your GTK settings and `kvantum` as the Qt style.
+
+Limits: dark only, GTK 3 and 4 rely on adw-gtk3, Qt widgets keep KvFlat's shapes with the new colours, and apps that draw their own colours (Electron, Firefox) are not themed.
+
 ## Keybinds and IPC
 ```
 bind = SUPER, Space,  exec, qs ipc call notch launcher
@@ -312,7 +361,8 @@ Opened this way the notch stays until you press Escape, click outside, or toggle
 ## Project layout
 - `shell.qml`: entry point, creates the notches, screen corners and IPC handler.
 - `config/`: `Settings` (persisted settings), `Theme` (colours, shapes, motion), `Glyphs` (icon name to Nerd Font code point).
-- `flake.nix`: exports the login screen as a NixOS module (`nixosModules.greeter`).
+- `flake.nix`: exports the login screen as a NixOS module (`nixosModules.greeter`), the GTK/Qt theme as a Home Manager module (`homeManagerModules.theme`) and `lib.mkTheme`.
+- `theme/`: one folder per accent colour with the GTK and Kvantum files, plus `default.nix` (assembles a theme) and `home-manager.nix`.
 - `greeter.qml`, `services/GreeterCtl.qml`, `greeter/`: the greetd login screen, its state and its example configs (Hyprland Lua and classic, greetd, NixOS module).
 - `components/AuthScreen.qml`: the card, clock and password field shared by the lock screen and the login screen.
 - `modules/lock/`: the lock screen (`LockScreen` session lock, `LockSurface` per-screen UI); `services/LockCtl` holds its state and the PAM conversation.

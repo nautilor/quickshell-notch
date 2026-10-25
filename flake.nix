@@ -3,6 +3,12 @@
 
   # no inputs: the module uses the pkgs of the configuration that imports it
   outputs = { self }: {
+    # the GTK 3/4 and Kvantum themes for a given pkgs: lib.mkTheme pkgs { accent = "cyan"; }
+    lib.mkTheme = pkgs: { accent ? "cyan" }: import ./theme/default.nix { inherit pkgs accent; };
+
+    # GTK and Qt themes for Home Manager
+    homeManagerModules.theme = import ./theme/home-manager.nix self;
+
     nixosModules = rec {
       # login screen for greetd (Hyprland as the greeter compositor)
       greeter = { lib, ... }: {
