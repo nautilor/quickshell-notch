@@ -281,7 +281,7 @@ Module options: `enable`, `src` (the repo, default is the flake itself), `wallpa
 
 Without the flake: `imports = [ /path/to/quickshell-notch/greeter/nixos.nix ];` works the same, with `src` pointing at the repo.
 
-**Login goes back to the login screen?** Your session started and exited at once. The greeter starts it through a login shell (so it gets the full `PATH`) and writes everything it prints to `~/.cache/quickshell-notch-session.log`; read that file from a TTY, and `journalctl -b -u greetd` for greetd's side. Messages like `Failed to create /var/empty/.cache for shader cache` come from the greeter itself (its user has no home folder) and are harmless.
+**Login goes back to the login screen?** Your session started and exited at once. The greeter writes everything the session prints to `~/.cache/quickshell-notch-session.log`; read that file from a TTY, and `journalctl -b -u greetd` for greetd's side. Messages like `Failed to create /var/empty/.cache for shader cache` come from the greeter itself (its user has no home folder) and are harmless.
 
 Limits: password only (no fingerprint prompts as a first step), no on-screen keyboard, and the user picker lists accounts with a UID of 1000 to 59999 and a real shell.
 

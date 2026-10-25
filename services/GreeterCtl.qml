@@ -117,10 +117,11 @@ Singleton {
 		function onReadyToLaunch() {
 			root.saveState();
 			const env = (root.config.env || ["XDG_SESSION_TYPE=wayland"]).slice();
-			// A login shell, so the session gets the full PATH and environment (NixOS and others only set them in
-			// /etc/profile). Its output goes to a file in the user's home so a failing session can be diagnosed.
-			const script = "d=\"${XDG_CACHE_HOME:-$HOME/.cache}\"; mkdir -p \"$d\"; exec sh -lc 'exec " + root.session.command.replace(/'/g, "'\\''") + "' >\"$d/quickshell-notch-session.log\" 2>&1";
-			Greetd.launch(["sh", "-c", script], env, true);
+			// greetd joins the argument list with spaces and runs it as `/bin/sh -c "<profile>; exec <args>"`,
+			// so the whole command goes in as ONE argument that is already shell syntax. Its output is
+			// written to a file in the user's home so a failing session can be diagnosed.
+			const inner = "mkdir -p \"$HOME/.cache\"; exec " + root.session.command + " >\"$HOME/.cache/quickshell-notch-session.log\" 2>&1";
+			Greetd.launch(["sh -c '" + inner.replace(/'/g, "'\\''") + "'"], env, true);
 		}
 		function onError(message) {
 			root.busy = false;
