@@ -43,7 +43,8 @@ in
       enable = true;
       settings.default_session = {
         user = "greeter";
-        command = "${pkgs.hyprland}/bin/start-hyprland -- --config ${hyprConf}";
+        # no shader cache: the greeter user has no writable home and Mesa would only complain about it
+        command = "${pkgs.coreutils}/bin/env MESA_SHADER_CACHE_DISABLE=true ${pkgs.hyprland}/bin/start-hyprland -- --config ${hyprConf}";
       };
     };
 
