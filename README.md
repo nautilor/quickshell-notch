@@ -135,6 +135,7 @@ Open the Settings tab. Everything is saved to `~/.config/quickshell-notch/settin
 | Setting | What it does |
 | --- | --- |
 | Accent colour | Seed hue for the whole palette |
+| Colour scheme | Pick a ready-made palette instead of the accent; see [Colour schemes](#colour-schemes) |
 | Open on hover | Hover opens the notch; otherwise click or IPC |
 | Home on hover | Hover always opens Home (default on) |
 | Rounded screen corners | Round every screen corner |
@@ -153,6 +154,25 @@ Open the Settings tab. Everything is saved to `~/.config/quickshell-notch/settin
 | Google Calendar | Sign in / sign out |
 
 Only in `settings.json`: `lockWallpaper` and `lockAvatar` (image paths for the lock screen), `lockPam` (PAM service, default `hyprlock`), `lockPamDir` (folder with your own PAM service file), `screenName` (which screen to use when not showing on all) and `cornerRadius` (screen corner size, default 20).
+
+## Colour schemes
+Settings → Colour scheme replaces the accent-derived palette with a fixed one. Bundled: Catppuccin (Mocha, Macchiato, Frappé), Dracula, Gruvbox Dark, Nord, Tokyo Night, Rosé Pine, One Dark, Solarized Dark, Everforest, Kanagawa. Choose **Accent** to go back to the hue-based palette; the Accent colour row only shows while Accent is selected.
+
+Add your own: drop a `.json` file into `~/.config/quickshell-notch/colorschemes/`. It shows up in Settings the next time the Settings tab opens, no restart needed. A file with the same name as a bundled one replaces it. The file name (without `.json`) is the scheme id.
+
+```json
+{
+	"name": "My scheme",
+	"background": "#101014",
+	"foreground": "#e6e6ea",
+	"primary": "#8ab4f8",
+	"secondary": "#81c995",
+	"tertiary": "#f28b82",
+	"error": "#f2b8b5"
+}
+```
+
+`background`, `foreground` and `primary` are required; `name`, `secondary`, `tertiary` and `error` are optional. Surfaces, containers and outlines are mixed from background and foreground. To override any single role, add its `Theme` name as a key (`notch`, `surfaceContainer`, `primaryContainer`, `outline`, ...). The scheme is stored as `colorscheme` in `settings.json`; the login screen reads the same key from its `greeter.json`.
 
 ## Google Calendar setup
 Uses `scripts/gcal.py` (Python standard library only, OAuth with PKCE on a local loopback port).
@@ -197,6 +217,7 @@ Settings live in `/etc/quickshell-notch/greeter.json` (or the file named by `$QS
 | --- | --- |
 | `wallpaper` | Background image, readable by `greeter` |
 | `hue` | Accent hue, 0 to 1 (same as Accent colour in Settings) |
+| `colorscheme` | Colour scheme id, e.g. `dracula` (overrides `hue`) |
 | `user` | User selected when nothing is remembered |
 | `session` | Session name selected when nothing is remembered |
 | `sessions` | `[{ "name": "Hyprland", "command": "start-hyprland" }]`, to skip scanning `wayland-sessions` |
@@ -360,6 +381,7 @@ Opened this way the notch stays until you press Escape, click outside, or toggle
 
 ## Project layout
 - `shell.qml`: entry point, creates the notches, screen corners and IPC handler.
+- `colorschemes/`: bundled colour scheme JSON files (user ones live in `~/.config/quickshell-notch/colorschemes/`).
 - `config/`: `Settings` (persisted settings), `Theme` (colours, shapes, motion), `Glyphs` (icon name to Nerd Font code point).
 - `flake.nix`: exports the login screen as a NixOS module (`nixosModules.greeter`), the GTK/Qt theme as a Home Manager module (`homeManagerModules.theme`) and `lib.mkTheme`.
 - `theme/`: one folder per accent colour with the GTK and Kvantum files, plus `default.nix` (assembles a theme) and `home-manager.nix`.

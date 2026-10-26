@@ -169,6 +169,8 @@ Singleton {
 			}
 			if (root.config.hue !== undefined)
 				Settings.hue = root.config.hue;
+			if (root.config.colorscheme !== undefined)
+				Settings.colorscheme = root.config.colorscheme;
 			if (root.config.use24h !== undefined)
 				Settings.use24h = root.config.use24h;
 			if (Array.isArray(root.config.sessions) && root.config.sessions.length > 0)
