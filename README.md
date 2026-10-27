@@ -94,6 +94,7 @@ Caffeine, microphone, volume and brightness changes show in the notch. The caffe
 - Hyprland workspaces: shows the existing ones, highlights the active one as a wide pill, click to switch.
 - Quick toggles that morph shape when switched on: Wi-Fi, Bluetooth, Caffeine, Mic, Silent (do not disturb).
 - Power profile for power-profiles-daemon as one segmented control: Saver, Balanced, Performance (Performance only if the hardware offers it).
+- Home layout (Settings → Home layout, `homeStyle` in `settings.json`): **Grid** is the editable dashboard above. **Control Center** is a fixed phone-style layout: brightness and volume sliders, pill toggle tiles (Wi-Fi, Bluetooth, caffeine, mic, silent, power profile), the tray, the player and the next event. **Strip** is one wide dock-bar row: player, week and clock, Wi-Fi and Bluetooth toggles, tray, power profile, next event, volume slider with mic, silent and caffeine buttons. **Compact** is three slim rows (toggles and tray, power profile and mini player, next event). **Glance** has a big clock, mini player and next event on the left, tiles, tray and power profile on the right. The fixed layouts have no edit mode, and all of them keep Wi-Fi, Bluetooth, power profile, tray and the next event.
 - Optional date next to the clock in the header (Settings → Date on Home tab).
 - System tray (StatusNotifier): left click activates, middle click triggers the secondary action, right click opens the app's menu inside the notch, including submenus.
 - Next event card from Google Calendar; click it to open the Calendar tab.
