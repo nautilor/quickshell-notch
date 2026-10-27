@@ -1,0 +1,19 @@
+quickshell:
+  components:
+    source: ./components/
+    destination: ~/.config/quickshell/components/
+  config:
+    source: ./config/
+    destination: ~/.config/quickshell/config/
+  modules:
+    source: ./modules/
+    destination: ~/.config/quickshell/modules/
+  scripts:
+    source: ./scripts/
+    destination: ~/.config/quickshell/scripts/
+  services:
+    source: ./services/
+    destination: ~/.config/quickshell/services/
+  shell.qml:
+    source: ./shell.qml
+    destination: ~/.config/quickshell/shell.qml
