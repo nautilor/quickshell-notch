@@ -17,3 +17,6 @@ quickshell:
   shell.qml:
     source: ./shell.qml
     destination: ~/.config/quickshell/shell.qml
+  colorschemes:
+    source: ./colorschemes/
+    destination: ~/.config/quickshell/colorschemes/
