@@ -38,6 +38,7 @@ Singleton {
 	property alias caffeineOffMessage: adapter.caffeineOffMessage
 	property alias micOnMessage: adapter.micOnMessage
 	property alias micOffMessage: adapter.micOffMessage
+	property alias notchEdge: adapter.notchEdge
 	property alias launchCounts: adapter.launchCounts
 
 	property bool dirReady: false
@@ -62,6 +63,8 @@ Singleton {
 			id: adapter
 
 			property real hue: 0.53
+			// screen edge the notch is attached to: "top" | "bottom" | "left" | "right"
+			property string notchEdge: "top"
 			// id (file name without .json) of a colour scheme; empty = tonal palette from hue
 			property string colorscheme: ""
 			// built-in lock screen: used by the Power tab and `notch lock`

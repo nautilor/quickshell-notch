@@ -16,7 +16,14 @@ PanelWindow {
 	// the shared open state only applies to the screen it was opened on
 	readonly property bool isOpen: NotchCtl.open && (NotchCtl.screen === "" || NotchCtl.screen === screen.name)
 
-	anchors.top: true
+	// which screen edge the notch is attached to
+	readonly property string edge: Settings.notchEdge
+	readonly property bool vertical: edge === "left" || edge === "right"
+
+	anchors.top: edge === "top"
+	anchors.bottom: edge === "bottom"
+	anchors.left: edge === "left"
+	anchors.right: edge === "right"
 	implicitWidth: 960
 	implicitHeight: 620
 	color: "transparent"
@@ -42,19 +49,20 @@ PanelWindow {
 		})
 	readonly property var openSize: sizes[NotchCtl.tab] ?? sizes.home
 
-	readonly property real targetW: {
+	// size of the content area (inside the ears)
+	readonly property real contentW: {
 		switch (mode) {
 		case "open":
-			return openSize[0];
+			return openSize[0] - 2 * topR;
 		case "notif":
-			return peek.implicitWidth + 2 * topR + 12;
+			return peek.implicitWidth + 12;
 		case "hud":
-			return Math.max(hudView.implicitWidth + 2 * topR + 16, 250);
+			return Math.max(hudView.implicitWidth + 16, 250 - 2 * topR);
 		default:
-			return closedView.implicitWidth + 2 * topR;
+			return vertical ? closedView.implicitHeight : closedView.implicitWidth;
 		}
 	}
-	readonly property real targetH: {
+	readonly property real contentH: {
 		switch (mode) {
 		case "open":
 			return openSize[1];
@@ -63,9 +71,12 @@ PanelWindow {
 		case "hud":
 			return hudView.implicitHeight;
 		default:
-			return closedView.implicitHeight;
+			return vertical ? closedView.implicitWidth : closedView.implicitHeight;
 		}
 	}
+	// the ears sit at both ends of the edge the notch hangs from
+	readonly property real targetW: vertical ? contentW : contentW + 2 * topR
+	readonly property real targetH: vertical ? contentH + 2 * topR : contentH
 	readonly property real topR: mode === "open" ? 24 : mode === "idle" ? 8 : 16
 	readonly property real botR: mode === "open" ? 34 : mode === "idle" ? 14 : 26
 
@@ -105,10 +116,10 @@ PanelWindow {
 	// input mask: the shape plus a small forgiving margin (just a strip while hidden)
 	Item {
 		id: hit
-		anchors.top: parent.top
-		anchors.horizontalCenter: parent.horizontalCenter
-		width: stage.width + 20
-		height: win.hidden ? 6 : stage.height + 8
+		width: win.vertical ? (win.hidden ? 6 : stage.width + 8) : stage.width + 20
+		height: win.vertical ? stage.height + 20 : (win.hidden ? 6 : stage.height + 8)
+		x: win.edge === "left" ? 0 : win.edge === "right" ? win.width - width : (win.width - width) / 2
+		y: win.edge === "top" ? 0 : win.edge === "bottom" ? win.height - height : (win.height - height) / 2
 	}
 
 	// click-outside dismissal; armed shortly after opening so the initial focus change does not trigger it
@@ -150,13 +161,14 @@ PanelWindow {
 
 		Item {
 			id: stage
-			anchors.top: parent.top
-			anchors.topMargin: win.hidden ? 4 - height : 0
-			anchors.horizontalCenter: parent.horizontalCenter
+			// how far the notch is pushed off its edge while autohidden
+			property real slide: win.hidden ? 4 - (win.vertical ? width : height) : 0
+			x: win.edge === "left" ? slide : win.edge === "right" ? win.width - width - slide : (win.width - width) / 2
+			y: win.edge === "top" ? slide : win.edge === "bottom" ? win.height - height - slide : (win.height - height) / 2
 			width: win.targetW
 			height: win.targetH
 
-			Behavior on anchors.topMargin {
+			Behavior on slide {
 				SpringAnimation {
 					spring: Theme.springSoft
 					damping: Theme.dampSoft
@@ -196,9 +208,18 @@ PanelWindow {
 				}
 			}
 
-			// notch silhouette: concave ears at the top corners, rounded bottom corners
+			// notch silhouette: concave ears where it meets the screen edge, rounded far corners.
+			// Drawn as a top notch in a (lw x lh) frame, then mapped onto the chosen edge.
 			Shape {
-				anchors.fill: parent
+				id: silhouette
+				readonly property real lw: win.vertical ? stage.height : stage.width
+				readonly property real lh: win.vertical ? stage.width : stage.height
+				width: lw
+				height: lh
+				transformOrigin: Item.TopLeft
+				transform: Matrix4x4 {
+					matrix: win.edge === "bottom" ? Qt.matrix4x4(1, 0, 0, 0, 0, -1, 0, silhouette.lh, 0, 0, 1, 0, 0, 0, 0, 1) : win.edge === "left" ? Qt.matrix4x4(0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1) : win.edge === "right" ? Qt.matrix4x4(0, -1, 0, silhouette.lh, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1) : Qt.matrix4x4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
+				}
 				preferredRendererType: Shape.CurveRenderer
 
 				ShapePath {
@@ -216,32 +237,32 @@ PanelWindow {
 					}
 					PathLine {
 						x: stage.tr
-						y: stage.height - stage.br
+						y: silhouette.lh - stage.br
 					}
 					PathArc {
 						x: stage.tr + stage.br
-						y: stage.height
+						y: silhouette.lh
 						radiusX: stage.br
 						radiusY: stage.br
 						direction: PathArc.Counterclockwise
 					}
 					PathLine {
-						x: stage.width - stage.tr - stage.br
-						y: stage.height
+						x: silhouette.lw - stage.tr - stage.br
+						y: silhouette.lh
 					}
 					PathArc {
-						x: stage.width - stage.tr
-						y: stage.height - stage.br
+						x: silhouette.lw - stage.tr
+						y: silhouette.lh - stage.br
 						radiusX: stage.br
 						radiusY: stage.br
 						direction: PathArc.Counterclockwise
 					}
 					PathLine {
-						x: stage.width - stage.tr
+						x: silhouette.lw - stage.tr
 						y: stage.tr
 					}
 					PathArc {
-						x: stage.width
+						x: silhouette.lw
 						y: 0
 						radiusX: stage.tr
 						radiusY: stage.tr
@@ -257,16 +278,19 @@ PanelWindow {
 			// content area (inside the ears)
 			Item {
 				id: content
-				x: stage.tr
-				width: stage.width - 2 * stage.tr
-				height: stage.height
+				x: win.vertical ? 0 : stage.tr
+				y: win.vertical ? stage.tr : 0
+				width: win.vertical ? stage.width : stage.width - 2 * stage.tr
+				height: win.vertical ? stage.height - 2 * stage.tr : stage.height
 				clip: true
 
 				ClosedContent {
 					id: closedView
-					anchors.fill: parent
-					anchors.leftMargin: 10
-					anchors.rightMargin: 10
+					// on a side edge the idle pill is rotated to run along the edge
+					anchors.centerIn: parent
+					width: (win.vertical ? content.height : content.width) - 20
+					height: win.vertical ? content.width : content.height
+					rotation: win.edge === "left" ? -90 : win.edge === "right" ? 90 : 0
 					opacity: win.mode === "idle" ? 1 : 0
 					visible: opacity > 0.01
 					Behavior on opacity {

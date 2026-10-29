@@ -334,6 +334,41 @@ Item {
 					text: "NOTCH"
 				}
 				SettingRow {
+					title: "Position"
+					subtitle: "Screen edge the notch is attached to"
+				}
+				Row {
+					spacing: 8
+					Repeater {
+						model: [{ id: "top", name: "Top" }, { id: "bottom", name: "Bottom" }, { id: "left", name: "Left" }, { id: "right", name: "Right" }]
+						Rectangle {
+							id: edgeChip
+							required property var modelData
+							readonly property bool current: Settings.notchEdge === modelData.id
+							width: 110
+							height: 44
+							radius: current ? Theme.radiusSmall : Theme.radiusMedium
+							color: current ? Theme.primaryContainer : Theme.surfaceContainerHigh
+							Behavior on radius {
+								NumberAnimation {
+									duration: Theme.durShort
+								}
+							}
+							Txt {
+								anchors.centerIn: parent
+								text: edgeChip.modelData.name
+								font.pixelSize: 12
+								color: edgeChip.current ? Theme.primaryContainerFg : Theme.surfaceVariantFg
+							}
+							MouseArea {
+								anchors.fill: parent
+								cursorShape: Qt.PointingHandCursor
+								onClicked: Settings.notchEdge = edgeChip.modelData.id
+							}
+						}
+					}
+				}
+				SettingRow {
 					title: "Open on hover"
 					subtitle: "Otherwise click the notch or use IPC"
 					Switch {
