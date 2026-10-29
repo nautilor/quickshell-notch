@@ -5,7 +5,7 @@ import Quickshell
 import Quickshell.Io
 import qs.config
 
-// Google Calendar via scripts/gcal.py (OAuth + REST, stdlib only).
+// Local calendar (calendar.json) plus, when signed in, Google Calendar via scripts/gcal.py (OAuth + REST, stdlib only).
 Singleton {
 	id: root
 
@@ -18,9 +18,13 @@ Singleton {
 
 	property date today: new Date()
 	property date weekStart: startOfWeek(today)
-	property var events: []      // week window, dates already parsed
+	property var events: []      // local + Google, dates already parsed
+	property var remoteEvents: []
+	property var remoteUpcoming: []
 	property bool reauth: false     // token exists but lacks write access
-	property var calendars: []      // writable calendars
+	property var calendars: []      // writable calendars, local first
+	property var remoteCalendars: []
+	readonly property string localId: "local"
 	property bool saving: false
 	property var upcoming: []    // next events from now, for the home tab
 	readonly property string script: Quickshell.shellPath("scripts/gcal.py")
@@ -53,6 +57,33 @@ Singleton {
 			e = new Date(ev.end);
 		}
 		return Object.assign({}, ev, { s: s, e: e });
+	}
+
+	// ---- local calendar ----
+	// stored like Google's: all-day ends are exclusive dates, timed events are "YYYY-MM-DDTHH:MM"
+	readonly property var localCalendar: ({ id: localId, name: "Local", color: String(Theme.primary), primary: authState !== "ready" })
+	readonly property var localStored: store.adapter.events || []
+
+	function localParsed() {
+		return localStored.map(ev => parseEvent(Object.assign({}, ev, { calendar: "Local", calendarId: localId, canEdit: true, color: localCalendar.color })));
+	}
+
+	function rebuild() {
+		const now = new Date();
+		const local = localParsed();
+		events = remoteEvents.concat(local);
+		calendars = [localCalendar].concat(remoteCalendars);
+		upcoming = remoteUpcoming.concat(local.filter(ev => ev.e > now && ev.s < addDays(now, 8))).sort((a, b) => a.s - b.s);
+	}
+
+	function saveLocal(d) {
+		let end = d.end;
+		if (d.allDay)
+			end = iso(addDays(new Date(+d.end.slice(0, 4), +d.end.slice(5, 7) - 1, +d.end.slice(8, 10)), 1));
+		const ev = { id: d.id || String(Date.now()) + Math.floor(Math.random() * 1000), title: d.title, location: d.location, allDay: d.allDay, start: d.start, end: end };
+		const list = localStored.filter(e => e.id !== ev.id);
+		list.push(ev);
+		store.adapter.events = list;
 	}
 
 	// ---- layout: events of one day in side-by-side lanes (Google Calendar style) ----
@@ -132,12 +163,24 @@ Singleton {
 
 	// payload: {id?, calendarId, title, location, allDay, start, end}  (start/end: "YYYY-MM-DD" or "YYYY-MM-DDTHH:MM")
 	function saveEvent(payload) {
+		if (payload.calendarId === localId) {
+			saveLocal(payload);
+			rebuild();
+			editFinished(true, "");
+			return;
+		}
 		saving = true;
 		saveProc.command = ["python3", script, "save", JSON.stringify(payload)];
 		saveProc.running = true;
 	}
 
 	function deleteEvent(calendarId, eventId) {
+		if (calendarId === localId) {
+			store.adapter.events = localStored.filter(e => e.id !== eventId);
+			rebuild();
+			editFinished(true, "");
+			return;
+		}
 		saving = true;
 		deleteProc.command = ["python3", script, "delete", calendarId, eventId];
 		deleteProc.running = true;
@@ -160,6 +203,7 @@ Singleton {
 
 	// ---- backend ----
 	function refresh() {
+		rebuild();
 		if (authState !== "ready")
 			return;
 		loading = true;
@@ -195,6 +239,23 @@ Singleton {
 	}
 
 	Component.onCompleted: checkStatus()
+
+	FileView {
+		id: store
+		path: Settings.dirReady ? Settings.configDir + "/calendar.json" : ""
+		onAdapterUpdated: {
+			writeAdapter();
+			root.rebuild();
+		}
+		onLoadFailed: error => {
+			if (error === FileViewError.FileNotFound)
+				writeAdapter();
+		}
+
+		adapter: JsonAdapter {
+			property var events: []
+		}
+	}
 
 	Timer {
 		interval: 600000
@@ -236,8 +297,9 @@ Singleton {
 					if (r.error)
 						return root.handleError(r);
 					root.error = "";
-					root.events = r.events.map(root.parseEvent);
-					root.calendars = r.calendars || [];
+					root.remoteEvents = r.events.map(root.parseEvent);
+					root.remoteCalendars = r.calendars || [];
+					root.rebuild();
 				} catch (e) {
 					root.error = "Could not read calendar data.";
 				}
@@ -254,7 +316,8 @@ Singleton {
 					if (r.error)
 						return;
 					const now = new Date();
-					root.upcoming = r.events.map(root.parseEvent).filter(ev => ev.e > now).sort((a, b) => a.s - b.s);
+					root.remoteUpcoming = r.events.map(root.parseEvent).filter(ev => ev.e > now);
+					root.rebuild();
 				} catch (e) {}
 			}
 		}
@@ -281,8 +344,10 @@ Singleton {
 		id: logoutProc
 		command: ["python3", root.script, "logout"]
 		onExited: {
-			root.events = [];
-			root.upcoming = [];
+			root.remoteEvents = [];
+			root.remoteUpcoming = [];
+			root.remoteCalendars = [];
+			root.rebuild();
 			root.checkStatus();
 		}
 	}

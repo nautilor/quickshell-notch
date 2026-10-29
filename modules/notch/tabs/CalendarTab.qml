@@ -39,69 +39,12 @@ Item {
 
 	Component.onCompleted: {
 		Gcal.today = new Date();
-		if (Gcal.authState === "ready")
-			Gcal.refresh();
+		Gcal.refresh();
 		Qt.callLater(scrollToNow);
-	}
-
-	// ---- not connected ----
-	Column {
-		visible: Gcal.authState !== "ready"
-		anchors.centerIn: parent
-		spacing: 12
-		width: 420
-
-		Icon {
-			name: "event_busy"
-			size: 52
-			color: Theme.outline
-			anchors.horizontalCenter: parent.horizontalCenter
-		}
-		Txt {
-			width: parent.width
-			horizontalAlignment: Text.AlignHCenter
-			wrapMode: Text.Wrap
-			font.pixelSize: 16
-			font.weight: Font.Bold
-			text: Gcal.reauth ? "Sign in again to allow editing events" : Gcal.authState === "no-client" ? "Google Calendar needs an OAuth client" : Gcal.authState === "checking" ? "Checking…" : "Connect Google Calendar"
-		}
-		Txt {
-			visible: Gcal.authState === "no-client"
-			width: parent.width
-			horizontalAlignment: Text.AlignHCenter
-			wrapMode: Text.Wrap
-			color: Theme.surfaceVariantFg
-			text: "Create a Desktop-app OAuth client in Google Cloud Console (Calendar API enabled) and save it as\n" + Gcal.clientFile
-		}
-		Txt {
-			visible: Gcal.error !== ""
-			width: parent.width
-			horizontalAlignment: Text.AlignHCenter
-			wrapMode: Text.Wrap
-			color: Theme.error
-			text: Gcal.error
-		}
-		Btn {
-			visible: Gcal.authState === "logged-out"
-			icon: "login"
-			label: Gcal.loggingIn ? "Waiting for browser…" : "Sign in with Google"
-			variant: 1
-			enabled: !Gcal.loggingIn
-			anchors.horizontalCenter: parent.horizontalCenter
-			onClicked: Gcal.login()
-		}
-		Btn {
-			visible: Gcal.authState === "no-client"
-			icon: "refresh"
-			label: "Check again"
-			anchors.horizontalCenter: parent.horizontalCenter
-			onClicked: Gcal.checkStatus()
-		}
 	}
 
 	// ---- week view ----
 	ColumnLayout {
-		visible: Gcal.authState === "ready"
 		anchors.fill: parent
 		spacing: 6
 

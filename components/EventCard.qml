@@ -52,13 +52,13 @@ Rectangle {
 		spacing: 1
 		Txt {
 			width: parent.width
-			text: Gcal.authState !== "ready" ? "Google Calendar" : root.next ? root.next.title : "No upcoming events"
+			text: root.next ? root.next.title : "No upcoming events"
 			font.weight: Font.Bold
 			color: Theme.tertiaryContainerFg
 		}
 		Txt {
 			width: parent.width
-			text: Gcal.authState !== "ready" ? "Tap to connect" : root.next ? root.when(root.next) : "Enjoy the quiet"
+			text: root.next ? root.when(root.next) : "Enjoy the quiet"
 			font.pixelSize: 12
 			color: Theme.tertiaryContainerFg
 			opacity: 0.8
