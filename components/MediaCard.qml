@@ -13,6 +13,7 @@ Rectangle {
 
 	radius: Theme.radiusLarge
 	color: Theme.surfaceContainer
+	clip: true
 
 	function fmt(sec) {
 		const s = Math.max(0, Math.floor(sec));
@@ -53,6 +54,8 @@ Rectangle {
 		RowLayout {
 			spacing: 12
 			Layout.fillWidth: true
+			Layout.minimumWidth: 0
+			Layout.preferredWidth: 0
 
 			Item {
 				id: art
@@ -91,20 +94,28 @@ Rectangle {
 
 			ColumnLayout {
 				Layout.fillWidth: true
+				Layout.minimumWidth: 0
+				Layout.preferredWidth: 0
 				spacing: 2
 				Txt {
 					Layout.fillWidth: true
+					Layout.minimumWidth: 0
+					Layout.preferredWidth: 0
 					text: root.player ? (root.player.trackTitle || "Unknown") : ""
 					font.pixelSize: 16
 					font.weight: Font.Bold
 				}
 				Txt {
 					Layout.fillWidth: true
+					Layout.minimumWidth: 0
+					Layout.preferredWidth: 0
 					text: root.player ? root.player.trackArtist : ""
 					color: Theme.surfaceVariantFg
 				}
 				Txt {
 					Layout.fillWidth: true
+					Layout.minimumWidth: 0
+					Layout.preferredWidth: 0
 					text: root.player ? root.player.identity : ""
 					font.pixelSize: 11
 					color: Theme.outline
@@ -115,6 +126,8 @@ Rectangle {
 		// progress
 		Item {
 			Layout.fillWidth: true
+			Layout.minimumWidth: 0
+			Layout.preferredWidth: 0
 			Layout.preferredHeight: 18
 			visible: root.player && root.player.lengthSupported
 
@@ -148,7 +161,9 @@ Rectangle {
 
 		RowLayout {
 			Layout.fillWidth: true
-			spacing: 6
+			Layout.minimumWidth: 0
+			Layout.preferredWidth: 0
+			spacing: 4
 			Txt {
 				text: root.player ? root.fmt(root.player.position) : ""
 				font.pixelSize: 11
@@ -161,7 +176,10 @@ Rectangle {
 				icon: "skip_previous"
 				variant: 2
 				iconSize: 26
-				implicitWidth: 44
+				Layout.fillWidth: true
+				Layout.preferredWidth: 44
+				Layout.minimumWidth: 30
+				Layout.maximumWidth: 44
 				implicitHeight: 40
 				enabled: root.player && root.player.canGoPrevious
 				onClicked: root.player.previous()
@@ -173,7 +191,10 @@ Rectangle {
 				toggled: Media.playing
 				toggledRadius: 14
 				iconSize: 28
-				implicitWidth: 64
+				Layout.fillWidth: true
+				Layout.preferredWidth: 64
+				Layout.minimumWidth: 46
+				Layout.maximumWidth: 64
 				implicitHeight: 44
 				onClicked: root.player.togglePlaying()
 			}
@@ -181,7 +202,10 @@ Rectangle {
 				icon: "skip_next"
 				variant: 2
 				iconSize: 26
-				implicitWidth: 44
+				Layout.fillWidth: true
+				Layout.preferredWidth: 44
+				Layout.minimumWidth: 30
+				Layout.maximumWidth: 44
 				implicitHeight: 40
 				enabled: root.player && root.player.canGoNext
 				onClicked: root.player.next()
