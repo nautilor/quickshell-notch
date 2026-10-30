@@ -39,6 +39,8 @@ Singleton {
 	property alias micOnMessage: adapter.micOnMessage
 	property alias micOffMessage: adapter.micOffMessage
 	property alias notchEdge: adapter.notchEdge
+	property alias recordDir: adapter.recordDir
+	property alias recordEncoder: adapter.recordEncoder
 	property alias launchCounts: adapter.launchCounts
 
 	property bool dirReady: false
@@ -98,6 +100,10 @@ Singleton {
 			property string caffeineOffMessage: "Caffeine off"
 			property string micOnMessage: "Microphone live"
 			property string micOffMessage: "Microphone muted"
+			// folder for screen recordings; empty = ~/Videos/Recordings
+			property string recordDir: ""
+			// screen recording encoder: "auto" (NVENC on NVIDIA GPUs, else CPU) or "cpu"
+			property string recordEncoder: "auto"
 			property var launchCounts: ({})
 		}
 	}

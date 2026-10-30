@@ -7,6 +7,12 @@ import Quickshell
 Singleton {
 	readonly property var codes: ({
 		"add": 0xf0415,
+		"videocam": 0xf0567,
+		"stop": 0xf04db,
+		"fiber_manual_record": 0xf044a,
+		"fullscreen": 0xf0293,
+		"web_asset": 0xf05b0,
+		"monitor_multiple": 0xf0a88,
 		"dashboard": 0xf056e,
 		"terminal": 0xf018d,
 		"extension": 0xf0431,

@@ -10,8 +10,8 @@ Singleton {
 	id: root
 
 	readonly property var node: Pipewire.defaultAudioSource
-	readonly property bool available: node !== null && node.audio !== null
-	readonly property bool muted: available ? node.audio.muted : false
+	readonly property bool available: !!node && !!node.audio
+	readonly property bool muted: !!node && !!node.audio ? node.audio.muted : false
 	property bool armed: false
 
 	PwObjectTracker {
@@ -21,6 +21,11 @@ Singleton {
 	function toggle() {
 		if (available)
 			node.audio.muted = !node.audio.muted;
+	}
+
+	function setMuted(value) {
+		if (available && node.audio.muted !== value)
+			node.audio.muted = value;
 	}
 
 	onMutedChanged: {

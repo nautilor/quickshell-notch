@@ -19,7 +19,7 @@ A [Boring Notch](https://github.com/TheBoredTeam/boring.notch)-style island for 
 The reasoning behind the look and behaviour is in [DESIGN.md](DESIGN.md).
 
 ## Install and run
-Requirements: Quickshell 0.3+, Hyprland, PipeWire, UPower, power-profiles-daemon, NetworkManager, BlueZ, `brightnessctl`, `clipse` + `wl-clipboard`, `systemd` (for caffeine and power actions), `hyprlock`, Python 3, and the JetBrainsMono Nerd Font.
+Requirements: Quickshell 0.3+, Hyprland, `wf-recorder` + `ffmpeg` (screen recording), PipeWire, UPower, power-profiles-daemon, NetworkManager, BlueZ, `brightnessctl`, `clipse` + `wl-clipboard`, `systemd` (for caffeine and power actions), `hyprlock`, Python 3, and the JetBrainsMono Nerd Font.
 
 Run: `./run.sh` (or `quickshell $(pwd)`).
 Only one notification daemon can run: stop other shells/daemons (mako, dunst, your old quickshell config) first.
@@ -63,6 +63,9 @@ Incoming notifications slide out of the notch with their action buttons, then st
 
 ### Power
 ![Power tab](docs/screenshots/power.png)
+
+### Record
+Screen recorder (wf-recorder). Record one or more screens (several screens are merged into one video, laid out like your monitors, which needs `ffmpeg`) or a visible window. Optional audio from the microphone, the system output, or both mixed. Files go to `~/Videos/Recordings` (`recordDir` in settings.json). On NVIDIA GPUs it encodes with NVENC (set `recordEncoder` to `"cpu"` in settings.json to force the CPU encoder). A red dot shows in the idle notch while recording. IPC: `record` (start/stop with the tab's selection), `recordScreens` (all screens).
 
 ### Settings
 ![Settings tab](docs/screenshots/settings.png)

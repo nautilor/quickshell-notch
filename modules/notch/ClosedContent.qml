@@ -106,6 +106,14 @@ Item {
 		spacing: 8
 
 		Icon {
+			visible: Recorder.recording
+			name: "fiber_manual_record"
+			size: 18
+			fill: 1
+			color: Theme.error
+			anchors.verticalCenter: parent.verticalCenter
+		}
+		Icon {
 			visible: Caffeine.active
 			name: "coffee"
 			size: 18

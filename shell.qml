@@ -8,7 +8,7 @@ import qs.config
 
 ShellRoot {
 	// singletons are lazy: touch the ones that must react to system events from startup
-	readonly property var keepAlive: [Audio.armed, Brightness.armed, Mic.armed, Caffeine.active, Notifs.count, Clip.entries]
+	readonly property var keepAlive: [Audio.armed, Brightness.armed, Mic.armed, Caffeine.active, Notifs.count, Clip.entries, Recorder.recording]
 
 	LockScreen {}
 
@@ -57,6 +57,14 @@ ShellRoot {
 		}
 		function mic(): void {
 			Mic.toggle();
+		}
+		// start/stop recording with what the Record tab has selected
+		function record(): void {
+			Recorder.toggle();
+		}
+		function recordScreens(): void {
+			Recorder.selectAll();
+			Recorder.startScreens(Recorder.selectedScreens);
 		}
 		function volumeUp(): void {
 			Audio.step(0.05);

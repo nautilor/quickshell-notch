@@ -9,9 +9,9 @@ Singleton {
 	id: root
 
 	readonly property var sink: Pipewire.defaultAudioSink
-	readonly property bool available: sink !== null && sink.audio !== null
-	readonly property real volume: available ? sink.audio.volume : 0
-	readonly property bool muted: available ? sink.audio.muted : false
+	readonly property bool available: !!sink && !!sink.audio
+	readonly property real volume: !!sink && !!sink.audio ? sink.audio.volume : 0
+	readonly property bool muted: !!sink && !!sink.audio ? sink.audio.muted : false
 	property bool armed: false
 
 	PwObjectTracker {

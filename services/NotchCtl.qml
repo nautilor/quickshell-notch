@@ -9,7 +9,7 @@ import qs.config
 Singleton {
 	id: root
 
-	readonly property var tabs: ["home", "apps", "clipboard", "calendar", "notifications", "power", "settings"]
+	readonly property var tabs: ["home", "apps", "clipboard", "calendar", "notifications", "power", "record", "settings"]
 
 	property bool open: false
 	property string tab: "home"

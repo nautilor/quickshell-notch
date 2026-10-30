@@ -19,6 +19,7 @@ Item {
 		{ id: "calendar", icon: "calendar_month", label: "Calendar" },
 		{ id: "notifications", icon: "notifications", label: "Alerts" },
 		{ id: "power", icon: "power_settings_new", label: "Power" },
+		{ id: "record", icon: "videocam", label: "Record" },
 		{ id: "settings", icon: "tune", label: "Settings" }
 	]
 
@@ -252,6 +253,8 @@ Item {
 				return "tabs/NotificationsTab.qml";
 			case "power":
 				return "tabs/PowerTab.qml";
+			case "record":
+				return "tabs/RecordTab.qml";
 			case "settings":
 				return "tabs/SettingsTab.qml";
 			default:
