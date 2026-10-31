@@ -18,7 +18,7 @@ Item {
 		anchors.left: parent.left
 		anchors.top: parent.top
 		anchors.bottom: parent.bottom
-		width: 180
+		width: 160
 		spacing: 4
 		Repeater {
 			model: root.pages
