@@ -39,6 +39,12 @@ Singleton {
 	property alias micOnMessage: adapter.micOnMessage
 	property alias micOffMessage: adapter.micOffMessage
 	property alias notchEdge: adapter.notchEdge
+	property alias dockEnabled: adapter.dockEnabled
+	property alias dockEdge: adapter.dockEdge
+	property alias dockAutohide: adapter.dockAutohide
+	property alias dockAllScreens: adapter.dockAllScreens
+	property alias dockIconSize: adapter.dockIconSize
+	property alias dockPinned: adapter.dockPinned
 	property alias recordDir: adapter.recordDir
 	property alias recordEncoder: adapter.recordEncoder
 	property alias launchCounts: adapter.launchCounts
@@ -67,6 +73,14 @@ Singleton {
 			property real hue: 0.53
 			// screen edge the notch is attached to: "top" | "bottom" | "left" | "right"
 			property string notchEdge: "top"
+			// dock
+			property bool dockEnabled: true
+			property string dockEdge: "bottom"
+			property bool dockAutohide: false
+			property bool dockAllScreens: false
+			property int dockIconSize: 44
+			// desktop entry ids, in dock order
+			property var dockPinned: []
 			// id (file name without .json) of a colour scheme; empty = tonal palette from hue
 			property string colorscheme: ""
 			// built-in lock screen: used by the Power tab and `notch lock`

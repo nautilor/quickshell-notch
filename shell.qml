@@ -2,6 +2,7 @@ import Quickshell
 import Quickshell.Io
 import qs.modules.notch
 import qs.modules.corner
+import qs.modules.dock
 import qs.modules.lock
 import qs.services
 import qs.config
@@ -22,6 +23,12 @@ ShellRoot {
 		model: Settings.allScreens ? Quickshell.screens : [Quickshell.screens.find(s => s.name === Settings.screenName) ?? Quickshell.screens[0]]
 
 		Notch {}
+	}
+
+	Variants {
+		model: !Settings.dockEnabled ? [] : Settings.dockAllScreens ? Quickshell.screens : [Quickshell.screens.find(s => s.name === Settings.screenName) ?? Quickshell.screens[0]]
+
+		DockWindow {}
 	}
 
 	// Bind these in hyprland.conf, e.g.:  bind = SUPER, Space, exec, qs ipc -p ~/Sources/PERSONAL/quickshell-notch call notch launcher

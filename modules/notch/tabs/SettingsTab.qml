@@ -8,7 +8,7 @@ Item {
 	id: root
 
 	property int page: 0
-	readonly property var pages: [{ name: "Appearance", icon: "image" }, { name: "Notch", icon: "tune" }, { name: "Notifications", icon: "notifications" }, { name: "Date & time", icon: "schedule" }, { name: "Calendar", icon: "calendar_month" }]
+	readonly property var pages: [{ name: "Appearance", icon: "image" }, { name: "Notch", icon: "tune" }, { name: "Notifications", icon: "notifications" }, { name: "Date & time", icon: "schedule" }, { name: "Calendar", icon: "calendar_month" }, { name: "Dock", icon: "apps" }]
 
 	Component.onCompleted: Colorschemes.reload()
 
@@ -337,36 +337,9 @@ Item {
 					title: "Position"
 					subtitle: "Screen edge the notch is attached to"
 				}
-				Row {
-					spacing: 8
-					Repeater {
-						model: [{ id: "top", name: "Top" }, { id: "bottom", name: "Bottom" }, { id: "left", name: "Left" }, { id: "right", name: "Right" }]
-						Rectangle {
-							id: edgeChip
-							required property var modelData
-							readonly property bool current: Settings.notchEdge === modelData.id
-							width: 110
-							height: 44
-							radius: current ? Theme.radiusSmall : Theme.radiusMedium
-							color: current ? Theme.primaryContainer : Theme.surfaceContainerHigh
-							Behavior on radius {
-								NumberAnimation {
-									duration: Theme.durShort
-								}
-							}
-							Txt {
-								anchors.centerIn: parent
-								text: edgeChip.modelData.name
-								font.pixelSize: 12
-								color: edgeChip.current ? Theme.primaryContainerFg : Theme.surfaceVariantFg
-							}
-							MouseArea {
-								anchors.fill: parent
-								cursorShape: Qt.PointingHandCursor
-								onClicked: Settings.notchEdge = edgeChip.modelData.id
-							}
-						}
-					}
+				EdgePicker {
+					value: Settings.notchEdge
+					onPicked: edge => Settings.notchEdge = edge
 				}
 				SettingRow {
 					title: "Open on hover"
@@ -554,6 +527,64 @@ Item {
 						variant: 1
 						enabled: !Gcal.loggingIn
 						onClicked: Gcal.login()
+					}
+				}
+			}
+
+			ColumnLayout {
+				Layout.fillWidth: true
+				visible: root.page === 5
+				spacing: 8
+
+				SectionLabel {
+					text: "DOCK"
+				}
+				SettingRow {
+					title: "Show dock"
+					subtitle: "Pinned and running apps, plus the trash"
+					Switch {
+						checked: Settings.dockEnabled
+						onToggled: v => Settings.dockEnabled = v
+					}
+				}
+				SettingRow {
+					title: "Position"
+					subtitle: "Screen edge the dock is attached to"
+				}
+				EdgePicker {
+					value: Settings.dockEdge
+					onPicked: edge => Settings.dockEdge = edge
+				}
+				SettingRow {
+					title: "Autohide"
+					subtitle: "Slide the dock off screen; hover the edge to bring it back. Otherwise it reserves space"
+					Switch {
+						checked: Settings.dockAutohide
+						onToggled: v => Settings.dockAutohide = v
+					}
+				}
+				SettingRow {
+					title: "Show on all screens"
+					subtitle: "Otherwise only on the first screen"
+					Switch {
+						checked: Settings.dockAllScreens
+						onToggled: v => Settings.dockAllScreens = v
+					}
+				}
+				SettingRow {
+					title: "Icon size"
+					subtitle: Settings.dockIconSize + " px"
+					Btn {
+						icon: "remove"
+						implicitWidth: 40
+						implicitHeight: 40
+						onClicked: Settings.dockIconSize = Math.max(28, Settings.dockIconSize - 4)
+					}
+					Btn {
+						icon: "add"
+						implicitWidth: 40
+						implicitHeight: 40
+						onClicked: Settings.dockIconSize = Math.min(72, Settings.dockIconSize + 4)
 					}
 				}
 			}
