@@ -45,6 +45,7 @@ Singleton {
 	property alias dockAllScreens: adapter.dockAllScreens
 	property alias dockIconSize: adapter.dockIconSize
 	property alias dockPinned: adapter.dockPinned
+	property alias dockIcons: adapter.dockIcons
 	property alias recordDir: adapter.recordDir
 	property alias recordEncoder: adapter.recordEncoder
 	property alias launchCounts: adapter.launchCounts
@@ -81,6 +82,8 @@ Singleton {
 			property int dockIconSize: 44
 			// desktop entry ids, in dock order
 			property var dockPinned: []
+			// per-app custom icon: desktop entry id / app id -> icon theme name or image path
+			property var dockIcons: ({})
 			// id (file name without .json) of a colour scheme; empty = tonal palette from hue
 			property string colorscheme: ""
 			// built-in lock screen: used by the Power tab and `notch lock`

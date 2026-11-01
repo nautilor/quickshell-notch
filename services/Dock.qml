@@ -82,6 +82,39 @@ Singleton {
 			w.close();
 	}
 
+	// custom icon (theme name or image path) if set, else the app's own
+	function iconSource(key, fallbackName) {
+		const custom = (Settings.dockIcons || {})[key];
+		if (custom) {
+			if (custom.startsWith("file://") || custom.startsWith("/") || custom.startsWith("~"))
+				return "file://" + custom.replace(/^file:\/\//, "").replace(/^~/, Quickshell.env("HOME"));
+			return Quickshell.iconPath(custom, "application-x-executable");
+		}
+		return Quickshell.iconPath(fallbackName, "application-x-executable");
+	}
+
+	function setIcon(key, value) {
+		const icons = Object.assign({}, Settings.dockIcons || {});
+		const v = (value || "").trim();
+		if (v === "")
+			delete icons[key];
+		else
+			icons[key] = v;
+		Settings.dockIcons = icons;
+	}
+
+	// move a pinned app to position `target` among the pinned ones
+	function move(key, target) {
+		const keys = items.filter(i => i.type === "app" && i.pinned).map(i => i.key);
+		const from = keys.indexOf(key);
+		if (from < 0)
+			return;
+		keys.splice(from, 1);
+		keys.splice(Math.max(0, Math.min(keys.length, target)), 0, key);
+		// pins whose desktop entry is gone stay in the list
+		Settings.dockPinned = keys.concat(pinned.filter(p => keys.indexOf(p) < 0));
+	}
+
 	function pin(id) {
 		if (pinned.indexOf(id) < 0)
 			Settings.dockPinned = pinned.concat([id]);

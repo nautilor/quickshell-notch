@@ -23,8 +23,8 @@ PanelWindow {
 	anchors.bottom: edge !== "top"
 	anchors.left: edge !== "right"
 	anchors.right: edge !== "left"
-	implicitWidth: 420
-	implicitHeight: 420
+	implicitWidth: 560
+	implicitHeight: 560
 	color: "transparent"
 	exclusionMode: Settings.dockAutohide ? ExclusionMode.Ignore : ExclusionMode.Normal
 	exclusiveZone: Settings.dockAutohide ? 0 : thickness + 2 * margin
@@ -34,13 +34,18 @@ PanelWindow {
 
 	WlrLayershell.namespace: "dock"
 	WlrLayershell.layer: WlrLayer.Top
-	WlrLayershell.keyboardFocus: menuKind === "add" ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
+	WlrLayershell.keyboardFocus: (menuKind === "add" || menuKind === "icon") ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
 
 	// ---- popup menu state ----
 	property string menuKind: ""      // "" | "app" | "trash" | "add"
 	property var menuItem: null
 	property point menuAnchor: Qt.point(0, 0)
 	property int armed: -1
+
+	// drag-to-reorder: the slot being dragged and where it would land among the pinned apps
+	property string dragKey: ""
+	property int dragFrom: -1
+	property int dragTo: -1
 
 	function openMenu(kind, info, slot) {
 		const p = slot.mapToItem(root, slot.width / 2, slot.height / 2);
@@ -57,6 +62,26 @@ PanelWindow {
 		menuKind = "";
 	}
 
+	// popup placement next to the dock, centred on the slot that opened it
+	function popX(w) {
+		return vertical ? (edge === "left" ? bar.x + bar.width + 10 : bar.x - w - 10) : Math.max(8, Math.min(root.width - w - 8, menuAnchor.x - w / 2));
+	}
+	function popY(h) {
+		return vertical ? Math.max(8, Math.min(root.height - h - 8, menuAnchor.y - h / 2)) : (edge === "top" ? bar.y + bar.height + 10 : bar.y - h - 10);
+	}
+
+	function openIconEditor() {
+		const cur = (Settings.dockIcons || {})[menuItem.key] || "";
+		iconField.text = cur;
+		menuKind = "icon";
+		iconPop.browsing = false;
+		Qt.callLater(() => iconField.forceFocus());
+	}
+	function applyIcon(value) {
+		Dock.setIcon(menuItem.key, value);
+		closeMenu();
+	}
+
 	readonly property var menuRows: {
 		const it = menuItem;
 		const r = [];
@@ -67,6 +92,7 @@ PanelWindow {
 				r.push({ sep: true });
 			}
 			r.push({ label: it.windows.length > 0 ? "New window" : "Open", act: () => Dock.launch(it.entry) });
+			r.push({ label: "Change icon…", keep: true, act: () => win.openIconEditor() });
 			if (it.entry)
 				r.push({ label: it.pinned ? "Remove from Dock" : "Keep in Dock", act: () => it.pinned ? Dock.unpin(it.key) : Dock.pin(it.key) });
 			if (it.windows.length > 0)
@@ -157,11 +183,36 @@ PanelWindow {
 				}
 
 				Repeater {
+					id: slots
 					model: Dock.items
 					DockItem {
 						id: slot
 						required property var modelData
-						info: modelData
+						required property int index
+						shift: {
+							if (win.dragKey === "" || !info.pinned || info.key === win.dragKey)
+								return 0;
+							if (win.dragFrom < win.dragTo && index > win.dragFrom && index <= win.dragTo)
+								return -(win.vertical ? height : width);
+							if (win.dragFrom > win.dragTo && index >= win.dragTo && index < win.dragFrom)
+								return win.vertical ? height : width;
+							return 0;
+						}
+						function targetFor(offset) {
+							const c = center + offset;
+							let target = 0;
+							for (let i = 0; i < slots.count; i++) {
+								const o = slots.itemAt(i);
+								if (o && o !== slot && o.info.type === "app" && o.info.pinned && o.center < c)
+									target++;
+							}
+							return target;
+						}
+						onDragMoved: offset => {
+							win.dragKey = info.key;
+							win.dragFrom = index;
+							win.dragTo = targetFor(offset);
+						}						info: modelData
 						size: win.iconSize
 						vertical: win.vertical
 						edge: win.edge
@@ -183,6 +234,11 @@ PanelWindow {
 								win.openMenu(info.type, info, slot);
 						}
 						onFilesDropped: paths => Dock.trash(paths)
+						onDragReleased: offset => {
+							const target = targetFor(offset);
+							win.dragKey = "";
+							Dock.move(info.key, target);
+						}
 					}
 				}
 			}
@@ -191,15 +247,15 @@ PanelWindow {
 		// ---- context menu ----
 		Rectangle {
 			id: menu
-			visible: win.menuKind === "app" || win.menuKind === "trash"
+			visible: win.menuRows.length > 0 && (win.menuKind === "app" || win.menuKind === "trash")
 			width: 220
 			height: menuCol.implicitHeight + 12
 			radius: Theme.radiusMedium
 			color: Theme.surfaceContainerHigh
 			border.width: 1
 			border.color: Theme.outlineVariant
-			x: win.vertical ? (win.edge === "left" ? bar.x + bar.width + 10 : bar.x - width - 10) : Math.max(8, Math.min(root.width - width - 8, win.menuAnchor.x - width / 2))
-			y: win.vertical ? Math.max(8, Math.min(root.height - height - 8, win.menuAnchor.y - height / 2)) : (win.edge === "top" ? bar.y + bar.height + 10 : bar.y - height - 10)
+			x: win.popX(width)
+			y: win.popY(height)
 
 			Column {
 				id: menuCol
@@ -252,7 +308,8 @@ PanelWindow {
 									return;
 								}
 								row.modelData.act();
-								win.closeMenu();
+								if (!row.modelData.keep)
+									win.closeMenu();
 							}
 						}
 					}
@@ -270,8 +327,8 @@ PanelWindow {
 			color: Theme.surfaceContainerHigh
 			border.width: 1
 			border.color: Theme.outlineVariant
-			x: win.vertical ? (win.edge === "left" ? bar.x + bar.width + 10 : bar.x - width - 10) : Math.max(8, Math.min(root.width - width - 8, win.menuAnchor.x - width / 2))
-			y: win.vertical ? Math.max(8, Math.min(root.height - height - 8, win.menuAnchor.y - height / 2)) : (win.edge === "top" ? bar.y + bar.height + 10 : bar.y - height - 10)
+			x: win.popX(width)
+			y: win.popY(height)
 
 			readonly property var results: win.menuKind === "add" ? Apps.search(pickerField.text).filter(a => Dock.pinned.indexOf(a.id) < 0) : []
 
@@ -335,6 +392,87 @@ PanelWindow {
 							Dock.pin(pr.modelData.id);
 							win.closeMenu();
 						}
+					}
+				}
+			}
+		}
+
+		// ---- custom icon editor ----
+		Rectangle {
+			id: iconPop
+			visible: win.menuKind === "icon"
+			property bool browsing: false
+			width: browsing ? 380 : 360
+			height: browsing ? 440 : iconCol.implicitHeight + 24
+			radius: Theme.radiusMedium
+			color: dropIcon.containsDrag ? Theme.primaryContainer : Theme.surfaceContainerHigh
+			border.width: 1
+			border.color: Theme.outlineVariant
+			x: win.popX(width)
+			y: win.popY(height)
+
+			DropArea {
+				id: dropIcon
+				anchors.fill: parent
+				keys: ["text/uri-list"]
+				onDropped: d => {
+					if (d.urls.length > 0)
+						iconField.text = decodeURIComponent(d.urls[0].toString().replace(/^file:\/\//, ""));
+				}
+			}
+
+			FilePicker {
+				visible: iconPop.browsing
+				anchors.fill: parent
+				anchors.margins: 12
+				onPicked: path => {
+					iconField.text = path;
+					iconPop.browsing = false;
+				}
+				onCancelled: iconPop.browsing = false
+			}
+
+			Column {
+				id: iconCol
+				visible: !iconPop.browsing
+				anchors.fill: parent
+				anchors.margins: 12
+				spacing: 10
+
+				Txt {
+					width: parent.width
+					text: win.menuItem ? "Icon for " + win.menuItem.name : ""
+					font.weight: Font.Medium
+				}
+				Field {
+					id: iconField
+					width: parent.width
+					icon: "image"
+					placeholder: "Icon name or image path"
+					onAccepted: win.applyIcon(text)
+				}
+				Txt {
+					width: parent.width
+					wrapMode: Text.Wrap
+					font.pixelSize: 12
+					color: Theme.surfaceVariantFg
+					text: "Type an icon theme name or an image path, browse for a file, or drop one here."
+				}
+				Row {
+					spacing: 8
+					Btn {
+						icon: "folder"
+						label: "Browse…"
+						onClicked: iconPop.browsing = true
+					}
+					Btn {
+						label: "Apply"
+						variant: 1
+						onClicked: win.applyIcon(iconField.text)
+					}
+					Btn {
+						label: "Reset"
+						onClicked: win.applyIcon("")
 					}
 				}
 			}
