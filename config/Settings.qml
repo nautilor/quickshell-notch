@@ -46,6 +46,9 @@ Singleton {
 	property alias dockIconSize: adapter.dockIconSize
 	property alias dockPinned: adapter.dockPinned
 	property alias dockIcons: adapter.dockIcons
+	property alias wallpaper: adapter.wallpaper
+	property alias wallpaperColors: adapter.wallpaperColors
+	property alias wallpaperTintBg: adapter.wallpaperTintBg
 	property alias recordDir: adapter.recordDir
 	property alias recordEncoder: adapter.recordEncoder
 	property alias launchCounts: adapter.launchCounts
@@ -74,6 +77,11 @@ Singleton {
 			property real hue: 0.53
 			// screen edge the notch is attached to: "top" | "bottom" | "left" | "right"
 			property string notchEdge: "top"
+			// wallpaper chosen from ~/Pictures/Wallpapers; with wallpaperColors the theme is generated from it
+			property string wallpaper: ""
+			property bool wallpaperColors: false
+			// with wallpaperColors: tint the near-black background with the wallpaper colour
+			property bool wallpaperTintBg: false
 			// dock
 			property bool dockEnabled: true
 			property string dockEdge: "bottom"

@@ -18,7 +18,8 @@ Singleton {
 	// [{id, name, preview: [color x4], palette: {role: color}}]
 	property var schemes: []
 	readonly property var current: schemes.find(s => s.id === Settings.colorscheme) ?? null
-	readonly property var palette: current ? current.palette : null
+	// the wallpaper palette, when enabled, wins over the selected scheme
+	readonly property var palette: Settings.wallpaperColors && Wallpaper.palette ? Wallpaper.palette : current ? current.palette : null
 
 	function reload() {
 		if (!loader.running)

@@ -8,9 +8,12 @@ Item {
 	id: root
 
 	property int page: 0
-	readonly property var pages: [{ name: "Appearance", icon: "image" }, { name: "Notch", icon: "tune" }, { name: "Notifications", icon: "notifications" }, { name: "Date & time", icon: "schedule" }, { name: "Calendar", icon: "calendar_month" }, { name: "Dock", icon: "apps" }]
+	readonly property var pages: [{ name: "Appearance", icon: "brightness_7" }, { name: "Notch", icon: "tune" }, { name: "Notifications", icon: "notifications" }, { name: "Date & time", icon: "schedule" }, { name: "Calendar", icon: "calendar_month" }, { name: "Dock", icon: "apps" }, { name: "Wallpaper", icon: "image" }]
 
-	Component.onCompleted: Colorschemes.reload()
+	Component.onCompleted: {
+		Colorschemes.reload();
+		Wallpaper.reload();
+	}
 
 	// left pane: category list
 	Column {
@@ -109,7 +112,7 @@ Item {
 				}
 				Item {
 					id: accentWrap
-					readonly property bool shown: Settings.colorscheme === ""
+					readonly property bool shown: Settings.colorscheme === "" && !Settings.wallpaperColors
 					property real amount: shown ? 1 : 0
 					Behavior on amount {
 						NumberAnimation {
@@ -585,6 +588,102 @@ Item {
 						implicitWidth: 40
 						implicitHeight: 40
 						onClicked: Settings.dockIconSize = Math.min(72, Settings.dockIconSize + 4)
+					}
+				}
+			}
+
+			ColumnLayout {
+				Layout.fillWidth: true
+				visible: root.page === 6
+				spacing: 8
+
+				SectionLabel {
+					text: "WALLPAPER"
+				}
+				SettingRow {
+					title: "Match colours to wallpaper"
+					subtitle: "Generate the theme from the chosen wallpaper. Replaces the accent and colour scheme"
+					Switch {
+						checked: Settings.wallpaperColors
+						onToggled: v => Settings.wallpaperColors = v
+					}
+				}
+				SettingRow {
+					title: "Tint the background"
+					subtitle: "Use a dark shade of the wallpaper colour instead of near-black"
+					enabled: Settings.wallpaperColors
+					opacity: enabled ? 1 : 0.5
+					Switch {
+						checked: Settings.wallpaperTintBg
+						onToggled: v => Settings.wallpaperTintBg = v
+					}
+				}
+				SettingRow {
+					title: "Wallpaper folder"
+					subtitle: "~/Pictures/Wallpapers · " + Wallpaper.files.length + " images"
+					Btn {
+						icon: "refresh"
+						implicitWidth: 40
+						implicitHeight: 40
+						onClicked: Wallpaper.reload()
+					}
+				}
+				Flow {
+					Layout.fillWidth: true
+					spacing: 6
+					visible: Wallpaper.folders.length > 0
+					Repeater {
+						model: [""].concat(Wallpaper.folders)
+						Btn {
+							required property string modelData
+							implicitHeight: 32
+							label: modelData === "" ? "All" : modelData
+							toggleable: true
+							toggled: Wallpaper.folderFilter === modelData
+							toggledRadius: 14
+							onClicked: Wallpaper.folderFilter = modelData
+						}
+					}
+				}
+				// decoding every thumbnail is costly, so the grid is only filled while this page is shown
+				Flow {
+					id: thumbs
+					Layout.fillWidth: true
+					spacing: 8
+					readonly property int columns: 3
+					Repeater {
+						model: root.page === 6 ? Wallpaper.filtered : []
+						Item {
+							id: thumb
+							required property var modelData
+							readonly property bool current: Settings.wallpaper === modelData.path
+							width: Math.floor((thumbs.width - (thumbs.columns - 1) * thumbs.spacing) / thumbs.columns)
+							height: Math.round(width * 0.62)
+							RoundedImage {
+								anchors.fill: parent
+								radius: thumb.current ? Theme.radiusSmall : Theme.radiusMedium
+								source: "file://" + thumb.modelData.path
+								Behavior on radius {
+									NumberAnimation {
+										duration: Theme.durShort
+									}
+								}
+							}
+							Rectangle {
+								anchors.fill: parent
+								radius: thumb.current ? Theme.radiusSmall : Theme.radiusMedium
+								color: "transparent"
+								border.width: thumb.current ? 3 : area.containsMouse ? 2 : 0
+								border.color: thumb.current ? Theme.primary : Theme.outline
+							}
+							MouseArea {
+								id: area
+								anchors.fill: parent
+								hoverEnabled: true
+								cursorShape: Qt.PointingHandCursor
+								onClicked: Wallpaper.apply(thumb.modelData.path)
+							}
+						}
 					}
 				}
 			}

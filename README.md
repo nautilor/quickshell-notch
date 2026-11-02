@@ -19,7 +19,7 @@ A [Boring Notch](https://github.com/TheBoredTeam/boring.notch)-style island for 
 The reasoning behind the look and behaviour is in [DESIGN.md](DESIGN.md).
 
 ## Install and run
-Requirements: Quickshell 0.3+, Hyprland, `wf-recorder` + `ffmpeg` (screen recording), PipeWire, UPower, power-profiles-daemon, NetworkManager, BlueZ, `brightnessctl`, `clipse` + `wl-clipboard`, `systemd` (for caffeine and power actions), `hyprlock`, Python 3, and the JetBrainsMono Nerd Font.
+Requirements: Quickshell 0.3+, Hyprland, `wf-recorder` + `ffmpeg` (screen recording), PipeWire, UPower, power-profiles-daemon, NetworkManager, BlueZ, `brightnessctl`, `awww` + ImageMagick (wallpaper picker and wallpaper colours), `clipse` + `wl-clipboard`, `systemd` (for caffeine and power actions), `hyprlock`, Python 3, and the JetBrainsMono Nerd Font.
 
 Run: `./run.sh` (or `quickshell $(pwd)`).
 Only one notification daemon can run: stop other shells/daemons (mako, dunst, your old quickshell config) first.
