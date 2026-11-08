@@ -53,7 +53,8 @@ PanelWindow {
 	readonly property real contentW: {
 		switch (mode) {
 		case "open":
-			return openSize[0] - 2 * topR;
+			// never narrower than the header needs (the tab bar grows with the selected tab)
+			return Math.max(openSize[0] - 2 * topR, openView.implicitWidth + 16);
 		case "notif":
 			return peek.implicitWidth + 12;
 		case "hud":

@@ -12,6 +12,9 @@ Item {
 	property bool active: false
 	property bool stickyBefore: false
 
+	// narrowest the header can be without the tab bar running into the status icons
+	implicitWidth: tabBar.width + status.width + 6 + 8 + 24
+
 	readonly property var tabDefs: [
 		{ id: "home", icon: "home", label: "Home" },
 		{ id: "apps", icon: "apps", label: "Apps" },
@@ -117,6 +120,7 @@ Item {
 
 	// right side of the header: clock, battery, pin
 	Row {
+		id: status
 		anchors.right: parent.right
 		anchors.rightMargin: 8
 		anchors.verticalCenter: tabBar.verticalCenter
