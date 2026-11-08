@@ -11,6 +11,8 @@ Item {
 	readonly property real hourH: 46
 	readonly property real gutter: 46
 	property var selectedEvent: null
+	// day column an event is being dragged out of; kept above its neighbours so the event stays visible over them
+	property int dragCol: -1
 	property date now: new Date()
 
 	readonly property var days: {
@@ -35,6 +37,15 @@ Item {
 	function scrollToNow() {
 		const target = Math.max(0, ((Gcal.sameDay(Gcal.today, root.now) && Gcal.weekStart <= root.now && root.now < Gcal.addDays(Gcal.weekStart, 7)) ? root.now.getHours() - 1 : 8) * hourH);
 		grid.contentY = Math.min(target, Math.max(0, grid.contentHeight - grid.height));
+	}
+
+	// a failed drag-move has no editor open to show its error
+	Connections {
+		target: Gcal
+		function onEditFinished(ok, message) {
+			if (!ok && !editor.visible)
+				Gcal.error = message;
+		}
 	}
 
 	Component.onCompleted: {
@@ -277,10 +288,12 @@ Item {
 							Item {
 								id: col
 								required property date modelData
+								required property int index
 								readonly property bool isToday: Gcal.sameDay(modelData, root.now)
 								readonly property var laid: Gcal.layoutFor(modelData)
 								width: parent.width / 7
 								height: parent.height
+								z: root.dragCol === index ? 10 : 0
 
 								Rectangle {
 									anchors.fill: parent
@@ -311,14 +324,40 @@ Item {
 										id: evBox
 										required property var modelData
 										readonly property var ev: modelData.ev
-										x: 2 + modelData.lane * ((col.width - 4) / modelData.lanes)
-										width: (col.width - 4) / modelData.lanes - 2
+										// overlapping events cascade like Google Calendar: each later one is shifted right
+										// and drawn over the previous, so every title stays readable; clicking one brings it to the front
+										readonly property real full: col.width - 4
+										readonly property real step: modelData.lanes > 1 ? Math.min(full * 0.28, full * 0.6 / (modelData.lanes - 1)) : 0
+										x: 2 + modelData.lane * step
+										width: full - modelData.lane * step - 2
+										z: dragging || (root.selectedEvent && root.selectedEvent.id === ev.id) ? 100 : modelData.lane
 										y: modelData.sm / 60 * root.hourH + 1
 										height: Math.max(18, (modelData.em - modelData.sm) / 60 * root.hourH - 2)
 										radius: 8
 										color: ev.color
-										border.width: root.selectedEvent && root.selectedEvent.id === ev.id ? 2 : 0
-										border.color: Theme.surfaceFg
+										opacity: dragging ? 0.85 : 1
+										// drag to move in time (15 min steps) and between days, like Google Calendar
+										readonly property bool canDrag: ev.canEdit === true && !ev.allDay
+										readonly property real snapPx: root.hourH / 4
+										property bool dragging: false
+										property real dragDx: 0
+										property real dragDy: 0
+										readonly property int dayDelta: Math.round(dragDx / col.width)
+										readonly property int minuteDelta: Math.round(dragDy / snapPx) * 15
+										function shifted(d) {
+											const r = new Date(d);
+											r.setDate(r.getDate() + dayDelta);
+											r.setMinutes(r.getMinutes() + minuteDelta);
+											return r;
+										}
+										readonly property date movedStart: shifted(ev.s)
+										readonly property date movedEnd: shifted(ev.e)
+										transform: Translate {
+											x: Math.round(evBox.dragDx / col.width) * col.width
+											y: Math.round(evBox.dragDy / evBox.snapPx) * evBox.snapPx
+										}
+										border.width: root.selectedEvent && root.selectedEvent.id === ev.id ? 2 : modelData.lanes > 1 ? 1 : 0
+										border.color: root.selectedEvent && root.selectedEvent.id === ev.id ? Theme.surfaceFg : Theme.surfaceContainerLow
 										clip: true
 
 										Rectangle {
@@ -341,8 +380,8 @@ Item {
 											}
 											Txt {
 												width: parent.width
-												visible: evBox.height > 34
-												text: Qt.formatTime(evBox.ev.s, "hh:mm")
+												visible: evBox.height > 34 || evBox.dragging
+												text: evBox.dragging ? Qt.formatTime(evBox.movedStart, "hh:mm") + " – " + Qt.formatTime(evBox.movedEnd, "hh:mm") : Qt.formatTime(evBox.ev.s, "hh:mm")
 												font.pixelSize: 10
 												color: root.readableOn(evBox.ev.color)
 												opacity: 0.85
@@ -352,7 +391,52 @@ Item {
 											id: evArea
 											anchors.fill: parent
 											hoverEnabled: true
-											onClicked: root.selectedEvent = evBox.ev
+											preventStealing: evBox.canDrag
+											property point press
+											property bool moved: false
+											onPressed: m => {
+												press = evArea.mapToItem(sheet, m.x, m.y);
+												moved = false;
+											}
+											onPositionChanged: m => {
+												if (!pressed || !evBox.canDrag)
+													return;
+												const p = evArea.mapToItem(sheet, m.x, m.y);
+												if (!evBox.dragging && Math.abs(p.x - press.x) < 6 && Math.abs(p.y - press.y) < 6)
+													return;
+												evBox.dragging = true;
+												moved = true;
+												root.dragCol = col.index;
+												evBox.dragDx = p.x - press.x;
+												evBox.dragDy = p.y - press.y;
+											}
+											onReleased: {
+												if (!evBox.dragging)
+													return;
+												const changed = evBox.dayDelta !== 0 || evBox.minuteDelta !== 0;
+												const ns = evBox.movedStart, ne = evBox.movedEnd;
+												evBox.dragging = false;
+												evBox.dragDx = 0;
+												evBox.dragDy = 0;
+												root.dragCol = -1;
+												if (changed)
+													Gcal.saveEvent({
+														id: evBox.ev.id,
+														calendarId: evBox.ev.calendarId,
+														title: evBox.ev.title,
+														location: evBox.ev.location || "",
+														allDay: false,
+														start: Gcal.iso(ns) + "T" + Gcal.fmtTime(ns),
+														end: Gcal.iso(ne) + "T" + Gcal.fmtTime(ne)
+													});
+											}
+											onClicked: {
+												if (moved) {
+													moved = false;
+													return;
+												}
+												root.selectedEvent = evBox.ev;
+											}
 										}
 									}
 								}
