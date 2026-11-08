@@ -16,16 +16,37 @@ PanelWindow {
 	// the shared open state only applies to the screen it was opened on
 	readonly property bool isOpen: NotchCtl.open && (NotchCtl.screen === "" || NotchCtl.screen === screen.name)
 
-	// which screen edge the notch is attached to
-	readonly property string edge: Settings.notchEdge
+	// where the notch is attached: "edge:align". The idle notch and the Home tab use the notch placement,
+	// tabs opened with their shortcut and the notification popup can use their own.
+	readonly property string wanted: mode === "open" ? Settings.placementFor(NotchCtl.openedAs) : mode === "notif" ? Settings.placementFor("popup") : Settings.placementFor("")
+	// the placement actually in use; when `wanted` changes the notch first shrinks away where it is,
+	// then re-attaches at the new place and grows from there, so it never seems to travel across the screen
+	property string applied: Settings.placementFor("")
+	property bool moving: false
+	readonly property string edge: applied.split(":")[0]
+	readonly property string align: applied.split(":")[1] ?? "center"
+	onWantedChanged: {
+		if (wanted === applied && !moving)
+			return;
+		moving = true;
+		moveTimer.restart();
+	}
+	Timer {
+		id: moveTimer
+		interval: 170
+		onTriggered: {
+			win.applied = win.wanted;
+			win.moving = false;
+		}
+	}
 	readonly property bool vertical: edge === "left" || edge === "right"
 
-	anchors.top: edge === "top"
-	anchors.bottom: edge === "bottom"
-	anchors.left: edge === "left"
-	anchors.right: edge === "right"
-	implicitWidth: 960
-	implicitHeight: 620
+	// the window covers the whole screen (the mask keeps it click-through) so moving the notch
+	// is only a change of position inside it, never a re-anchoring of the layer surface
+	anchors.top: true
+	anchors.bottom: true
+	anchors.left: true
+	anchors.right: true
 	color: "transparent"
 	exclusionMode: ExclusionMode.Ignore
 	mask: Region {
@@ -76,10 +97,18 @@ PanelWindow {
 		}
 	}
 	// the ears sit at both ends of the edge the notch hangs from
-	readonly property real targetW: vertical ? contentW : contentW + 2 * topR
-	readonly property real targetH: vertical ? contentH + 2 * topR : contentH
-	readonly property real topR: mode === "open" ? 24 : mode === "idle" ? 8 : 16
-	readonly property real botR: mode === "open" ? 34 : mode === "idle" ? 14 : 26
+	readonly property real targetW: moving ? (vertical ? 4 : 80) : vertical ? contentW : contentW + 2 * topR
+	readonly property real targetH: moving ? (vertical ? 80 : 4) : vertical ? contentH + 2 * topR : contentH
+	readonly property real topR: moving ? 0 : mode === "open" ? 24 : mode === "idle" ? 8 : 16
+	readonly property real botR: moving ? 0 : mode === "open" ? 34 : mode === "idle" ? 14 : 26
+
+	// position along the edge for an item of the given size
+	function alongX(w) {
+		return align === "start" ? 0 : align === "end" ? width - w : (width - w) / 2;
+	}
+	function alongY(h) {
+		return align === "start" ? 0 : align === "end" ? height - h : (height - h) / 2;
+	}
 
 	// ---- open/close by hover ----
 	Timer {
@@ -87,6 +116,7 @@ PanelWindow {
 		interval: 140
 		onTriggered: if (hover.hovered && Settings.hoverOpen && !win.isOpen && win.mode !== "notif") {
 			NotchCtl.screen = win.screen.name;
+			NotchCtl.openedAs = "";
 			if (Settings.homeOnHover)
 				NotchCtl.tab = "home";
 			NotchCtl.open = true;
@@ -119,8 +149,8 @@ PanelWindow {
 		id: hit
 		width: win.vertical ? (win.hidden ? 6 : stage.width + 8) : stage.width + 20
 		height: win.vertical ? stage.height + 20 : (win.hidden ? 6 : stage.height + 8)
-		x: win.edge === "left" ? 0 : win.edge === "right" ? win.width - width : (win.width - width) / 2
-		y: win.edge === "top" ? 0 : win.edge === "bottom" ? win.height - height : (win.height - height) / 2
+		x: win.edge === "left" ? 0 : win.edge === "right" ? win.width - width : win.alongX(width)
+		y: win.edge === "top" ? 0 : win.edge === "bottom" ? win.height - height : win.alongY(height)
 	}
 
 	// click-outside dismissal; armed shortly after opening so the initial focus change does not trigger it
@@ -164,10 +194,16 @@ PanelWindow {
 			id: stage
 			// how far the notch is pushed off its edge while autohidden
 			property real slide: win.hidden ? 4 - (win.vertical ? width : height) : 0
-			x: win.edge === "left" ? slide : win.edge === "right" ? win.width - width - slide : (win.width - width) / 2
-			y: win.edge === "top" ? slide : win.edge === "bottom" ? win.height - height - slide : (win.height - height) / 2
+			x: win.edge === "left" ? slide : win.edge === "right" ? win.width - width - slide : win.alongX(width)
+			y: win.edge === "top" ? slide : win.edge === "bottom" ? win.height - height - slide : win.alongY(height)
 			width: win.targetW
 			height: win.targetH
+			opacity: win.moving ? 0 : 1
+			Behavior on opacity {
+				NumberAnimation {
+					duration: 130
+				}
+			}
 
 			Behavior on slide {
 				SpringAnimation {

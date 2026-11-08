@@ -8,7 +8,7 @@ Item {
 	id: root
 
 	property int page: 0
-	readonly property var pages: [{ name: "Appearance", icon: "brightness_7" }, { name: "Notch", icon: "tune" }, { name: "Notifications", icon: "notifications" }, { name: "Date & time", icon: "schedule" }, { name: "Calendar", icon: "calendar_month" }, { name: "Dock", icon: "apps" }, { name: "Wallpaper", icon: "image" }]
+	readonly property var pages: [{ name: "Appearance", icon: "brightness_7" }, { name: "Notch", icon: "tune" }, { name: "Notifications", icon: "notifications" }, { name: "Date & time", icon: "schedule" }, { name: "Calendar", icon: "calendar_month" }, { name: "Dock", icon: "apps" }, { name: "Wallpaper", icon: "image" }, { name: "Placement", icon: "place" }]
 
 	Component.onCompleted: {
 		Colorschemes.reload();
@@ -335,14 +335,6 @@ Item {
 
 				SectionLabel {
 					text: "NOTCH"
-				}
-				SettingRow {
-					title: "Position"
-					subtitle: "Screen edge the notch is attached to"
-				}
-				EdgePicker {
-					value: Settings.notchEdge
-					onPicked: edge => Settings.notchEdge = edge
 				}
 				SettingRow {
 					title: "Open on hover"
@@ -683,6 +675,66 @@ Item {
 								cursorShape: Qt.PointingHandCursor
 								onClicked: Wallpaper.apply(thumb.modelData.path)
 							}
+						}
+					}
+				}
+			}
+
+			ColumnLayout {
+				Layout.fillWidth: true
+				visible: root.page === 7
+				spacing: 8
+
+				SectionLabel {
+					text: "NOTCH AND HOME"
+				}
+				SettingRow {
+					title: "Notch position"
+					subtitle: "Where the idle notch sits and where Home opens"
+				}
+				PlacementPicker {
+					value: Settings.notchEdge + ":" + Settings.notchAlign
+					onPicked: v => {
+						const p = v.split(":");
+						Settings.notchEdge = p[0];
+						Settings.notchAlign = p[1];
+					}
+				}
+
+				SectionLabel {
+					text: "WHEN OPENED WITH A SHORTCUT"
+				}
+				Repeater {
+					model: [{ id: "apps", name: "Application launcher" }, { id: "clipboard", name: "Clipboard manager" }, { id: "calendar", name: "Calendar" }, { id: "notifications", name: "Notifications" }, { id: "power", name: "Power menu" }, { id: "record", name: "Screen recorder" }, { id: "settings", name: "Settings" }, { id: "popup", name: "Notification popup" }]
+					ColumnLayout {
+						id: ctx
+						required property var modelData
+						property bool expanded: false
+						readonly property string stored: (Settings.placements || {})[modelData.id] || ""
+						Layout.fillWidth: true
+						spacing: 8
+						SettingRow {
+							title: ctx.modelData.name
+							subtitle: ctx.stored === "" ? "Same as notch" : Settings.placementLabel(ctx.stored)
+							Btn {
+								icon: "chevron_right"
+								implicitWidth: 40
+								implicitHeight: 40
+								rotation: ctx.expanded ? 270 : 90
+								Behavior on rotation {
+									NumberAnimation {
+										duration: Theme.durMedium
+										easing.type: Easing.OutCubic
+									}
+								}
+								onClicked: ctx.expanded = !ctx.expanded
+							}
+						}
+						PlacementPicker {
+							visible: ctx.expanded
+							allowInherit: true
+							value: ctx.stored
+							onPicked: v => Settings.setPlacement(ctx.modelData.id, v)
 						}
 					}
 				}

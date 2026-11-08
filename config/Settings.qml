@@ -39,6 +39,8 @@ Singleton {
 	property alias micOnMessage: adapter.micOnMessage
 	property alias micOffMessage: adapter.micOffMessage
 	property alias notchEdge: adapter.notchEdge
+	property alias notchAlign: adapter.notchAlign
+	property alias placements: adapter.placements
 	property alias dockEnabled: adapter.dockEnabled
 	property alias dockEdge: adapter.dockEdge
 	property alias dockAutohide: adapter.dockAutohide
@@ -52,6 +54,29 @@ Singleton {
 	property alias recordDir: adapter.recordDir
 	property alias recordEncoder: adapter.recordEncoder
 	property alias launchCounts: adapter.launchCounts
+
+	// "edge:align" the notch sits at when it opens for `ctx` (a tab id, "popup", or "" for the notch itself)
+	function placementFor(ctx) {
+		const p = ctx ? (placements || {})[ctx] : "";
+		return p ? p : notchEdge + ":" + notchAlign;
+	}
+
+	function placementLabel(p) {
+		const [edge, align] = p.split(":");
+		const side = { top: "Top", bottom: "Bottom", left: "Left", right: "Right" }[edge];
+		const vertical = edge === "left" || edge === "right";
+		const al = align === "start" ? (vertical ? "top" : "left") : align === "end" ? (vertical ? "bottom" : "right") : "";
+		return al === "" ? side : side + " · " + al;
+	}
+
+	function setPlacement(ctx, value) {
+		const m = Object.assign({}, placements || {});
+		if (value === "")
+			delete m[ctx];
+		else
+			m[ctx] = value;
+		placements = m;
+	}
 
 	property bool dirReady: false
 
@@ -77,6 +102,11 @@ Singleton {
 			property real hue: 0.53
 			// screen edge the notch is attached to: "top" | "bottom" | "left" | "right"
 			property string notchEdge: "top"
+			// position along that edge: "start" (left / top), "center" or "end" (right / bottom)
+			property string notchAlign: "center"
+			// where the notch opens for a tab or the notification popup ("edge:align"); missing = same as the notch
+			// keys: tab ids (apps, clipboard, calendar, notifications, power, record, settings) and "popup"
+			property var placements: ({})
 			// wallpaper chosen from ~/Pictures/Wallpapers; with wallpaperColors the theme is generated from it
 			property string wallpaper: ""
 			property bool wallpaperColors: false

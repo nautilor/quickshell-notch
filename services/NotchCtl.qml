@@ -16,13 +16,16 @@ Singleton {
 	// sticky: opened explicitly (keyboard/IPC/click), so leaving with the pointer does not close it
 	property bool sticky: false
 	property bool keyboard: false
+	// tab the current opening was requested for ("" = plain open); decides where the notch appears
+	property string openedAs: ""
 	// screen the notch is open on ("" = any)
 	property string screen: ""
 
 	function show(name, scr) {
 		// with a single notch there is nothing to pick; otherwise open on the screen the user is working on
 		screen = !Settings.allScreens ? "" : (scr || (Hyprland.focusedMonitor ? Hyprland.focusedMonitor.name : ""));
-		if (name && tabs.indexOf(name) >= 0)
+		openedAs = name && tabs.indexOf(name) >= 0 ? name : "";
+		if (openedAs !== "")
 			tab = name;
 		sticky = true;
 		keyboard = true;
