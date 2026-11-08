@@ -87,7 +87,8 @@ PanelWindow {
 	readonly property real contentH: {
 		switch (mode) {
 		case "open":
-			return openSize[1];
+			// without the header the tab needs less height
+			return openSize[1] - (NotchCtl.clean ? 40 : 0);
 		case "notif":
 			return peek.implicitHeight + 8;
 		case "hud":

@@ -18,6 +18,8 @@ Singleton {
 	property bool keyboard: false
 	// tab the current opening was requested for ("" = plain open); decides where the notch appears
 	property string openedAs: ""
+	// opened by a shortcut for one specific tab (not Home): show only that tab, without the tab bar and status icons
+	readonly property bool clean: openedAs !== "" && openedAs !== "home"
 	// screen the notch is open on ("" = any)
 	property string screen: ""
 

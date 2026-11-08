@@ -13,7 +13,7 @@ Item {
 	property bool stickyBefore: false
 
 	// narrowest the header can be without the tab bar running into the status icons
-	implicitWidth: tabBar.width + status.width + 6 + 8 + 24
+	implicitWidth: NotchCtl.clean ? 0 : tabBar.width + status.width + 6 + 8 + 24
 
 	readonly property var tabDefs: [
 		{ id: "home", icon: "home", label: "Home" },
@@ -28,6 +28,7 @@ Item {
 
 	Row {
 		id: tabBar
+		visible: !NotchCtl.clean
 		anchors.top: parent.top
 		anchors.topMargin: 10
 		anchors.left: parent.left
@@ -121,6 +122,7 @@ Item {
 	// right side of the header: clock, battery, pin
 	Row {
 		id: status
+		visible: !NotchCtl.clean
 		anchors.right: parent.right
 		anchors.rightMargin: 8
 		anchors.verticalCenter: tabBar.verticalCenter
@@ -236,8 +238,8 @@ Item {
 
 	Loader {
 		id: tabLoader
-		anchors.top: tabBar.bottom
-		anchors.topMargin: 10
+		anchors.top: NotchCtl.clean ? parent.top : tabBar.bottom
+		anchors.topMargin: NotchCtl.clean ? 18 : 10
 		anchors.left: parent.left
 		anchors.right: parent.right
 		anchors.bottom: parent.bottom
