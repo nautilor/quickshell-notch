@@ -11,6 +11,9 @@ Item {
 	property url startFolder: "file://" + Quickshell.env("HOME")
 	property var filters: ["*.png", "*.svg", "*.jpg", "*.jpeg", "*.webp", "*.ico", "*.xpm", "*.bmp", "*.gif"]
 
+	// folder chooser mode: only directories are listed and a button picks the current one
+	property bool dirsOnly: false
+
 	signal picked(string path)
 	signal cancelled
 
@@ -21,7 +24,8 @@ Item {
 	FolderListModel {
 		id: folders
 		folder: root.startFolder
-		nameFilters: root.filters
+		nameFilters: root.dirsOnly ? [] : root.filters
+		showFiles: !root.dirsOnly
 		showDirs: true
 		showDirsFirst: true
 		showDotAndDotDot: false
@@ -48,6 +52,14 @@ Item {
 				elide: Text.ElideLeft
 				font.pixelSize: 12
 				color: Theme.surfaceVariantFg
+			}
+			Btn {
+				visible: root.dirsOnly
+				icon: "check"
+				label: "Select"
+				variant: 1
+				implicitHeight: 36
+				onClicked: root.picked(root.pathOf(folders.folder))
 			}
 			Btn {
 				icon: "close"

@@ -21,7 +21,7 @@ Item {
 	readonly property real bump: dragging ? 0.6 : mouseAxis < 0 || info.type === "sep" ? 0 : Math.max(0, 1 - Math.abs(mouseAxis - center) / (cell * 2.2))
 	readonly property real zoom: 1 + 0.45 * bump
 	readonly property bool hovered: area.containsMouse
-	readonly property string label: info.type === "app" ? info.name : info.type === "add" ? "Add app" : info.type === "trash" ? (Dock.trashCount > 0 ? "Trash (" + Dock.trashCount + ")" : "Trash") : ""
+	readonly property string label: info.type === "app" ? info.name : info.type === "folder" ? info.name : info.type === "add" ? "Add app" : info.type === "trash" ? (Dock.trashCount > 0 ? "Trash (" + Dock.trashCount + ")" : "Trash") : ""
 
 	// pinned apps can be dragged along the dock; the parent decides the new slot from the final offset
 	property real dragOffset: 0
@@ -84,6 +84,13 @@ Item {
 			source: root.info.type === "app" ? Dock.iconSource(root.info.key, root.info.icon) : ""
 		}
 
+		Image {
+			visible: root.info.type === "folder"
+			anchors.fill: parent
+			sourceSize: Qt.size(root.size * 2, root.size * 2)
+			asynchronous: true
+			source: root.info.type === "folder" ? Dock.iconSource(root.info.key, root.info.icon) : ""
+		}
 		Rectangle {
 			visible: root.info.type === "add" || root.info.type === "trash"
 			anchors.fill: parent

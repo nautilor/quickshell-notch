@@ -13,7 +13,7 @@ Singleton {
 	readonly property string trashDir: Quickshell.env("HOME") + "/.local/share/Trash"
 	readonly property var pinned: Settings.dockPinned || []
 	// [{type: "app", key, name, icon, entry, pinned, windows}, {type: "sep"}, {type: "add"}, {type: "trash"}]
-	readonly property var items: build(ToplevelManager.toplevels.values, pinned, DesktopEntries.applications.values.length)
+	readonly property var items: build(ToplevelManager.toplevels.values, pinned, DesktopEntries.applications.values.length, userDirs)
 	property int trashCount: 0
 
 	function entryFor(appId) {
@@ -22,7 +22,43 @@ Singleton {
 		return DesktopEntries.byId(appId) ?? DesktopEntries.byId(appId.toLowerCase()) ?? DesktopEntries.heuristicLookup(appId) ?? null;
 	}
 
-	function build(toplevels, pins) {
+	// icon-theme name for a folder: XDG user dirs (read from user-dirs.dirs, so localized names work), then plain names
+	property var userDirs: ({})
+	readonly property var xdgIcons: ({
+		"DESKTOP": "user-desktop",
+		"DOCUMENTS": "folder-documents",
+		"DOWNLOAD": "folder-download",
+		"MUSIC": "folder-music",
+		"PICTURES": "folder-pictures",
+		"PUBLICSHARE": "folder-publicshare",
+		"TEMPLATES": "folder-templates",
+		"VIDEOS": "folder-videos"
+	})
+	readonly property var nameIcons: ({
+		"desktop": "user-desktop",
+		"documents": "folder-documents",
+		"downloads": "folder-download",
+		"music": "folder-music",
+		"pictures": "folder-pictures",
+		"videos": "folder-videos",
+		"templates": "folder-templates",
+		"public": "folder-publicshare",
+		"projects": "folder-development",
+		"code": "folder-code",
+		"dev": "folder-development",
+		"src": "folder-code",
+		"sources": "folder-code"
+	})
+	function folderIcon(path, dirs) {
+		const clean = path.replace(/(.)\/+$/, "$1");
+		if (clean === Quickshell.env("HOME"))
+			return "user-home";
+		if (dirs && dirs[clean])
+			return dirs[clean];
+		return nameIcons[clean.split("/").pop().toLowerCase()] ?? "folder";
+	}
+
+	function build(toplevels, pins, count, dirs) {
 		const groups = {};
 		const order = [];
 		for (const t of toplevels) {
@@ -36,6 +72,11 @@ Singleton {
 		}
 		const out = [];
 		for (const id of pins) {
+			if (id.startsWith("dir:")) {
+				const path = id.slice(4);
+				out.push({ type: "folder", key: id, path: path, name: path.replace(/\/+$/, "").split("/").pop() || "/", icon: folderIcon(path, dirs), entry: null, pinned: true, windows: [] });
+				continue;
+			}
 			const e = DesktopEntries.byId(id);
 			if (!e)
 				continue;
@@ -82,6 +123,10 @@ Singleton {
 			w.close();
 	}
 
+	function hasCustomIcon(key) {
+		return !!(Settings.dockIcons || {})[key];
+	}
+
 	// custom icon (theme name or image path) if set, else the app's own
 	function iconSource(key, fallbackName) {
 		const custom = (Settings.dockIcons || {})[key];
@@ -105,7 +150,7 @@ Singleton {
 
 	// move a pinned app to position `target` among the pinned ones
 	function move(key, target) {
-		const keys = items.filter(i => i.type === "app" && i.pinned).map(i => i.key);
+		const keys = items.filter(i => (i.type === "app" || i.type === "folder") && i.pinned).map(i => i.key);
 		const from = keys.indexOf(key);
 		if (from < 0)
 			return;
@@ -120,8 +165,32 @@ Singleton {
 			Settings.dockPinned = pinned.concat([id]);
 	}
 
+	function pinFolder(path) {
+		pin("dir:" + path.replace(/(.)\/+$/, "$1"));
+	}
+
+	function openPath(path) {
+		Quickshell.execDetached(["xdg-open", path]);
+	}
+
 	function unpin(id) {
 		Settings.dockPinned = pinned.filter(p => p !== id);
+	}
+
+	Process {
+		running: true
+		command: ["sh", "-c", '. "${XDG_CONFIG_HOME:-$HOME/.config}/user-dirs.dirs" 2>/dev/null; for k in DESKTOP DOCUMENTS DOWNLOAD MUSIC PICTURES PUBLICSHARE TEMPLATES VIDEOS; do eval "d=\\$XDG_${k}_DIR"; echo "$k $d"; done']
+		stdout: StdioCollector {
+			onStreamFinished: {
+				const m = {};
+				for (const l of text.split("\n")) {
+					const i = l.indexOf(" ");
+					if (i > 0 && l.length > i + 1 && root.xdgIcons[l.slice(0, i)])
+						m[l.slice(i + 1).replace(/(.)\/+$/, "$1")] = root.xdgIcons[l.slice(0, i)];
+				}
+				root.userDirs = m;
+			}
+		}
 	}
 
 	// ---- trash ----

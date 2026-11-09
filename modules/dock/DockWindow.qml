@@ -1,4 +1,5 @@
 import QtQuick
+import Qt.labs.folderlistmodel
 import Quickshell
 import Quickshell.Wayland
 import qs.config
@@ -129,6 +130,10 @@ PanelWindow {
 				r.push({ label: it.pinned ? "Remove from Dock" : "Keep in Dock", act: () => it.pinned ? Dock.unpin(it.key) : Dock.pin(it.key) });
 			if (it.windows.length > 0)
 				r.push({ label: it.windows.length > 1 ? "Quit all windows" : "Quit", danger: true, act: () => Dock.closeAll(it.windows) });
+		} else if (menuKind === "foldermenu" && it) {
+			r.push({ label: "Open in file manager", act: () => Dock.openPath(it.path) });
+			r.push({ label: "Change icon…", keep: true, act: () => win.openIconEditor() });
+			r.push({ label: "Remove from Dock", act: () => Dock.unpin(it.key) });
 		} else if (menuKind === "trash") {
 			r.push({ label: "Open Trash", act: () => Dock.openTrash() });
 			r.push({ label: "Empty Trash", confirm: "Click again to empty", danger: true, enabled: Dock.trashCount > 0, act: () => Dock.emptyTrash() });
@@ -241,7 +246,7 @@ PanelWindow {
 							let target = 0;
 							for (let i = 0; i < slots.count; i++) {
 								const o = slots.itemAt(i);
-								if (o && o !== slot && o.info.type === "app" && o.info.pinned && o.center < c)
+								if (o && o !== slot && (o.info.type === "app" || o.info.type === "folder") && o.info.pinned && o.center < c)
 									target++;
 							}
 							return target;
@@ -258,10 +263,15 @@ PanelWindow {
 						menuOpen: win.menuKind !== ""
 						mouseAxis: gridHover.hovered ? (win.vertical ? gridHover.point.position.y : gridHover.point.position.x) : -1
 						onClicked: {
+							const toggleOff = info.type === "folder" && win.menuKind === "folder" && win.menuItem && win.menuItem.key === info.key;
 							win.closeMenu();
 							win.previewKey = "";
+							if (toggleOff)
+								return;
 							if (info.type === "app")
 								Dock.activate(info);
+							else if (info.type === "folder")
+								win.openMenu("folder", info, slot);
 							else if (info.type === "add")
 								win.openMenu("add", info, slot);
 							else if (info.type === "trash")
@@ -272,6 +282,8 @@ PanelWindow {
 						onMenuRequested: {
 							if (info.type === "app" || info.type === "trash")
 								win.openMenu(info.type, info, slot);
+							else if (info.type === "folder")
+								win.openMenu("foldermenu", info, slot);
 						}
 						onFilesDropped: paths => Dock.trash(paths)
 						onDragReleased: offset => {
@@ -363,7 +375,7 @@ PanelWindow {
 		// ---- context menu ----
 		Rectangle {
 			id: menu
-			visible: win.menuRows.length > 0 && (win.menuKind === "app" || win.menuKind === "trash")
+			visible: win.menuRows.length > 0 && (win.menuKind === "app" || win.menuKind === "foldermenu" || win.menuKind === "trash")
 			width: 220
 			height: menuCol.implicitHeight + 12
 			radius: Theme.radiusMedium
@@ -448,10 +460,20 @@ PanelWindow {
 
 			readonly property var results: win.menuKind === "add" ? Apps.search(pickerField.text).filter(a => Dock.pinned.indexOf(a.id) < 0) : []
 
+			Btn {
+				id: addFolderBtn
+				anchors.right: parent.right
+				anchors.top: parent.top
+				anchors.margins: 8
+				icon: "folder"
+				implicitWidth: 44
+				implicitHeight: pickerField.height
+				onClicked: win.menuKind = "addfolder"
+			}
 			Field {
 				id: pickerField
 				anchors.left: parent.left
-				anchors.right: parent.right
+				anchors.right: addFolderBtn.left
 				anchors.top: parent.top
 				anchors.margins: 8
 				icon: "search"
@@ -510,6 +532,155 @@ PanelWindow {
 						}
 					}
 				}
+			}
+		}
+
+		// ---- folder contents (stack) ----
+		Rectangle {
+			id: stack
+			visible: win.menuKind === "folder" && win.menuItem !== null
+			width: 300
+			height: 380
+			radius: Theme.radiusMedium
+			color: Theme.surfaceContainerHigh
+			border.width: 1
+			border.color: Theme.outlineVariant
+			x: win.popX(width)
+			y: win.popY(height)
+
+			readonly property string base: win.menuItem && win.menuItem.path ? win.menuItem.path : ""
+			function pathOf(url) {
+				return decodeURIComponent(url.toString().replace(/^file:\/\//, ""));
+			}
+			onVisibleChanged: if (visible)
+				stackModel.folder = "file://" + base
+
+			FolderListModel {
+				id: stackModel
+				showDirs: true
+				showDirsFirst: true
+				showDotAndDotDot: false
+				showHidden: false
+				sortField: FolderListModel.Name
+			}
+
+			Row {
+				id: stackHead
+				anchors.left: parent.left
+				anchors.right: parent.right
+				anchors.top: parent.top
+				anchors.margins: 8
+				spacing: 8
+				Btn {
+					icon: "arrow_back"
+					implicitWidth: 36
+					implicitHeight: 36
+					opacity: stack.pathOf(stackModel.folder) !== stack.base ? 1 : 0.4
+					onClicked: if (stack.pathOf(stackModel.folder) !== stack.base)
+						stackModel.folder = stackModel.parentFolder
+				}
+				Txt {
+					width: parent.width - 36 - 36 - 16
+					anchors.verticalCenter: parent.verticalCenter
+					text: stack.pathOf(stackModel.folder)
+					elide: Text.ElideLeft
+					font.pixelSize: 12
+					color: Theme.surfaceVariantFg
+				}
+				Btn {
+					icon: "folder"
+					implicitWidth: 36
+					implicitHeight: 36
+					onClicked: {
+						Dock.openPath(stack.pathOf(stackModel.folder));
+						win.closeMenu();
+					}
+				}
+			}
+
+			Txt {
+				visible: stackModel.count === 0
+				anchors.centerIn: parent
+				text: "Empty folder"
+				color: Theme.surfaceVariantFg
+			}
+
+			ListView {
+				anchors.left: parent.left
+				anchors.right: parent.right
+				anchors.top: stackHead.bottom
+				anchors.bottom: parent.bottom
+				anchors.margins: 8
+				clip: true
+				spacing: 2
+				model: stackModel
+				boundsBehavior: Flickable.StopAtBounds
+				delegate: Rectangle {
+					id: se
+					required property string fileName
+					required property url fileUrl
+					required property bool fileIsDir
+					width: ListView.view.width
+					height: 40
+					radius: Theme.radiusSmall
+					color: seArea.containsMouse ? Theme.secondaryContainer : "transparent"
+					Icon {
+						id: seIcon
+						anchors.left: parent.left
+						anchors.leftMargin: 10
+						anchors.verticalCenter: parent.verticalCenter
+						name: se.fileIsDir ? "folder" : "description"
+						size: 22
+						color: se.fileIsDir ? Theme.primary : Theme.surfaceVariantFg
+					}
+					Txt {
+						anchors.left: seIcon.right
+						anchors.leftMargin: 10
+						anchors.right: parent.right
+						anchors.rightMargin: 8
+						anchors.verticalCenter: parent.verticalCenter
+						text: se.fileName
+						elide: Text.ElideRight
+					}
+					MouseArea {
+						id: seArea
+						anchors.fill: parent
+						hoverEnabled: true
+						cursorShape: Qt.PointingHandCursor
+						onClicked: {
+							if (se.fileIsDir) {
+								stackModel.folder = se.fileUrl;
+							} else {
+								Dock.openPath(stack.pathOf(se.fileUrl));
+								win.closeMenu();
+							}
+						}
+					}
+				}
+			}
+		}
+
+		// ---- add-folder browser ----
+		Rectangle {
+			visible: win.menuKind === "addfolder"
+			width: 380
+			height: 440
+			radius: Theme.radiusMedium
+			color: Theme.surfaceContainerHigh
+			border.width: 1
+			border.color: Theme.outlineVariant
+			x: win.popX(width)
+			y: win.popY(height)
+
+			FilePicker {
+				anchors.fill: parent
+				anchors.margins: 12
+				dirsOnly: true
+				onPicked: path => {
+					Dock.pinFolder(path);
+					win.closeMenu();
+				}
+				onCancelled: win.closeMenu()
 			}
 		}
 

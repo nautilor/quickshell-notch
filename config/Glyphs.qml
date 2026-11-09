@@ -18,6 +18,7 @@ Singleton {
 		"extension": 0xf0431,
 		"touch_app": 0xf0741,
 		"folder": 0xf024b,
+		"description": 0xf0219,
 		"language": 0xf059f,
 		"link": 0xf0337,
 		"mail": 0xf01ee,
