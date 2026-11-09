@@ -50,6 +50,7 @@ PanelWindow {
 	property string dragKey: ""
 	property int dragFrom: -1
 	property int dragTo: -1
+	property real dragSize: 0   // length of the dragged slot along the dock; the other slots slide by this much
 
 	function openMenu(kind, info, slot) {
 		const p = slot.mapToItem(root, slot.width / 2, slot.height / 2);
@@ -133,6 +134,8 @@ PanelWindow {
 		} else if (menuKind === "foldermenu" && it) {
 			r.push({ label: "Open in file manager", act: () => Dock.openPath(it.path) });
 			r.push({ label: "Change icon…", keep: true, act: () => win.openIconEditor() });
+			r.push({ label: "Remove from Dock", act: () => Dock.unpin(it.key) });
+		} else if (menuKind === "widgetmenu" && it) {
 			r.push({ label: "Remove from Dock", act: () => Dock.unpin(it.key) });
 		} else if (menuKind === "trash") {
 			r.push({ label: "Open Trash", act: () => Dock.openTrash() });
@@ -236,9 +239,9 @@ PanelWindow {
 							if (win.dragKey === "" || !info.pinned || info.key === win.dragKey)
 								return 0;
 							if (win.dragFrom < win.dragTo && index > win.dragFrom && index <= win.dragTo)
-								return -(win.vertical ? height : width);
+								return -win.dragSize;
 							if (win.dragFrom > win.dragTo && index >= win.dragTo && index < win.dragFrom)
-								return win.vertical ? height : width;
+								return win.dragSize;
 							return 0;
 						}
 						function targetFor(offset) {
@@ -254,6 +257,7 @@ PanelWindow {
 						onDragMoved: offset => {
 							win.previewKey = "";
 							win.dragKey = info.key;
+							win.dragSize = along;
 							win.dragFrom = index;
 							win.dragTo = targetFor(offset);
 						}						info: modelData
@@ -284,6 +288,8 @@ PanelWindow {
 								win.openMenu(info.type, info, slot);
 							else if (info.type === "folder")
 								win.openMenu("foldermenu", info, slot);
+							else if (info.type === "widget")
+								win.openMenu("widgetmenu", info, slot);
 						}
 						onFilesDropped: paths => Dock.trash(paths)
 						onDragReleased: offset => {
@@ -418,7 +424,7 @@ PanelWindow {
 		// ---- context menu ----
 		Rectangle {
 			id: menu
-			visible: win.menuRows.length > 0 && (win.menuKind === "app" || win.menuKind === "foldermenu" || win.menuKind === "trash")
+			visible: win.menuRows.length > 0 && (win.menuKind === "app" || win.menuKind === "foldermenu" || win.menuKind === "widgetmenu" || win.menuKind === "trash")
 			width: 220
 			height: menuCol.implicitHeight + 12
 			radius: Theme.radiusMedium
@@ -513,10 +519,23 @@ PanelWindow {
 				implicitHeight: pickerField.height
 				onClicked: win.menuKind = "addfolder"
 			}
+			Btn {
+				id: addWidgetBtn
+				// widgets are horizontal-only, so they can't be added to a left/right dock
+				visible: !win.vertical
+				anchors.right: addFolderBtn.left
+				anchors.top: parent.top
+				anchors.topMargin: 8
+				anchors.rightMargin: 4
+				icon: "widgets"
+				implicitWidth: 44
+				implicitHeight: pickerField.height
+				onClicked: win.menuKind = "addwidget"
+			}
 			Field {
 				id: pickerField
 				anchors.left: parent.left
-				anchors.right: addFolderBtn.left
+				anchors.right: addWidgetBtn.visible ? addWidgetBtn.left : addFolderBtn.left
 				anchors.top: parent.top
 				anchors.margins: 8
 				icon: "search"
@@ -696,6 +715,75 @@ PanelWindow {
 							} else {
 								Dock.openPath(stack.pathOf(se.fileUrl));
 								win.closeMenu();
+							}
+						}
+					}
+				}
+			}
+		}
+
+		// ---- add-widget list ----
+		Rectangle {
+			visible: win.menuKind === "addwidget"
+			width: 260
+			height: widgetCol.implicitHeight + 16
+			radius: Theme.radiusMedium
+			color: Theme.surfaceContainerHigh
+			border.width: 1
+			border.color: Theme.outlineVariant
+			x: win.popX(width)
+			y: win.popY(height)
+
+			Column {
+				id: widgetCol
+				anchors.fill: parent
+				anchors.margins: 8
+				spacing: 2
+
+				Txt {
+					visible: wlist.count === 0
+					width: parent.width
+					height: 36
+					verticalAlignment: Text.AlignVCenter
+					text: "All widgets are already in the Dock"
+					color: Theme.surfaceVariantFg
+					font.pixelSize: 12
+				}
+				Repeater {
+					id: wlist
+					model: win.menuKind === "addwidget" ? Dock.widgetPresets.filter(w => Dock.pinned.indexOf("widget:" + w.id) < 0) : []
+					Rectangle {
+						id: wr
+						required property var modelData
+						width: widgetCol.width
+						height: 40
+						radius: Theme.radiusSmall
+						color: wrArea.containsMouse ? Theme.secondaryContainer : "transparent"
+						Icon {
+							id: wrIcon
+							anchors.left: parent.left
+							anchors.leftMargin: 10
+							anchors.verticalCenter: parent.verticalCenter
+							name: wr.modelData.icon
+							size: 22
+							color: Theme.primary
+						}
+						Txt {
+							anchors.left: wrIcon.right
+							anchors.leftMargin: 10
+							anchors.verticalCenter: parent.verticalCenter
+							text: wr.modelData.title
+						}
+						MouseArea {
+							id: wrArea
+							anchors.fill: parent
+							hoverEnabled: true
+							cursorShape: Qt.PointingHandCursor
+							onClicked: {
+								// close first: pinning rebuilds this list and destroys the delegate mid-handler
+								const id = wr.modelData.id;
+								win.closeMenu();
+								Dock.pinWidget(id);
 							}
 						}
 					}

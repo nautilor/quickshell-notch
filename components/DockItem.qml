@@ -16,9 +16,9 @@ Item {
 	property bool menuOpen: false
 
 	readonly property real cell: size + 14
-	readonly property real along: info.type === "sep" ? 14 : cell
+	readonly property real along: info.type === "sep" ? 14 : info.type === "widget" ? info.cells * cell - 6 : cell
 	readonly property real center: (vertical ? y : x) + along / 2
-	readonly property real bump: dragging ? 0.6 : mouseAxis < 0 || info.type === "sep" ? 0 : Math.max(0, 1 - Math.abs(mouseAxis - center) / (cell * 2.2))
+	readonly property real bump: dragging ? 0.6 : mouseAxis < 0 || info.type === "sep" || info.type === "widget" ? 0 : Math.max(0, 1 - Math.abs(mouseAxis - center) / (cell * 2.2))
 	readonly property real zoom: 1 + 0.45 * bump
 	readonly property bool hovered: area.containsMouse
 	readonly property string label: info.type === "app" ? info.name : info.type === "folder" ? info.name : info.type === "add" ? "Add app" : info.type === "trash" ? (Dock.trashCount > 0 ? "Trash (" + Dock.trashCount + ")" : "Trash") : ""
@@ -61,10 +61,23 @@ Item {
 		color: Theme.outlineVariant
 	}
 
+	// dock widget (media, clock, ...): sits above the mouse area, so its own controls get the clicks while the
+	// rest of the tile still drags / opens the context menu through the area underneath
+	Loader {
+		id: widgetLoader
+		z: 1
+		active: root.info.type === "widget"
+		anchors.centerIn: parent
+		width: root.width - 8
+		height: root.cell - 6
+		source: root.info.type === "widget" ? root.info.source : ""
+		onLoaded: item.cfg = root.info.cfg
+	}
+
 	// icon; grows towards the inside of the screen
 	Item {
 		id: icon
-		visible: root.info.type !== "sep"
+		visible: root.info.type !== "sep" && root.info.type !== "widget"
 		anchors.centerIn: parent
 		width: root.size
 		height: root.size
@@ -148,6 +161,34 @@ Item {
 		}
 	}
 
+	// Widgets contain their own mouse areas that would swallow the press, so dragging them uses a handler:
+	// it watches passively and only takes over once the pointer actually moves.
+	DragHandler {
+		id: widgetDrag
+		enabled: root.info.type === "widget"
+		target: null
+		acceptedButtons: Qt.LeftButton
+		onTranslationChanged: {
+			if (!active)
+				return;
+			const d = root.vertical ? translation.y : translation.x;
+			if (root.dragging || Math.abs(d) > 8) {
+				root.dragging = true;
+				root.moved = true;
+				root.dragOffset = d;
+				root.dragMoved(d);
+			}
+		}
+		onActiveChanged: {
+			if (!active && root.dragging) {
+				const d = root.dragOffset;
+				root.dragging = false;
+				root.dragOffset = 0;
+				root.dragReleased(d);
+			}
+		}
+	}
+
 	MouseArea {
 		id: area
 		anchors.fill: parent
@@ -165,7 +206,7 @@ Item {
 			root.moved = false;
 		}
 		onPositionChanged: m => {
-			if (!pressed || !root.info.pinned || !(pressedButtons & Qt.LeftButton))
+			if (!pressed || !root.info.pinned || root.info.type === "widget" || !(pressedButtons & Qt.LeftButton))
 				return;
 			const d = axisOf(m) - pressAxis;
 			if (root.dragging || Math.abs(d) > 8) {

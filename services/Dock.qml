@@ -13,7 +13,7 @@ Singleton {
 	readonly property string trashDir: Quickshell.env("HOME") + "/.local/share/Trash"
 	readonly property var pinned: Settings.dockPinned || []
 	// [{type: "app", key, name, icon, entry, pinned, windows}, {type: "sep"}, {type: "add"}, {type: "trash"}]
-	readonly property var items: build(ToplevelManager.toplevels.values, pinned, DesktopEntries.applications.values.length, userDirs)
+	readonly property var items: build(ToplevelManager.toplevels.values, pinned, DesktopEntries.applications.values.length, userDirs, Settings.dockEdge)
 	property int trashCount: 0
 
 	function entryFor(appId) {
@@ -58,7 +58,24 @@ Singleton {
 		return nameIcons[clean.split("/").pop().toLowerCase()] ?? "folder";
 	}
 
-	function build(toplevels, pins, count, dirs) {
+	// widgets that can live in the dock (one instance each); `cells` is the length along the dock in icon cells
+	readonly property var widgetPresets: [
+		{ id: "media", title: "Now playing", icon: "music_note", type: "media", source: Qt.resolvedUrl("../components/DockMedia.qml"), cells: 5, cfg: {} },
+		{ id: "clock", title: "Clock", icon: "schedule", type: "clock", cells: 2, cfg: {} },
+		{ id: "battery", title: "Battery", icon: "battery_full", type: "battery", cells: 2, cfg: {} },
+		{ id: "event", title: "Next event", icon: "event", type: "event", cells: 4, cfg: {} },
+		{ id: "workspaces", title: "Workspaces", icon: "apps", type: "workspaces", cells: 3, cfg: {} }
+	]
+	function presetFor(id) {
+		return widgetPresets.find(w => w.id === id) ?? null;
+	}
+	function pinWidget(id) {
+		if (Settings.dockEdge === "left" || Settings.dockEdge === "right")
+			return;
+		pin("widget:" + id);
+	}
+
+	function build(toplevels, pins, count, dirs, edge) {
 		const groups = {};
 		const order = [];
 		for (const t of toplevels) {
@@ -71,7 +88,15 @@ Singleton {
 			groups[key].windows.push(t);
 		}
 		const out = [];
+		const horizontal = edge === "top" || edge === "bottom";
 		for (const id of pins) {
+			if (id.startsWith("widget:")) {
+				const w = presetFor(id.slice(7));
+				// widgets are laid out horizontally, so a vertical dock simply doesn't show them
+				if (w && horizontal)
+					out.push({ type: "widget", key: id, name: w.title, icon: "", entry: null, pinned: true, windows: [], cells: w.cells, cfg: w.cfg, wtype: w.type, source: w.source ?? WidgetTypes.types[w.type].source });
+				continue;
+			}
 			if (id.startsWith("dir:")) {
 				const path = id.slice(4);
 				out.push({ type: "folder", key: id, path: path, name: path.replace(/\/+$/, "").split("/").pop() || "/", icon: folderIcon(path, dirs), entry: null, pinned: true, windows: [] });
@@ -178,7 +203,7 @@ Singleton {
 
 	// move a pinned app to position `target` among the pinned ones
 	function move(key, target) {
-		const keys = items.filter(i => (i.type === "app" || i.type === "folder") && i.pinned).map(i => i.key);
+		const keys = items.filter(i => (i.type === "app" || i.type === "folder" || i.type === "widget") && i.pinned).map(i => i.key);
 		const from = keys.indexOf(key);
 		if (from < 0)
 			return;

@@ -27,25 +27,26 @@ Rectangle {
 
 	Rectangle {
 		id: badge
-		width: 40
-		height: 40
-		radius: 14
+		// scales down in short containers (dock) so it keeps a margin; 40px otherwise
+		width: Math.min(40, root.height - 16)
+		height: width
+		radius: width * 0.35
 		color: Theme.tertiary
 		anchors.left: parent.left
-		anchors.leftMargin: 12
+		anchors.leftMargin: Math.min(12, (root.height - width) / 2)
 		anchors.verticalCenter: parent.verticalCenter
 		Icon {
 			anchors.centerIn: parent
 			name: "event"
 			fill: 1
-			size: 22
+			size: badge.width * 0.55
 			color: Theme.tertiaryFg
 		}
 	}
 
 	Column {
 		anchors.left: badge.right
-		anchors.leftMargin: 12
+		anchors.leftMargin: Math.min(12, (root.height - badge.width) / 2 + 2)
 		anchors.right: parent.right
 		anchors.rightMargin: 12
 		anchors.verticalCenter: parent.verticalCenter
