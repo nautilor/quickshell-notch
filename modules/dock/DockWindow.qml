@@ -296,6 +296,26 @@ PanelWindow {
 			}
 		}
 
+		// keeps the focused window's thumbnail fresh while it is on screen, so it is still there once scrolled away
+		ScreencopyView {
+			id: activeCap
+			x: -5000
+			width: preview.cardW * 2
+			height: preview.cardH * 2
+			captureSource: ToplevelManager.activeToplevel
+			live: true
+			Timer {
+				interval: 2000
+				running: activeCap.hasContent && ToplevelManager.activeToplevel !== null
+				repeat: true
+				triggeredOnStart: true
+				onTriggered: {
+					const tl = ToplevelManager.activeToplevel;
+					activeCap.grabToImage(r => Dock.setThumb(tl, r), Qt.size(preview.cardW * 2, preview.cardH * 2));
+				}
+			}
+		}
+
 		// ---- window previews ----
 		Rectangle {
 			id: preview
@@ -346,16 +366,39 @@ PanelWindow {
 							elide: Text.ElideRight
 							text: card.modelData.title || ""
 						}
-						ScreencopyView {
+						// last good frame (kept in Dock.thumbs): shown when the window can't be captured right now, e.g. an
+						// off-screen column of the scrolling layout
+						Image {
 							anchors.left: parent.left
-							anchors.right: parent.right
-							anchors.top: cardTitle.bottom
-							anchors.bottom: parent.bottom
-							anchors.margins: 6
-							anchors.topMargin: 4
+	anchors.right: parent.right
+	anchors.top: cardTitle.bottom
+	anchors.bottom: parent.bottom
+	anchors.margins: 6
+	anchors.topMargin: 4
+							fillMode: Image.PreserveAspectFit
+							cache: false
+							source: Dock.thumbUrl(card.modelData, Dock.thumbRev)
+						}
+						// fresh frame when available; every second it is also saved as the new last good frame
+						ScreencopyView {
+							id: sv
+							anchors.left: parent.left
+	anchors.right: parent.right
+	anchors.top: cardTitle.bottom
+	anchors.bottom: parent.bottom
+	anchors.margins: 6
+	anchors.topMargin: 4
 							captureSource: card.modelData
 							live: true
+							opacity: hasContent ? 1 : 0
 							constraintSize: Qt.size(preview.cardW * 2, preview.cardH * 2)
+							Timer {
+								interval: 1000
+		running: sv.hasContent
+		repeat: true
+		triggeredOnStart: true
+								onTriggered: sv.grabToImage(r => Dock.setThumb(card.modelData, r), Qt.size(preview.cardW * 2, preview.cardH * 2))
+							}
 						}
 						MouseArea {
 							id: cardArea

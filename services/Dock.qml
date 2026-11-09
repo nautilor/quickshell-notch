@@ -95,6 +95,34 @@ Singleton {
 		return out;
 	}
 
+	// ---- window thumbnails ----
+	// Hyprland's scrolling layout doesn't render off-screen columns, so those windows can't be captured live.
+	// The last good frame of every window we managed to capture is kept here (toplevel -> grab result).
+	property var thumbs: new Map()
+	property int thumbRev: 0
+
+	function setThumb(tl, res) {
+		if (tl && res) {
+			thumbs.set(tl, res);
+			thumbRev++;
+		}
+	}
+	// pass thumbRev from the binding so it re-evaluates when a thumbnail changes
+	function thumbUrl(tl, rev) {
+		const r = thumbs.get(tl);
+		return r ? r.url : "";
+	}
+
+	Connections {
+		target: ToplevelManager.toplevels
+		function onValuesChanged() {
+			const alive = new Set(ToplevelManager.toplevels.values);
+			for (const k of Array.from(root.thumbs.keys()))
+				if (!alive.has(k))
+					root.thumbs.delete(k);
+		}
+	}
+
 	// ---- apps ----
 	property var cycle: ({})
 
