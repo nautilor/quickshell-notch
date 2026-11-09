@@ -30,6 +30,9 @@ PanelWindow {
 	exclusiveZone: Settings.dockAutohide ? 0 : thickness + 2 * margin
 	mask: Region {
 		item: win.menuKind !== "" ? full : hit
+		Region {
+			item: preview
+		}
 	}
 
 	WlrLayershell.namespace: "dock"
@@ -62,12 +65,41 @@ PanelWindow {
 		menuKind = "";
 	}
 
-	// popup placement next to the dock, centred on the slot that opened it
-	function popX(w) {
-		return vertical ? (edge === "left" ? bar.x + bar.width + 10 : bar.x - w - 10) : Math.max(8, Math.min(root.width - w - 8, menuAnchor.x - w / 2));
+	// ---- window previews (hover a running app) ----
+	property string previewKey: ""
+	property point previewAnchor: Qt.point(0, 0)
+	readonly property var previewWindows: {
+		if (previewKey === "")
+			return [];
+		for (const i of Dock.items)
+			if (i.type === "app" && i.key === previewKey)
+				return i.windows;
+		return [];
 	}
-	function popY(h) {
-		return vertical ? Math.max(8, Math.min(root.height - h - 8, menuAnchor.y - h / 2)) : (edge === "top" ? bar.y + bar.height + 10 : bar.y - h - 10);
+	readonly property bool previewShown: previewKey !== "" && previewWindows.length > 0 && menuKind === "" && dragKey === ""
+	function showPreview(info, slot) {
+		previewTimer.stop();
+		const p = slot.mapToItem(root, slot.width / 2, slot.height / 2);
+		previewAnchor = Qt.point(p.x, p.y);
+		previewKey = info.key;
+	}
+	function hidePreview() {
+		previewTimer.restart();
+	}
+	Timer {
+		id: previewTimer
+		interval: 250
+		onTriggered: win.previewKey = ""
+	}
+
+	// popup placement next to the dock, centred on the slot that opened it
+	function popX(w, anchor) {
+		const a = anchor ?? menuAnchor;
+		return vertical ? (edge === "left" ? bar.x + bar.width + 10 : bar.x - w - 10) : Math.max(8, Math.min(root.width - w - 8, a.x - w / 2));
+	}
+	function popY(h, anchor) {
+		const a = anchor ?? menuAnchor;
+		return vertical ? Math.max(8, Math.min(root.height - h - 8, a.y - h / 2)) : (edge === "top" ? bar.y + bar.height + 10 : bar.y - h - 10);
 	}
 
 	function openIconEditor() {
@@ -189,6 +221,12 @@ PanelWindow {
 						id: slot
 						required property var modelData
 						required property int index
+						onHoveredChanged: {
+							if (hovered && info.type === "app" && info.windows.length > 0 && !dragging && win.menuKind === "")
+								win.showPreview(info, slot);
+							else if (!hovered && win.previewKey === info.key)
+								win.hidePreview();
+						}
 						shift: {
 							if (win.dragKey === "" || !info.pinned || info.key === win.dragKey)
 								return 0;
@@ -209,6 +247,7 @@ PanelWindow {
 							return target;
 						}
 						onDragMoved: offset => {
+							win.previewKey = "";
 							win.dragKey = info.key;
 							win.dragFrom = index;
 							win.dragTo = targetFor(offset);
@@ -220,6 +259,7 @@ PanelWindow {
 						mouseAxis: gridHover.hovered ? (win.vertical ? gridHover.point.position.y : gridHover.point.position.x) : -1
 						onClicked: {
 							win.closeMenu();
+							win.previewKey = "";
 							if (info.type === "app")
 								Dock.activate(info);
 							else if (info.type === "add")
@@ -238,6 +278,82 @@ PanelWindow {
 							const target = targetFor(offset);
 							win.dragKey = "";
 							Dock.move(info.key, target);
+						}
+					}
+				}
+			}
+		}
+
+		// ---- window previews ----
+		Rectangle {
+			id: preview
+			visible: win.previewShown
+			readonly property real cardW: 200
+			readonly property real cardH: 125
+			readonly property int perLine: Math.max(1, Math.min(win.previewWindows.length, Math.floor(((win.vertical ? root.width - win.thickness - 40 : root.width - 32) - 12) / (cardW + 8))))
+			width: perLine * (cardW + 8) - 8 + 24
+			height: Math.ceil(win.previewWindows.length / perLine) * (cardH + 28 + 8) - 8 + 24
+			radius: Theme.radiusMedium
+			color: Theme.surfaceContainerHigh
+			border.width: 1
+			border.color: Theme.outlineVariant
+			x: win.popX(width, win.previewAnchor)
+			y: win.popY(height, win.previewAnchor)
+
+			HoverHandler {
+				onHoveredChanged: {
+					if (hovered)
+						previewTimer.stop();
+					else
+						win.hidePreview();
+				}
+			}
+
+			Flow {
+				anchors.fill: parent
+				anchors.margins: 12
+				spacing: 8
+
+				Repeater {
+					model: win.previewShown ? win.previewWindows : []
+					Rectangle {
+						id: card
+						required property var modelData
+						width: preview.cardW
+						height: preview.cardH + 28
+						radius: Theme.radiusSmall
+						color: cardArea.containsMouse ? Theme.secondaryContainer : "transparent"
+
+						Txt {
+							id: cardTitle
+							anchors.left: parent.left
+							anchors.right: parent.right
+							anchors.top: parent.top
+							anchors.margins: 6
+							font.pixelSize: 12
+							elide: Text.ElideRight
+							text: card.modelData.title || ""
+						}
+						ScreencopyView {
+							anchors.left: parent.left
+							anchors.right: parent.right
+							anchors.top: cardTitle.bottom
+							anchors.bottom: parent.bottom
+							anchors.margins: 6
+							anchors.topMargin: 4
+							captureSource: card.modelData
+							live: true
+							constraintSize: Qt.size(preview.cardW * 2, preview.cardH * 2)
+						}
+						MouseArea {
+							id: cardArea
+							anchors.fill: parent
+							hoverEnabled: true
+							cursorShape: Qt.PointingHandCursor
+							onClicked: {
+								Dock.focus(card.modelData);
+								win.previewKey = "";
+							}
 						}
 					}
 				}

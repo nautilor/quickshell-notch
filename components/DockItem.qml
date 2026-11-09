@@ -112,7 +112,7 @@ Item {
 	// name bubble on the inner side
 	Rectangle {
 		id: tip
-		visible: root.hovered && !root.menuOpen && !root.dragging && root.label !== ""
+		visible: root.hovered && !root.menuOpen && !root.dragging && root.label !== "" && !(root.info.type === "app" && root.info.windows.length > 0)
 		width: tipText.implicitWidth + 20
 		height: tipText.implicitHeight + 12
 		radius: height / 2
