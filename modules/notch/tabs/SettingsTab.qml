@@ -8,7 +8,7 @@ Item {
 	id: root
 
 	property int page: 0
-	readonly property var pages: [{ name: "Appearance", icon: "brightness_7" }, { name: "Notch", icon: "tune" }, { name: "Notifications", icon: "notifications" }, { name: "Date & time", icon: "schedule" }, { name: "Calendar", icon: "calendar_month" }, { name: "Dock", icon: "apps" }, { name: "Wallpaper", icon: "image" }, { name: "Placement", icon: "place" }]
+	readonly property var pages: [{ name: "Appearance", icon: "brightness_7" }, { name: "Notch", icon: "tune" }, { name: "Notifications", icon: "notifications" }, { name: "Date & time", icon: "schedule" }, { name: "Calendar", icon: "calendar_month" }, { name: "Dock", icon: "apps" }, { name: "Wallpaper", icon: "image" }, { name: "Placement", icon: "place" }, { name: "Bar", icon: "web_asset" }]
 
 	Component.onCompleted: {
 		Colorschemes.reload();
@@ -361,6 +361,14 @@ Item {
 					}
 				}
 				SettingRow {
+					title: "Full bar"
+					subtitle: "Stretch the idle notch along the whole screen edge; it still opens as a notch. Takes screen space unless Autohide is on"
+					Switch {
+						checked: Settings.fullBar
+						onToggled: v => Settings.fullBar = v
+					}
+				}
+				SettingRow {
 					title: "Show on all screens"
 					subtitle: "Otherwise only on the first screen"
 					Switch {
@@ -677,6 +685,56 @@ Item {
 							}
 						}
 					}
+				}
+			}
+
+			ColumnLayout {
+				Layout.fillWidth: true
+				visible: root.page === 8
+				spacing: 8
+
+				SectionLabel {
+					text: "FULL BAR"
+				}
+				SettingRow {
+					title: "Full bar"
+					subtitle: "Stretch the idle notch along the whole screen edge; it still opens as a notch. Takes screen space unless Autohide is on"
+					Switch {
+						checked: Settings.fullBar
+						onToggled: v => Settings.fullBar = v
+					}
+				}
+				SettingRow {
+					title: "Height"
+					subtitle: "Thickness of the bar in pixels"
+					Btn {
+						icon: "remove"
+						implicitWidth: 34
+						implicitHeight: 34
+						iconSize: 18
+						onClicked: Settings.barHeight = Math.max(28, Settings.barHeight - 2)
+					}
+					Txt {
+						width: 44
+						height: 34
+						horizontalAlignment: Text.AlignHCenter
+						verticalAlignment: Text.AlignVCenter
+						text: Settings.barHeight
+						font.weight: Font.Bold
+					}
+					Btn {
+						icon: "add"
+						implicitWidth: 34
+						implicitHeight: 34
+						iconSize: 18
+						onClicked: Settings.barHeight = Math.min(72, Settings.barHeight + 2)
+					}
+				}
+				SectionLabel {
+					text: "ITEMS"
+				}
+				BarEditor {
+					Layout.fillWidth: true
 				}
 			}
 

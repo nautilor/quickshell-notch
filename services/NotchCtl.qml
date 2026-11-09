@@ -23,6 +23,16 @@ Singleton {
 	// screen the notch is open on ("" = any)
 	property string screen: ""
 
+	// screens (by name) currently showing the full bar; the screen corners step in below it
+	property var barOn: ({})
+	function setBar(screenName, on) {
+		if (!!barOn[screenName] === on)
+			return;
+		const m = Object.assign({}, barOn);
+		m[screenName] = on;
+		barOn = m;
+	}
+
 	function show(name, scr) {
 		// with a single notch there is nothing to pick; otherwise open on the screen the user is working on
 		screen = !Settings.allScreens ? "" : (scr || (Hyprland.focusedMonitor ? Hyprland.focusedMonitor.name : ""));

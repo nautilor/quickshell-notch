@@ -40,6 +40,11 @@ PanelWindow {
 		}
 	}
 	readonly property bool vertical: edge === "left" || edge === "right"
+	// idle notch drawn as a bar spanning the whole edge
+	readonly property bool bar: Settings.fullBar && mode === "idle"
+	readonly property bool barShown: bar && !hidden && !moving
+	onBarShownChanged: NotchCtl.setBar(screen.name, barShown)
+	Component.onCompleted: NotchCtl.setBar(screen.name, barShown)
 
 	// the window covers the whole screen (the mask keeps it click-through) so moving the notch
 	// is only a change of position inside it, never a re-anchoring of the layer surface
@@ -81,6 +86,8 @@ PanelWindow {
 		case "hud":
 			return Math.max(hudView.implicitWidth + 16, 250 - 2 * topR);
 		default:
+			if (bar)
+				return vertical ? Settings.barHeight : width;
 			return vertical ? closedView.implicitHeight : closedView.implicitWidth;
 		}
 	}
@@ -94,14 +101,16 @@ PanelWindow {
 		case "hud":
 			return hudView.implicitHeight;
 		default:
+			if (bar)
+				return vertical ? height : Settings.barHeight;
 			return vertical ? closedView.implicitWidth : closedView.implicitHeight;
 		}
 	}
 	// the ears sit at both ends of the edge the notch hangs from
 	readonly property real targetW: moving ? (vertical ? 4 : 80) : vertical ? contentW : contentW + 2 * topR
 	readonly property real targetH: moving ? (vertical ? 80 : 4) : vertical ? contentH + 2 * topR : contentH
-	readonly property real topR: moving ? 0 : mode === "open" ? 24 : mode === "idle" ? 8 : 16
-	readonly property real botR: moving ? 0 : mode === "open" ? 34 : mode === "idle" ? 14 : 26
+	readonly property real topR: moving || bar ? 0 : mode === "open" ? 24 : mode === "idle" ? 8 : 16
+	readonly property real botR: moving || bar ? 0 : mode === "open" ? 34 : mode === "idle" ? 14 : 26
 
 	// position along the edge for an item of the given size
 	function alongX(w) {
@@ -329,7 +338,23 @@ PanelWindow {
 					width: (win.vertical ? content.height : content.width) - 20
 					height: win.vertical ? content.width : content.height
 					rotation: win.edge === "left" ? -90 : win.edge === "right" ? 90 : 0
-					opacity: win.mode === "idle" ? 1 : 0
+					opacity: win.mode === "idle" && !win.bar ? 1 : 0
+					visible: opacity > 0.01
+					Behavior on opacity {
+						NumberAnimation {
+							duration: Theme.durShort
+						}
+					}
+				}
+
+				// customisable items, shown instead of the idle notch content in full-bar mode
+				BarContent {
+					id: barView
+					anchors.centerIn: parent
+					width: (win.vertical ? content.height : content.width) - 32
+					height: win.vertical ? content.width : content.height
+					rotation: win.edge === "left" ? -90 : win.edge === "right" ? 90 : 0
+					opacity: win.bar ? 1 : 0
 					visible: opacity > 0.01
 					Behavior on opacity {
 						NumberAnimation {

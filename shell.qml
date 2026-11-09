@@ -25,6 +25,13 @@ ShellRoot {
 		Notch {}
 	}
 
+	// full bar takes screen space unless it autohides
+	Variants {
+		model: !(Settings.fullBar && !Settings.autohide) ? [] : Settings.allScreens ? Quickshell.screens : [Quickshell.screens.find(s => s.name === Settings.screenName) ?? Quickshell.screens[0]]
+
+		BarReserve {}
+	}
+
 	Variants {
 		model: !Settings.dockEnabled ? [] : Settings.dockAllScreens ? Quickshell.screens : [Quickshell.screens.find(s => s.name === Settings.screenName) ?? Quickshell.screens[0]]
 

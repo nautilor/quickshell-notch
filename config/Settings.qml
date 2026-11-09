@@ -25,6 +25,9 @@ Singleton {
 	property alias screenCorners: adapter.screenCorners
 	property alias cornerRadius: adapter.cornerRadius
 	property alias autohide: adapter.autohide
+	property alias fullBar: adapter.fullBar
+	property alias barLayout: adapter.barLayout
+	property alias barHeight: adapter.barHeight
 	property alias notifTimeout: adapter.notifTimeout
 	property alias screenName: adapter.screenName
 	property alias allScreens: adapter.allScreens
@@ -142,6 +145,12 @@ Singleton {
 			property bool screenCorners: true
 			property real cornerRadius: 20
 			property bool autohide: false
+			// idle notch stretches along the whole edge as a bar; it still opens as a notch
+			property bool fullBar: false
+			// items of the full bar: {v: 1, left: [...], center: [...], right: [...]}; empty = default
+			property var barLayout: ({})
+			// thickness of the full bar in pixels
+			property int barHeight: 34
 			property int notifTimeout: 5000
 			property string screenName: ""
 			property bool allScreens: false

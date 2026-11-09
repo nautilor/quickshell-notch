@@ -3,6 +3,7 @@ import QtQuick.Shapes
 import Quickshell
 import Quickshell.Wayland
 import qs.config
+import qs.services
 
 // Rounds the corners of one screen: four inverted quarter-circles drawn over everything, click-through.
 PanelWindow {
@@ -13,6 +14,17 @@ PanelWindow {
 
 	readonly property real radius: Settings.cornerRadius
 	readonly property color fill: Theme.notch
+
+	// with the full bar showing, the corners on its edge sit just inside the bar instead of under it
+	readonly property string barEdge: Settings.placementFor("").split(":")[0]
+	property real off: NotchCtl.barOn[screen.name] ? Settings.barHeight : 0
+	Behavior on off {
+		NumberAnimation {
+			duration: Theme.durMedium
+			easing.type: Easing.BezierSpline
+			easing.bezierCurve: Theme.emphasized
+		}
+	}
 
 	anchors {
 		left: true
@@ -60,20 +72,28 @@ PanelWindow {
 	CornerShape {
 		anchors.top: parent.top
 		anchors.left: parent.left
+		anchors.topMargin: root.barEdge === "top" ? root.off : 0
+		anchors.leftMargin: root.barEdge === "left" ? root.off : 0
 	}
 	CornerShape {
 		anchors.top: parent.top
 		anchors.right: parent.right
+		anchors.topMargin: root.barEdge === "top" ? root.off : 0
+		anchors.rightMargin: root.barEdge === "right" ? root.off : 0
 		rotation: 90
 	}
 	CornerShape {
 		anchors.bottom: parent.bottom
 		anchors.right: parent.right
+		anchors.bottomMargin: root.barEdge === "bottom" ? root.off : 0
+		anchors.rightMargin: root.barEdge === "right" ? root.off : 0
 		rotation: 180
 	}
 	CornerShape {
 		anchors.bottom: parent.bottom
 		anchors.left: parent.left
+		anchors.bottomMargin: root.barEdge === "bottom" ? root.off : 0
+		anchors.leftMargin: root.barEdge === "left" ? root.off : 0
 		rotation: 270
 	}
 }

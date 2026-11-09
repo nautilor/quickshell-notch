@@ -149,6 +149,8 @@ Open the Settings tab. Everything is saved to `~/.config/quickshell-notch/settin
 | Battery on closed notch | Battery percentage on the idle notch |
 | Date on Home tab | Date next to the clock in the header |
 | Autohide | Slide the idle notch off screen |
+| Full bar | Idle notch spans the whole screen edge as a bar; reserves screen space unless Autohide is on |
+| Bar items (Settings → Bar) | Choose and arrange what the full bar shows in its left, center and right zones: workspaces, media, clock, tray, battery, volume, status icons, notifications, toggles, tab shortcuts (launcher, clipboard, ...) and command buttons |
 | Do not disturb | Keep notifications, do not show them |
 | Notification time | How long a notification stays out |
 | 24-hour clock | Clock and calendar time format |
