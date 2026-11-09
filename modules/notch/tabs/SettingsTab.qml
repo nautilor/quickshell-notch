@@ -345,8 +345,8 @@ Item {
 					}
 				}
 				SettingRow {
-					title: "Home on hover"
-					subtitle: "Hovering the notch always opens the Home tab"
+					title: "Home on hover or click"
+					subtitle: "Hovering or clicking the notch always opens the Home tab"
 					Switch {
 						checked: Settings.homeOnHover
 						onToggled: v => Settings.homeOnHover = v

@@ -81,7 +81,7 @@ Caffeine, microphone, volume and brightness changes show in the notch. The caffe
 
 **Notch behaviour**
 - Opens when you hover it, when you click it, or through IPC and keybinds. Closes when the pointer leaves, unless pinned. The pin button in the header keeps it open; Escape or a click outside closes a pinned notch.
-- "Home on hover": hovering always opens the Home tab (default on). Keybinds and IPC open the tab you asked for.
+- "Home on hover or click": hovering or clicking the notch always opens the Home tab (default on). Keybinds and IPC open the tab you asked for.
 - Autohide: the idle notch slides off the top edge; hover the top edge to bring it back. Notifications and on-screen messages still appear.
 - Optional clock, date and battery percentage on the closed notch (each its own setting). The battery icon is green while charging, accent-coloured when full, red when low.
 - Multi-monitor: show on one screen (the first, or the one named by `screenName`) or on all screens. With several notches, hover opens only the one you hovered, and keybinds open the one on the focused monitor.
@@ -141,7 +141,7 @@ Open the Settings tab. Everything is saved to `~/.config/quickshell-notch/settin
 | Accent colour | Seed hue for the whole palette |
 | Colour scheme | Pick a ready-made palette instead of the accent; see [Colour schemes](#colour-schemes) |
 | Open on hover | Hover opens the notch; otherwise click or IPC |
-| Home on hover | Hover always opens Home (default on) |
+| Home on hover or click | Hover or click always opens Home (default on) |
 | Rounded screen corners | Round every screen corner |
 | Show on all screens | One notch per screen |
 | Clock on closed notch | Time in the middle of the idle notch |

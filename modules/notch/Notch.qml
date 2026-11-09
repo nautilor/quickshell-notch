@@ -409,7 +409,11 @@ PanelWindow {
 			MouseArea {
 				anchors.fill: parent
 				enabled: win.mode !== "open" && win.mode !== "notif"
-				onClicked: NotchCtl.show(undefined, win.screen.name)
+				onClicked: {
+					if (Settings.homeOnHover)
+						NotchCtl.tab = "home";
+					NotchCtl.show(undefined, win.screen.name);
+				}
 				z: -1
 			}
 		}
