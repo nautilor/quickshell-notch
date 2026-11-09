@@ -7,6 +7,9 @@ A [Boring Notch](https://github.com/TheBoredTeam/boring.notch)-style island for 
 ## Contents
 - [Install and run](#install-and-run)
 - [Tour](#tour)
+  - [Dock](#dock)
+  - [Bar](#bar)
+  - [Custom placement](#custom-placement)
 - [Everything it does](#everything-it-does)
 - [Settings](#settings)
 - [Google Calendar setup](#google-calendar-setup)
@@ -70,6 +73,35 @@ Screen recorder (wf-recorder). Record one or more screens (several screens are m
 ### Settings
 ![Settings tab](docs/screenshots/settings.png)
 
+### Dock
+A macOS-style dock on any screen edge. Pinned and running apps, folders, optional widgets and the trash. Autohide slides it off screen until you hover the edge; otherwise it reserves space.
+
+![Dock on the right edge](docs/screenshots/dock-right.png)
+
+On a top or bottom dock you can also pin widgets (now playing, clock, battery, next event, workspaces).
+
+![Dock with folders and widgets](docs/screenshots/dock-bottom.png)
+
+- Running apps get a dot; hover one to preview its windows, click to focus or launch.
+- Drag pinned items to reorder them. Right click for the menu: new window, change icon, keep in or remove from the dock, quit.
+- The **+** button adds an app, a folder or a widget. Click a folder to browse its contents in a popup; right click opens it in your file manager. Folders use the matching XDG icon.
+- The trash opens the Trash and empties it (second click confirms).
+
+![Dock settings](docs/screenshots/settings-dock.png)
+
+### Bar
+Turn on **Full bar** and the idle notch stretches along the whole screen edge. It still opens as a notch. Pick what goes in the left, centre and right zones: workspaces, media, clock, tray, battery, volume, status icons, notifications, toggles, tab shortcuts, a visualiser and command buttons.
+
+![Full bar](docs/screenshots/bar.png)
+![Bar settings](docs/screenshots/settings-bar.png)
+
+### Custom placement
+The notch can sit on any edge (top, bottom, left, right) and at the start, centre or end of it. Each tab and the notification popup can open somewhere else, so for example the launcher can open on the left while Home stays at the bottom.
+
+![Home opened from the bottom edge](docs/screenshots/placement-bottom.png)
+![Launcher opened from the left edge](docs/screenshots/placement-left.png)
+![Placement settings](docs/screenshots/settings-placement.png)
+
 ### On-screen messages
 Caffeine, microphone, volume and brightness changes show in the notch. The caffeine and microphone texts are yours to customise.
 
@@ -87,6 +119,15 @@ Caffeine, microphone, volume and brightness changes show in the notch. The caffe
 - Multi-monitor: show on one screen (the first, or the one named by `screenName`) or on all screens. With several notches, hover opens only the one you hovered, and keybinds open the one on the focused monitor.
 - Rounded screen corners on every screen (click-through overlay, adjustable radius).
 - Springy open/close animation, with concave "ears" at the top corners like a hardware notch.
+
+**Dock**
+- Settings → Dock: show or hide, edge (top, bottom, left, right), autohide, show on all screens, icon size (28 to 72 px). Stored as `dockEnabled`, `dockEdge`, `dockAutohide`, `dockAllScreens`, `dockIconSize`.
+- Pinned apps are desktop entry ids in `dockPinned`; folders are `dir:<path>`; widgets are `widget:<id>` (`media`, `clock`, `battery`, `event`, `workspaces`) and only show on a top or bottom dock.
+- Hover a running app to see live thumbnails of its windows; click a thumbnail to focus it.
+- Custom icons per app or folder: right click → Change icon (`dockIcons` in `settings.json`).
+
+**Placement**
+- Settings → Placement: notch edge and alignment, plus a separate edge and alignment for each tab and the notification popup when opened by a shortcut (`notchEdge`, `notchAlign`, `placements` in `settings.json`).
 
 **Home tab (customisable)**
 - The Home dashboard is a grid of widgets. Press the pencil in the header to edit: drag a widget to move it, drag its corner handle to resize it, use the gear to configure it or the cross to remove it. Dropping onto an occupied spot: hold still for a moment and the widget underneath swaps places with yours (when it fits) or the others shuffle aside to the nearest free space; the preview turns green when it works and stays red when it can't. **Add** opens the widget catalogue and **Reset** restores the default layout. The layout is saved in `settings.json`.
