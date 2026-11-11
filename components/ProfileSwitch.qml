@@ -23,7 +23,7 @@ Item {
 		return i === index ? activeWeight * unit : unit;
 	}
 
-	implicitHeight: 44
+	implicitHeight: 48
 
 	Rectangle {
 		anchors.fill: parent

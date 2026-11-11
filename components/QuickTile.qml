@@ -13,13 +13,13 @@ Item {
 
 	signal clicked
 
-	implicitHeight: 64
+	implicitHeight: 72
 
 	Rectangle {
 		id: bg
 		anchors.fill: parent
 		color: root.toggled ? Theme.primaryContainer : Theme.surfaceContainerHigh
-		radius: mouse.pressed ? 14 : root.toggled ? 22 : height / 2
+		radius: mouse.pressed ? 16 : root.toggled ? Theme.radiusMedium + 4 : height / 2
 		Behavior on color {
 			ColorAnimation {
 				duration: Theme.durShort
@@ -42,13 +42,13 @@ Item {
 
 	Rectangle {
 		id: chip
-		width: Math.min(root.height - 16, 44)
+		width: Math.min(root.height - 16, 52)
 		height: width
-		radius: root.toggled ? 14 : width / 2
+		radius: root.toggled ? 18 : width / 2
 		anchors.left: parent.left
 		anchors.leftMargin: 8
 		anchors.verticalCenter: parent.verticalCenter
-		color: root.toggled ? Theme.primary : "transparent"
+		color: root.toggled ? Theme.primary : Theme.surfaceContainerHighest
 		Behavior on color {
 			ColorAnimation {
 				duration: Theme.durShort
@@ -77,7 +77,7 @@ Item {
 		Txt {
 			width: parent.width
 			text: root.title
-			font.weight: Font.Medium
+			font.weight: Font.DemiBold
 			color: root.toggled ? Theme.primaryContainerFg : Theme.surfaceFg
 		}
 		Txt {

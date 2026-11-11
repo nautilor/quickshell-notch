@@ -21,9 +21,10 @@ Singleton {
 			"workspace": { title: "Workspace", icon: "dashboard", desc: "Current workspace number", source: src("BarWorkspace"), schema: [] },
 			"workspaces": { title: "Workspaces", icon: "apps", desc: "All workspaces as pills", source: src("BarWorkspaces"), schema: [] },
 			"media": {
-				title: "Media", icon: "music_note", desc: "Cover art of the playing track", source: src("BarMedia"),
+				title: "Media", icon: "music_note", desc: "Cover art and controls of the playing track", source: src("BarMedia"),
 				schema: [
 					{ key: "showTitle", label: "Show title and artist", kind: "bool", def: false },
+					{ key: "showControls", label: "Show previous / play / next", kind: "bool", def: true },
 					{ key: "alwaysShow", label: "Show when nothing plays", kind: "bool", def: false }
 				]
 			},

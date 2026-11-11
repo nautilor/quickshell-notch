@@ -150,7 +150,7 @@ Singleton {
 			// items of the full bar: {v: 1, left: [...], center: [...], right: [...]}; empty = default
 			property var barLayout: ({})
 			// thickness of the full bar in pixels
-			property int barHeight: 34
+			property int barHeight: 44
 			property int notifTimeout: 5000
 			property string screenName: ""
 			property bool allScreens: false

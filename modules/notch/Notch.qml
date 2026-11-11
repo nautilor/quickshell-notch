@@ -40,9 +40,16 @@ PanelWindow {
 		}
 	}
 	readonly property bool vertical: edge === "left" || edge === "right"
-	// idle notch drawn as a bar spanning the whole edge
-	readonly property bool bar: Settings.fullBar && mode === "idle"
-	readonly property bool barShown: bar && !hidden && !moving
+	// full-bar mode: the bar is always there, popups (home, launcher, OSD, notifications) hang below it
+	readonly property bool fullBar: Settings.fullBar
+	// idle in full-bar mode: the notch itself is not shown, only the bar
+	readonly property bool barIdle: fullBar && mode === "idle"
+	// the bar stays on the idle placement's edge; popups follow their own placement settings and
+	// are pushed below the bar only when they hang from the same edge
+	readonly property string barEdge: Settings.placementFor("").split(":")[0]
+	readonly property bool barVertical: barEdge === "left" || barEdge === "right"
+	readonly property real barOff: fullBar && edge === barEdge ? Settings.barHeight : 0
+	readonly property bool barShown: fullBar && !hidden
 	onBarShownChanged: NotchCtl.setBar(screen.name, barShown)
 	Component.onCompleted: NotchCtl.setBar(screen.name, barShown)
 
@@ -56,6 +63,9 @@ PanelWindow {
 	exclusionMode: ExclusionMode.Ignore
 	mask: Region {
 		item: hit
+		Region {
+			item: barHit
+		}
 	}
 
 	WlrLayershell.namespace: "notch"
@@ -86,8 +96,8 @@ PanelWindow {
 		case "hud":
 			return Math.max(hudView.implicitWidth + 16, 250 - 2 * topR);
 		default:
-			if (bar)
-				return vertical ? Settings.barHeight : width;
+			if (barIdle)
+				return 0;
 			return vertical ? closedView.implicitHeight : closedView.implicitWidth;
 		}
 	}
@@ -101,16 +111,16 @@ PanelWindow {
 		case "hud":
 			return hudView.implicitHeight;
 		default:
-			if (bar)
-				return vertical ? height : Settings.barHeight;
+			if (barIdle)
+				return 0;
 			return vertical ? closedView.implicitWidth : closedView.implicitHeight;
 		}
 	}
 	// the ears sit at both ends of the edge the notch hangs from
 	readonly property real targetW: moving ? (vertical ? 4 : 80) : vertical ? contentW : contentW + 2 * topR
 	readonly property real targetH: moving ? (vertical ? 80 : 4) : vertical ? contentH + 2 * topR : contentH
-	readonly property real topR: moving || bar ? 0 : mode === "open" ? 24 : mode === "idle" ? 8 : 16
-	readonly property real botR: moving || bar ? 0 : mode === "open" ? 34 : mode === "idle" ? 14 : 26
+	readonly property real topR: moving || barIdle ? 0 : mode === "open" ? 24 : mode === "idle" ? 8 : 16
+	readonly property real botR: moving || barIdle ? 0 : mode === "open" ? 34 : mode === "idle" ? 14 : 26
 
 	// position along the edge for an item of the given size
 	function alongX(w) {
@@ -154,13 +164,22 @@ PanelWindow {
 		onTriggered: win.hidden = win.wantHidden
 	}
 
-	// input mask: the shape plus a small forgiving margin (just a strip while hidden)
+	// input mask: the popup shape plus a small forgiving margin (just a strip while hidden)
 	Item {
 		id: hit
-		width: win.vertical ? (win.hidden ? 6 : stage.width + 8) : stage.width + 20
-		height: win.vertical ? stage.height + 20 : (win.hidden ? 6 : stage.height + 8)
-		x: win.edge === "left" ? 0 : win.edge === "right" ? win.width - width : win.alongX(width)
-		y: win.edge === "top" ? 0 : win.edge === "bottom" ? win.height - height : win.alongY(height)
+		visible: !win.barIdle
+		width: win.barIdle ? 0 : win.vertical ? (win.hidden ? 6 : stage.width + 8) : stage.width + 20
+		height: win.barIdle ? 0 : win.vertical ? stage.height + 20 : (win.hidden ? 6 : stage.height + 8)
+		x: win.edge === "left" ? win.barOff : win.edge === "right" ? win.width - width - win.barOff : win.alongX(width)
+		y: win.edge === "top" ? win.barOff : win.edge === "bottom" ? win.height - height - win.barOff : win.alongY(height)
+	}
+	// input mask of the full bar
+	Item {
+		id: barHit
+		width: !win.fullBar ? 0 : win.barVertical ? (win.hidden ? 6 : Settings.barHeight) : win.width
+		height: !win.fullBar ? 0 : win.barVertical ? win.height : (win.hidden ? 6 : Settings.barHeight)
+		x: win.barEdge === "right" ? win.width - width : 0
+		y: win.barEdge === "bottom" ? win.height - height : 0
 	}
 
 	// click-outside dismissal; armed shortly after opening so the initial focus change does not trigger it
@@ -200,15 +219,64 @@ PanelWindow {
 			}
 		}
 
+		// full bar: always present in full-bar mode, popups hang below it
+		Item {
+			id: barStage
+			readonly property real thick: Settings.barHeight
+			property real slide: win.hidden ? 4 - thick : 0
+			visible: win.fullBar
+			width: win.barVertical ? thick : win.width
+			height: win.barVertical ? win.height : thick
+			x: win.barEdge === "left" ? slide : win.barEdge === "right" ? win.width - width - slide : 0
+			y: win.barEdge === "top" ? slide : win.barEdge === "bottom" ? win.height - height - slide : 0
+			opacity: 1
+			Behavior on opacity {
+				NumberAnimation {
+					duration: 130
+				}
+			}
+			Behavior on slide {
+				SpringAnimation {
+					spring: Theme.springSoft
+					damping: Theme.dampSoft
+					epsilon: 0.5
+				}
+			}
+
+			Rectangle {
+				anchors.fill: parent
+				color: Theme.notch
+			}
+
+			BarContent {
+				anchors.centerIn: parent
+				width: (win.barVertical ? barStage.height : barStage.width) - 32
+				height: barStage.thick
+				rotation: win.barEdge === "left" ? -90 : win.barEdge === "right" ? 90 : 0
+			}
+
+			// clicking an empty part of the bar opens the notch explicitly
+			MouseArea {
+				anchors.fill: parent
+				enabled: win.mode === "idle"
+				z: -1
+				onClicked: {
+					if (Settings.homeOnHover)
+						NotchCtl.tab = "home";
+					NotchCtl.show(undefined, win.screen.name);
+				}
+			}
+		}
+
 		Item {
 			id: stage
 			// how far the notch is pushed off its edge while autohidden
 			property real slide: win.hidden ? 4 - (win.vertical ? width : height) : 0
-			x: win.edge === "left" ? slide : win.edge === "right" ? win.width - width - slide : win.alongX(width)
-			y: win.edge === "top" ? slide : win.edge === "bottom" ? win.height - height - slide : win.alongY(height)
+			x: win.edge === "left" ? slide + win.barOff : win.edge === "right" ? win.width - width - slide - win.barOff : win.alongX(width)
+			y: win.edge === "top" ? slide + win.barOff : win.edge === "bottom" ? win.height - height - slide - win.barOff : win.alongY(height)
 			width: win.targetW
 			height: win.targetH
-			opacity: win.moving ? 0 : 1
+			opacity: win.moving || win.barIdle ? 0 : 1
 			Behavior on opacity {
 				NumberAnimation {
 					duration: 130
@@ -338,23 +406,7 @@ PanelWindow {
 					width: (win.vertical ? content.height : content.width) - 20
 					height: win.vertical ? content.width : content.height
 					rotation: win.edge === "left" ? -90 : win.edge === "right" ? 90 : 0
-					opacity: win.mode === "idle" && !win.bar ? 1 : 0
-					visible: opacity > 0.01
-					Behavior on opacity {
-						NumberAnimation {
-							duration: Theme.durShort
-						}
-					}
-				}
-
-				// customisable items, shown instead of the idle notch content in full-bar mode
-				BarContent {
-					id: barView
-					anchors.centerIn: parent
-					width: (win.vertical ? content.height : content.width) - 32
-					height: win.vertical ? content.width : content.height
-					rotation: win.edge === "left" ? -90 : win.edge === "right" ? 90 : 0
-					opacity: win.bar ? 1 : 0
+					opacity: win.mode === "idle" && !win.fullBar ? 1 : 0
 					visible: opacity > 0.01
 					Behavior on opacity {
 						NumberAnimation {
@@ -408,7 +460,7 @@ PanelWindow {
 			// clicking the idle notch opens it explicitly
 			MouseArea {
 				anchors.fill: parent
-				enabled: win.mode !== "open" && win.mode !== "notif"
+				enabled: win.mode !== "open" && win.mode !== "notif" && !win.fullBar
 				onClicked: {
 					if (Settings.homeOnHover)
 						NotchCtl.tab = "home";

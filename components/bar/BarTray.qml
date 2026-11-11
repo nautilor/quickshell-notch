@@ -2,15 +2,20 @@ import QtQuick
 import Quickshell
 import Quickshell.Services.SystemTray
 import qs.config
+import qs.components
 
 // Tray icons: left click activates, middle click secondary action, right click shows the app menu.
-Row {
+BarCapsule {
 	id: root
 	property var cfg: ({})
 	readonly property var c: BarLayout.resolve("tray", cfg)
-	readonly property real cell: c.size
+	readonly property real cell: Math.min(c.size, 26)
+	visible: SystemTray.items.values.length > 0
+	padding: 4
 
+	Row {
 	spacing: 2
+	anchors.verticalCenter: parent.verticalCenter
 
 	Repeater {
 		model: SystemTray.items
@@ -22,7 +27,7 @@ Row {
 			width: root.cell
 			height: root.cell
 			radius: mouse.pressed ? 6 : root.cell / 2
-			color: mouse.containsMouse ? Theme.surfaceContainerHigh : "transparent"
+			color: mouse.containsMouse ? Theme.surfaceContainerHighest : "transparent"
 
 			Image {
 				anchors.centerIn: parent
@@ -53,4 +58,5 @@ Row {
 			}
 		}
 	}
+}
 }

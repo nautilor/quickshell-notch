@@ -11,12 +11,19 @@ Rectangle {
 	property bool active: false
 	signal clicked
 
-	implicitHeight: 28
-	implicitWidth: row.implicitWidth + (label !== "" ? 18 : 12)
-	radius: mouse.pressed ? 8 : height / 2
-	color: active ? Theme.primaryContainer : mouse.containsMouse ? Theme.surfaceContainerHigh : "transparent"
+	implicitHeight: 32
+	implicitWidth: Math.max(32, row.implicitWidth + (label !== "" ? 24 : 14))
+	radius: mouse.pressed ? Theme.radiusInner : active ? 12 : height / 2
+	color: active ? Theme.primaryContainer : mouse.containsMouse ? Theme.surfaceContainerHighest : Theme.surfaceContainerHigh
 	Behavior on radius {
-		NumberAnimation {
+		SpringAnimation {
+			spring: Theme.springBouncy
+			damping: Theme.dampBouncy
+			epsilon: 0.25
+		}
+	}
+	Behavior on color {
+		ColorAnimation {
 			duration: Theme.durShort
 		}
 	}
@@ -36,8 +43,8 @@ Rectangle {
 		Txt {
 			visible: root.label !== ""
 			text: root.label
-			font.pixelSize: 12
-			font.weight: Font.Medium
+			font.pixelSize: 13
+			font.weight: Font.DemiBold
 			elide: Text.ElideNone
 			color: root.active ? Theme.primaryContainerFg : root.fg
 			anchors.verticalCenter: parent.verticalCenter

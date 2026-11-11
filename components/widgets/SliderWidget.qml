@@ -29,7 +29,7 @@ Item {
 	Rectangle {
 		id: track
 		anchors.fill: parent
-		radius: Math.min(width, height) / 2 > 22 ? 22 : Math.min(width, height) / 2
+		radius: Math.min(width, height) / 2 > 26 ? 26 : Math.min(width, height) / 2
 		color: Theme.surfaceContainerHigh
 		clip: true
 
@@ -41,6 +41,18 @@ Item {
 			width: root.vertical ? parent.width : Math.max(radius * 2, parent.width * root.shown)
 			height: root.vertical ? Math.max(radius * 2, parent.height * root.shown) : parent.height
 			anchors.bottom: root.vertical ? parent.bottom : undefined
+		}
+
+		// handle bar at the end of the fill
+		Rectangle {
+			visible: root.shown > 0.02 && root.shown < 0.98
+			width: root.vertical ? 26 : 4
+			height: root.vertical ? 4 : 26
+			radius: 2
+			color: Theme.primaryFg
+			opacity: 0.55
+			x: root.vertical ? (parent.width - width) / 2 : parent.width * root.shown - 10
+			y: root.vertical ? parent.height * (1 - root.shown) + 6 : (parent.height - height) / 2
 		}
 
 		Icon {

@@ -17,10 +17,10 @@ Singleton {
 
 	// surfaces (the notch itself stays near-black so it merges with the screen edge)
 	readonly property color notch: pal ? pal.notch : tone(0.12, 0.035)
-	readonly property color surfaceContainerLow: pal ? pal.surfaceContainerLow : tone(0.16, 0.08)
-	readonly property color surfaceContainer: pal ? pal.surfaceContainer : tone(0.17, 0.115)
-	readonly property color surfaceContainerHigh: pal ? pal.surfaceContainerHigh : tone(0.18, 0.15)
-	readonly property color surfaceContainerHighest: pal ? pal.surfaceContainerHighest : tone(0.18, 0.19)
+	readonly property color surfaceContainerLow: pal ? pal.surfaceContainerLow : tone(0.18, 0.095)
+	readonly property color surfaceContainer: pal ? pal.surfaceContainer : tone(0.19, 0.135)
+	readonly property color surfaceContainerHigh: pal ? pal.surfaceContainerHigh : tone(0.2, 0.175)
+	readonly property color surfaceContainerHighest: pal ? pal.surfaceContainerHighest : tone(0.2, 0.22)
 
 	readonly property color primary: pal ? pal.primary : tone(0.55, 0.76)
 	readonly property color primaryFg: pal ? pal.primaryFg : tone(0.65, 0.14)
@@ -51,9 +51,18 @@ Singleton {
 	readonly property string iconFont: font
 
 	// shape scale
-	readonly property int radiusSmall: 12
-	readonly property int radiusMedium: 18
-	readonly property int radiusLarge: 28
+	readonly property int radiusSmall: 14
+	readonly property int radiusMedium: 22
+	readonly property int radiusLarge: 32
+	readonly property int radiusXLarge: 40
+	// connected button groups: big radius on the outer edge, small on the inner edges
+	readonly property int radiusInner: 8
+
+	// type scale (M3): label / body / title / headline
+	readonly property int textLabel: 12
+	readonly property int textBody: 14
+	readonly property int textTitle: 16
+	readonly property int textHeadline: 22
 
 	// motion: emphasized easing + springs that overshoot slightly (the "expressive" feel)
 	readonly property var emphasized: [0.2, 0.0, 0.0, 1.0, 1.0, 1.0]

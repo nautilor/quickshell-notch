@@ -13,7 +13,7 @@ Item {
 	property bool stickyBefore: false
 
 	// narrowest the header can be without the tab bar running into the status icons
-	implicitWidth: NotchCtl.clean ? 0 : tabBar.width + status.width + 6 + 8 + 24
+	implicitWidth: NotchCtl.clean ? 0 : tabBar.width + status.width + 6 + 8 + 32
 
 	readonly property var tabDefs: [
 		{ id: "home", icon: "home", label: "Home" },
@@ -26,13 +26,24 @@ Item {
 		{ id: "settings", icon: "tune", label: "Settings" }
 	]
 
+	// tonal track behind the tab pills
+	Rectangle {
+		visible: !NotchCtl.clean
+		x: tabBar.x - 4
+		y: tabBar.y - 4
+		width: tabBar.width + 8
+		height: tabBar.height + 8
+		radius: height / 2
+		color: Theme.surfaceContainer
+	}
+
 	Row {
 		id: tabBar
 		visible: !NotchCtl.clean
 		anchors.top: parent.top
-		anchors.topMargin: 10
+		anchors.topMargin: 12
 		anchors.left: parent.left
-		anchors.leftMargin: 6
+		anchors.leftMargin: 10
 		spacing: 4
 
 		Repeater {
@@ -57,7 +68,7 @@ Item {
 				Rectangle {
 					anchors.fill: parent
 					radius: height / 2
-					color: tabItem.current ? Theme.secondaryContainer : "transparent"
+					color: tabItem.current ? Theme.primaryContainer : "transparent"
 					Behavior on color {
 						ColorAnimation {
 							duration: Theme.durShort
@@ -78,7 +89,7 @@ Item {
 					name: tabItem.modelData.icon
 					size: 22
 					fill: tabItem.current ? 1 : 0
-					color: tabItem.current ? Theme.secondaryContainerFg : Theme.surfaceVariantFg
+					color: tabItem.current ? Theme.primaryContainerFg : Theme.surfaceVariantFg
 				}
 				Txt {
 					id: label
@@ -86,8 +97,8 @@ Item {
 					anchors.leftMargin: 6
 					anchors.verticalCenter: parent.verticalCenter
 					text: tabItem.modelData.label
-					font.weight: Font.Medium
-					color: Theme.secondaryContainerFg
+					font.weight: Font.DemiBold
+					color: Theme.primaryContainerFg
 					opacity: tabItem.current ? 1 : 0
 					elide: Text.ElideNone
 					Behavior on opacity {
@@ -239,7 +250,7 @@ Item {
 	Loader {
 		id: tabLoader
 		anchors.top: NotchCtl.clean ? parent.top : tabBar.bottom
-		anchors.topMargin: NotchCtl.clean ? 18 : 10
+		anchors.topMargin: NotchCtl.clean ? 18 : 16
 		anchors.left: parent.left
 		anchors.right: parent.right
 		anchors.bottom: parent.bottom

@@ -128,34 +128,16 @@ Rectangle {
 			Layout.fillWidth: true
 			Layout.minimumWidth: 0
 			Layout.preferredWidth: 0
-			Layout.preferredHeight: 18
+			Layout.preferredHeight: 24
 			visible: root.player && root.player.lengthSupported
 
-			Rectangle {
-				id: track
-				anchors.verticalCenter: parent.verticalCenter
-				width: parent.width
-				height: seek.pressed ? 10 : 6
-				radius: height / 2
-				color: Theme.surfaceContainerHighest
-				Behavior on height {
-					NumberAnimation {
-						duration: Theme.durShort
-					}
-				}
-				Rectangle {
-					width: root.player && root.player.length > 0 ? parent.width * Math.min(1, root.player.position / root.player.length) : 0
-					height: parent.height
-					radius: height / 2
-					color: Theme.primary
-				}
-			}
-			MouseArea {
+			WavySlider {
 				id: seek
 				anchors.fill: parent
-				enabled: root.player && root.player.canSeek
-				onPressed: mouse => root.player.position = root.player.length * Math.max(0, Math.min(1, mouse.x / width))
-				onPositionChanged: mouse => root.player.position = root.player.length * Math.max(0, Math.min(1, mouse.x / width))
+				wavy: Media.playing
+				interactive: root.player && root.player.canSeek
+				value: root.player && root.player.length > 0 ? root.player.position / root.player.length : 0
+				onMoved: v => root.player.position = root.player.length * v
 			}
 		}
 

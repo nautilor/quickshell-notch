@@ -4,8 +4,14 @@ import qs.services
 import qs.components
 
 // Recording, caffeine, muted microphone and do-not-disturb indicators.
-Row {
+BarCapsule {
+	id: root
 	property var cfg: ({})
+	visible: Recorder.recording || Caffeine.active || Mic.muted || Settings.dnd
+	padding: 11
+
+	Row {
+	anchors.verticalCenter: parent.verticalCenter
 	spacing: 8
 
 	Icon {
@@ -40,4 +46,5 @@ Row {
 		color: Theme.surfaceVariantFg
 		anchors.verticalCenter: parent.verticalCenter
 	}
+}
 }

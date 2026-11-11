@@ -7,7 +7,7 @@ import qs.components
 Item {
 	id: root
 
-	implicitHeight: 34
+	implicitHeight: 44
 
 	component Zone: Row {
 		id: zone

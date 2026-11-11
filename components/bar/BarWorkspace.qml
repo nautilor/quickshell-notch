@@ -1,6 +1,7 @@
 import QtQuick
 import Quickshell.Hyprland
 import qs.config
+import qs.services
 import qs.components
 
 // Current workspace number in a chip.
@@ -9,9 +10,9 @@ Rectangle {
 	property var cfg: ({})
 	readonly property var workspace: Hyprland.focusedWorkspace
 
-	width: Math.max(24, wsText.implicitWidth + 14)
-	height: 24
-	radius: 8
+	width: Math.max(32, wsText.implicitWidth + 18)
+	height: 32
+	radius: 12
 	color: Theme.primaryContainer
 
 	Txt {
@@ -19,7 +20,7 @@ Rectangle {
 		anchors.centerIn: parent
 		text: chip.workspace ? (chip.workspace.name || chip.workspace.id) : "–"
 		color: Theme.primaryContainerFg
-		font.pixelSize: 13
+		font.pixelSize: 14
 		font.weight: Font.Bold
 	}
 	Connections {
@@ -47,6 +48,6 @@ Rectangle {
 	}
 	MouseArea {
 		anchors.fill: parent
-		onWheel: w => Hyprland.dispatch(w.angleDelta.y > 0 ? "workspace e-1" : "workspace e+1")
+		onWheel: w => Hypr.focusWorkspace(w.angleDelta.y > 0 ? "e-1" : "e+1")
 	}
 }

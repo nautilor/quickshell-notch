@@ -57,6 +57,15 @@ The look is Material 3 Expressive: very rounded shapes, tonal colour, big touch-
 - **Workspaces.** The active workspace is a wide pill, the others are circles, and occupied ones are tinted. The row shrinks its circles to fit rather than overflowing.
 - **Power profile.** One segmented control with a sliding highlight. Only the selected segment shows its label and is wider, so the longest label ("Performance") never touches the edge.
 
+## Expressive pass (end-4 inspired)
+
+- **Bigger shapes.** Scale is 14 / 22 / 32 / 40 (`radiusSmall` to `radiusXLarge`), plus `radiusInner` (8) for pressed and connected-group edges.
+- **Lighter tonal ladder.** Container surfaces are about 2 lightness points brighter, so cards read against the black notch.
+- **Type scale.** `Txt.role` (`label`, `body`, `title`, `headline`) with tokens in `Theme`. Section labels are sentence case, not spaced caps.
+- **Wavy progress.** `WavySlider` draws the played part as a sine wave while music plays, flat when paused, with a gapped handle pill.
+- **Tab track.** Tabs sit in a tonal pill track, and the active tab is `primaryContainer`.
+- **Switch.** The thumb carries a check or close icon and stretches on press.
+
 ## Motion
 
 - **Springs for size and position.** The notch, tab pills, switches, workspace pills and toggle radii use spring animations with slight overshoot (`springBouncy`: stiffness 3.4, damping 0.30). Softer springs (`springSoft`) are used where bounce would look silly, like the album art corners.

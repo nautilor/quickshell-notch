@@ -1,15 +1,15 @@
 import QtQuick
 import qs.config
 
-// M3 switch: thumb grows on press, track is a pill.
+// M3 Expressive switch: pill track, thumb carries a check/close icon and stretches on press.
 Item {
 	id: root
 
 	property bool checked: false
 	signal toggled(bool value)
 
-	implicitWidth: 52
-	implicitHeight: 32
+	implicitWidth: 56
+	implicitHeight: 34
 
 	Rectangle {
 		anchors.fill: parent
@@ -26,12 +26,12 @@ Item {
 
 	Rectangle {
 		id: thumb
-		property real size: mouse.pressed ? 28 : (root.checked ? 24 : 16)
-		width: size
+		property real size: root.checked ? 26 : 18
+		width: mouse.pressed ? size + 6 : size
 		height: size
-		radius: size / 2
+		radius: height / 2
 		anchors.verticalCenter: parent.verticalCenter
-		x: root.checked ? parent.width - width - 4 : 8 - (size - 16) / 2
+		x: root.checked ? parent.width - width - 4 : 7 - (size - 18) / 2
 		color: root.checked ? Theme.primaryFg : Theme.outline
 
 		Behavior on x {
@@ -42,6 +42,13 @@ Item {
 			}
 		}
 		Behavior on size {
+			SpringAnimation {
+				spring: Theme.springBouncy
+				damping: Theme.dampBouncy
+				epsilon: 0.25
+			}
+		}
+		Behavior on width {
 			NumberAnimation {
 				duration: Theme.durShort
 			}
@@ -50,6 +57,14 @@ Item {
 			ColorAnimation {
 				duration: Theme.durShort
 			}
+		}
+
+		Icon {
+			anchors.centerIn: parent
+			name: root.checked ? "check" : "close"
+			size: 14
+			color: root.checked ? Theme.primary : Theme.surfaceContainerHighest
+			visible: root.checked || thumb.size > 16
 		}
 	}
 

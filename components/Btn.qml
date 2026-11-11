@@ -12,7 +12,7 @@ Item {
 	// 0 tonal, 1 filled, 2 ghost, 3 error
 	property int variant: 0
 	property real iconSize: 22
-	property real toggledRadius: 16
+	property real toggledRadius: 18
 	property real idleRadius: 1000
 	property bool vertical: false
 	property bool busy: false
@@ -41,14 +41,14 @@ Item {
 		return Theme.surfaceVariantFg;
 	}
 
-	implicitWidth: (vertical ? Math.max(contentCol.implicitWidth, contentRow.implicitWidth) : contentRow.implicitWidth) + 32
-	implicitHeight: 44
+	implicitWidth: (vertical ? Math.max(contentCol.implicitWidth, contentRow.implicitWidth) : contentRow.implicitWidth) + 40
+	implicitHeight: 48
 
 	Rectangle {
 		id: bg
 		anchors.fill: parent
 		color: root.bgColor
-		radius: root.pressed ? 10 : (root.on ? root.toggledRadius : Math.min(height / 2, root.idleRadius))
+		radius: root.pressed ? Theme.radiusInner : (root.on ? root.toggledRadius : Math.min(height / 2, root.idleRadius))
 
 		Behavior on color {
 			ColorAnimation {
@@ -102,7 +102,7 @@ Item {
 			visible: root.label !== ""
 			text: root.label
 			color: root.fgColor
-			font.weight: Font.Medium
+			font.weight: Font.DemiBold
 			anchors.verticalCenter: parent.verticalCenter
 		}
 	}

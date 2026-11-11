@@ -1,6 +1,7 @@
 import QtQuick
 import Quickshell.Hyprland
 import qs.config
+import qs.services
 import qs.components
 
 // Hyprland workspaces; the active one is a wide pill.
@@ -8,9 +9,10 @@ Row {
 	id: root
 
 	spacing: 4
+	property real pillHeight: 28
 	// shrink inactive pills so the row never exceeds this width
 	property real maxWidth: 100000
-	readonly property real inactiveW: Math.max(14, Math.min(26, (maxWidth - 44 - spacing * (count - 1)) / Math.max(1, count - 1)))
+	readonly property real inactiveW: Math.max(14, Math.min(pillHeight, (maxWidth - pillHeight * 1.6 - spacing * (count - 1)) / Math.max(1, count - 1)))
 	readonly property int count: {
 		let m = 5;
 		for (const w of Hyprland.workspaces.values)
@@ -29,9 +31,9 @@ Row {
 			readonly property bool active: root.activeId === wsId
 			readonly property bool occupied: Hyprland.workspaces.values.some(w => w.id === wsId)
 
-			height: 28
-			width: active ? 44 : root.inactiveW
-			radius: active ? 12 : 13
+			height: root.pillHeight
+			width: active ? root.pillHeight * 1.6 : root.pillHeight
+			radius: active ? root.pillHeight * 0.43 : root.pillHeight / 2
 			color: active ? Theme.primary : occupied ? Theme.secondaryContainer : Theme.surfaceContainerHigh
 
 			Behavior on width {
@@ -65,7 +67,7 @@ Row {
 			MouseArea {
 				anchors.fill: parent
 				cursorShape: Qt.PointingHandCursor
-				onClicked: Hyprland.dispatch("workspace " + pill.wsId)
+				onClicked: Hypr.focusWorkspace(pill.wsId)
 			}
 		}
 	}
