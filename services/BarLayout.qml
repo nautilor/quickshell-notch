@@ -19,7 +19,7 @@ Singleton {
 
 	readonly property var types: ({
 			"workspace": { title: "Workspace", icon: "dashboard", desc: "Current workspace number", source: src("BarWorkspace"), schema: [] },
-			"workspaces": { title: "Workspaces", icon: "apps", desc: "All workspaces as pills", source: src("BarWorkspaces"), schema: [] },
+			"workspaces": { title: "Workspaces", icon: "apps", desc: "Focused, visible and occupied workspaces", source: src("BarWorkspaces"), schema: [] },
 			"media": {
 				title: "Media", icon: "music_note", desc: "Cover art and controls of the playing track", source: src("BarMedia"),
 				schema: [

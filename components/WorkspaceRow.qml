@@ -13,21 +13,37 @@ Row {
 	// shrink inactive pills so the row never exceeds this width
 	property real maxWidth: 100000
 	readonly property real inactiveW: Math.max(14, Math.min(pillHeight, (maxWidth - pillHeight * 1.6 - spacing * (count - 1)) / Math.max(1, count - 1)))
-	readonly property int count: {
+	// only show focused, visible-on-a-monitor and occupied workspaces
+	property bool filtered: false
+	readonly property var ids: {
+		if (filtered) {
+			const set = new Set();
+			if (Hyprland.focusedWorkspace && Hyprland.focusedWorkspace.id > 0)
+				set.add(Hyprland.focusedWorkspace.id);
+			for (const m of Hyprland.monitors.values)
+				if (m.activeWorkspace && m.activeWorkspace.id > 0)
+					set.add(m.activeWorkspace.id);
+			for (const t of Hyprland.toplevels.values)
+				if (t.workspace && t.workspace.id > 0)
+					set.add(t.workspace.id);
+			return Array.from(set).sort((a, b) => a - b);
+		}
 		let m = 5;
 		for (const w of Hyprland.workspaces.values)
 			m = Math.max(m, w.id);
-		return Math.min(m, 10);
+		const n = Math.min(m, 10);
+		return Array.from({ length: n }, (_, i) => i + 1);
 	}
+	readonly property int count: ids.length
 	readonly property int activeId: Hyprland.focusedWorkspace ? Hyprland.focusedWorkspace.id : -1
 
 	Repeater {
-		model: root.count
+		model: root.ids
 
 		Rectangle {
 			id: pill
-			required property int index
-			readonly property int wsId: index + 1
+			required property int modelData
+			readonly property int wsId: modelData
 			readonly property bool active: root.activeId === wsId
 			readonly property bool occupied: Hyprland.workspaces.values.some(w => w.id === wsId)
 
