@@ -13,7 +13,9 @@ Rectangle {
 
 	implicitHeight: 32
 	implicitWidth: holder.childrenRect.width + padding * 2
-	radius: height / 2
+	radius: Theme.pillRadius(height)
+	border.width: Theme.controlBorder
+	border.color: Theme.outlineVariant
 	color: hoverable && hovered ? Theme.surfaceContainerHighest : fill
 	Behavior on color {
 		ColorAnimation {

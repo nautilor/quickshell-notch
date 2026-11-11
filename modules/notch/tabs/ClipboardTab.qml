@@ -77,7 +77,7 @@ FocusScope {
 
 				width: list.width
 				height: image ? 96 : 56
-				radius: 20
+				radius: Theme.r(20)
 				color: current ? Theme.secondaryContainer : Theme.surfaceContainer
 				Behavior on color {
 					ColorAnimation {

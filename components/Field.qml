@@ -14,10 +14,10 @@ Rectangle {
 	signal edited(string value)
 
 	implicitHeight: 44
-	radius: height / 2
+	radius: Theme.pillRadius(height)
 	color: Theme.surfaceContainerHigh
-	border.width: input.activeFocus ? 2 : 0
-	border.color: Theme.primary
+	border.width: input.activeFocus ? 2 : Theme.controlBorder
+	border.color: input.activeFocus ? Theme.primary : Theme.outlineVariant
 
 	Icon {
 		id: leading

@@ -111,7 +111,7 @@ Item {
 	// tint and darken so text stays readable on any wallpaper
 	Rectangle {
 		anchors.fill: parent
-		color: root.hasWallpaper ? Qt.alpha(Theme.notch, 0.35) : Theme.notch
+		color: root.hasWallpaper ? Qt.alpha(Theme.notchSolid, 0.35) : Theme.notchSolid
 	}
 
 	// ---- clock ----
@@ -250,7 +250,7 @@ Item {
 							Rectangle {
 								width: 12
 								height: 12
-								radius: 6
+								radius: Theme.r(6)
 								color: Theme.primary
 								scale: 0
 								Component.onCompleted: scale = 1

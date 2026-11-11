@@ -57,7 +57,7 @@ FocusScope {
 
 				width: list.width
 				height: 52
-				radius: 26
+				radius: Theme.r(26)
 				color: current ? Theme.secondaryContainer : "transparent"
 				Behavior on color {
 					ColorAnimation {

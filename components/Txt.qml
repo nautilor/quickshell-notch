@@ -8,7 +8,7 @@ Text {
 	color: Theme.surfaceFg
 	font.family: Theme.font
 	font.pixelSize: role === "headline" ? Theme.textHeadline : role === "title" ? Theme.textTitle : role === "label" ? Theme.textLabel : Theme.textBody
-	font.weight: role === "headline" || role === "title" ? Font.DemiBold : Font.Normal
+	font.weight: role === "headline" || role === "title" ? Theme.st.titleWeight : Font.Normal
 	elide: Text.ElideRight
 	renderType: Text.NativeRendering
 }

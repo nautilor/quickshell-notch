@@ -12,6 +12,8 @@ Singleton {
 
 	property alias hue: adapter.hue
 	property alias colorscheme: adapter.colorscheme
+	property alias uiStyle: adapter.uiStyle
+	property alias surfaceOpacity: adapter.surfaceOpacity
 	property alias builtinLock: adapter.builtinLock
 	property alias lockPam: adapter.lockPam
 	property alias lockPamDir: adapter.lockPamDir
@@ -127,6 +129,10 @@ Singleton {
 			property var dockIcons: ({})
 			// id (file name without .json) of a colour scheme; empty = tonal palette from hue
 			property string colorscheme: ""
+			// UI style (shapes, motion, font, colours): expressive | material | macos | gnome | windows11
+			property string uiStyle: "expressive"
+			// 0.2 - 1: opacity of the notch, bar and dock surfaces; below 1 they can be blurred with a Hyprland layerrule
+			property real surfaceOpacity: 1.0
 			// built-in lock screen: used by the Power tab and `notch lock`
 			property bool builtinLock: true
 			// PAM service used to check the password (must exist in /etc/pam.d)

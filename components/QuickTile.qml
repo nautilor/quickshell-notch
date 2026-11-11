@@ -19,7 +19,7 @@ Item {
 		id: bg
 		anchors.fill: parent
 		color: root.toggled ? Theme.primaryContainer : Theme.surfaceContainerHigh
-		radius: mouse.pressed ? 16 : root.toggled ? Theme.radiusMedium + 4 : height / 2
+		radius: mouse.pressed ? Theme.r(16) : root.toggled ? Theme.radiusMedium + 4 : Theme.pillRadius(height)
 		Behavior on color {
 			ColorAnimation {
 				duration: Theme.durShort
@@ -44,7 +44,7 @@ Item {
 		id: chip
 		width: Math.min(root.height - 16, 52)
 		height: width
-		radius: root.toggled ? 18 : width / 2
+		radius: root.toggled ? Theme.r(18) : Theme.pillRadius(width)
 		anchors.left: parent.left
 		anchors.leftMargin: 8
 		anchors.verticalCenter: parent.verticalCenter

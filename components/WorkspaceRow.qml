@@ -49,7 +49,7 @@ Row {
 
 			height: root.pillHeight
 			width: active ? root.pillHeight * 1.6 : root.pillHeight
-			radius: active ? root.pillHeight * 0.43 : root.pillHeight / 2
+			radius: Theme.st.pill ? (active ? root.pillHeight * 0.43 : root.pillHeight / 2) : Theme.pillRadius(root.pillHeight)
 			color: active ? Theme.primary : occupied ? Theme.secondaryContainer : Theme.surfaceContainerHigh
 
 			Behavior on width {

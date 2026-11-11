@@ -37,7 +37,7 @@ Item {
 		id: icon
 		width: 40
 		height: 40
-		radius: 14
+		radius: Theme.r(14)
 		color: Theme.secondaryContainer
 		anchors.left: parent.left
 		anchors.leftMargin: root.compact ? 0 : 8

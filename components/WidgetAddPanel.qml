@@ -68,7 +68,7 @@ Rectangle {
 						readonly property var def: WidgetTypes.types[modelData]
 						width: (flow.width - 16) / 3
 						height: 66
-						radius: 20
+						radius: Theme.r(20)
 						color: Theme.surfaceContainer
 
 						Rectangle {
@@ -81,7 +81,7 @@ Rectangle {
 							id: badge
 							width: 40
 							height: 40
-							radius: 14
+							radius: Theme.r(14)
 							color: Theme.primaryContainer
 							anchors.left: parent.left
 							anchors.leftMargin: 12

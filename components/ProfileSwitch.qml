@@ -27,7 +27,7 @@ Item {
 
 	Rectangle {
 		anchors.fill: parent
-		radius: height / 2
+		radius: Theme.pillRadius(height)
 		color: Theme.surfaceContainerHigh
 	}
 
@@ -36,7 +36,7 @@ Item {
 		y: 3
 		width: root.segW(root.index) - 6
 		height: parent.height - 6
-		radius: height / 2
+		radius: Theme.pillRadius(height)
 		color: Theme.primary
 		Behavior on x {
 			SpringAnimation {

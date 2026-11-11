@@ -13,7 +13,7 @@ Rectangle {
 	property real cell: 34
 	readonly property alias tray: tray
 
-	radius: Math.min(height / 2, 26)
+	radius: Theme.st.pill ? Math.min(height / 2, 26) : Theme.pillRadius(height)
 	color: Theme.surfaceContainerHigh
 	clip: true
 

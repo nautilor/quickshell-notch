@@ -13,9 +13,10 @@ Item {
 	property bool interactive: true
 	property real waveAmplitude: 3
 	property real waveLength: 22
-	property real lineWidth: 5
+	property real lineWidth: Theme.sliderTrack
 	readonly property bool pressed: mouse.pressed
-	readonly property real handleGap: 6
+	readonly property bool knob: Theme.sliderKind === "knob"
+	readonly property real handleGap: knob ? 0 : 6
 
 	signal moved(real value)
 
@@ -24,13 +25,13 @@ Item {
 	// phase drifts while the wave is visible; paused or flat bars cost nothing
 	property real phase: 0
 	NumberAnimation on phase {
-		running: root.wavy && root.animateWave && root.visible && root.value > 0
+		running: root.wavy && Theme.sliderKind === "wave" && root.animateWave && root.visible && root.value > 0
 		from: 0
 		to: Math.PI * 2
 		duration: 1600
 		loops: Animation.Infinite
 	}
-	property real amp: wavy ? waveAmplitude * (pressed ? 0.4 : 1) : 0
+	property real amp: wavy && Theme.sliderKind === "wave" ? waveAmplitude * (pressed ? 0.4 : 1) : 0
 	Behavior on amp {
 		NumberAnimation {
 			duration: Theme.durMedium
@@ -41,11 +42,11 @@ Item {
 
 	readonly property real clamped: Math.max(0, Math.min(1, value))
 	readonly property real handleX: clamped * (width - handleW) + handleW / 2
-	readonly property real handleW: pressed ? 2 : 4
+	readonly property real handleW: knob ? Theme.sliderKnob : pressed ? 2 : 4
 
 	// remaining track
 	Rectangle {
-		x: root.handleX + root.handleW / 2 + root.handleGap
+		x: root.knob ? root.handleX : root.handleX + root.handleW / 2 + root.handleGap
 		width: Math.max(0, root.width - x)
 		height: root.lineWidth
 		radius: height / 2
@@ -61,7 +62,7 @@ Item {
 		onPaint: {
 			const ctx = getContext("2d");
 			ctx.reset();
-			const end = root.handleX - root.handleW / 2 - root.handleGap;
+			const end = root.knob ? root.handleX : root.handleX - root.handleW / 2 - root.handleGap;
 			if (end <= 0)
 				return;
 			const mid = height / 2;
@@ -103,10 +104,12 @@ Item {
 	Rectangle {
 		x: root.handleX - width / 2
 		width: root.handleW
-		height: root.pressed ? 22 : 20
+		height: root.knob ? root.handleW : root.pressed ? 22 : 20
 		radius: width / 2
 		anchors.verticalCenter: parent.verticalCenter
-		color: Theme.primary
+		color: root.knob && Theme.switchWhiteKnob ? "#ffffff" : Theme.primary
+		border.width: root.knob && Theme.controlBorder > 0 ? 3 : 0
+		border.color: Theme.surfaceContainerHigh
 		Behavior on width {
 			NumberAnimation {
 				duration: Theme.durShort

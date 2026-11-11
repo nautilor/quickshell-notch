@@ -180,6 +180,7 @@ Open the Settings tab. Everything is saved to `~/.config/quickshell-notch/settin
 | Setting | What it does |
 | --- | --- |
 | Accent colour | Seed hue for the whole palette |
+| Interface style | Restyle the whole UI: Expressive, Material 3, macOS, GNOME or Windows 11 (shapes, motion, font, colours); see [Interface styles](#interface-styles) |
 | Colour scheme | Pick a ready-made palette instead of the accent; see [Colour schemes](#colour-schemes) |
 | Open on hover | Hover opens the notch; otherwise click or IPC |
 | Home on hover or click | Hover or click always opens Home (default on) |
@@ -201,6 +202,30 @@ Open the Settings tab. Everything is saved to `~/.config/quickshell-notch/settin
 | Google Calendar | Sign in / sign out |
 
 Only in `settings.json`: `lockWallpaper` and `lockAvatar` (image paths for the lock screen), `lockPam` (PAM service, default `hyprlock`), `lockPamDir` (folder with your own PAM service file), `screenName` (which screen to use when not showing on all) and `cornerRadius` (screen corner size, default 20).
+
+## Interface styles
+Settings → Appearance → Interface style changes the look of the whole shell at once: corner radii, capsule vs rounded-rectangle controls, outlines, switch and slider shapes, type scale, spring vs. flat motion, font and colours. Styles: **Expressive** (default, Material 3 Expressive), **Material 3** (calmer), **macOS**, **GNOME** (Adwaita dark) and **Windows 11** (Fluent). The last three are tuned to the official UI kits (kept in `figmas/`): macOS dark palette with capsule controls and a round slider knob, Adwaita's 6 / 12 px corners and 4 px slider track, Fluent's 4 / 8 px corners, 1 px strokes and 40 × 20 switch. They use the platform font when installed (SF Pro, Adwaita Sans / Cantarell, Segoe UI Variable), else the default font. A colour scheme or wallpaper colours still override a style's palette. Stored as `uiStyle` in `settings.json`; styles are defined in `services/UiStyles.qml`.
+
+## Transparency and blur
+Settings → Appearance → Transparency lowers the opacity of the notch, full bar and dock (stored as `surfaceOpacity`, 0.2 to 1). The shell cannot blur what is behind it, Hyprland does that. With the Lua config (Hyprland 0.55+), add to `hyprland.lua`:
+
+```lua
+hl.layer_rule({
+	name         = "notch-blur",
+	match        = { namespace = "^(notch|dock|notch-reserve)$" },
+	blur         = true,
+	ignore_alpha = 0.05,
+})
+```
+
+With the old `hyprland.conf` syntax the same rules are:
+
+```
+layerrule = blur on, match:namespace ^(notch|dock|notch-reserve)$
+layerrule = ignore_alpha 0.05, match:namespace ^(notch|dock|notch-reserve)$
+```
+
+`ignore_alpha` stops fully transparent pixels from being blurred, so the empty part of the window stays invisible. The lock screen and rounded screen corners stay opaque.
 
 ## Colour schemes
 Settings → Colour scheme replaces the accent-derived palette with a fixed one. Bundled: Catppuccin (Mocha, Macchiato, Frappé), Dracula, Gruvbox Dark, Nord, Tokyo Night, Rosé Pine, One Dark, Solarized Dark, Everforest, Kanagawa. Choose **Accent** to go back to the hue-based palette; the Accent colour row only shows while Accent is selected.
@@ -264,6 +289,8 @@ Settings live in `/etc/quickshell-notch/greeter.json` (or the file named by `$QS
 | --- | --- |
 | `wallpaper` | Background image, readable by `greeter` |
 | `hue` | Accent hue, 0 to 1 (same as Accent colour in Settings) |
+| `surfaceOpacity` | Opacity of notch, bar and dock surfaces, 0.2 to 1 (see [Transparency and blur](#transparency-and-blur)) |
+| `uiStyle` | `expressive`, `material`, `macos`, `gnome` or `windows11` |
 | `colorscheme` | Colour scheme id, e.g. `dracula` (overrides `hue`) |
 | `user` | User selected when nothing is remembered |
 | `session` | Session name selected when nothing is remembered |

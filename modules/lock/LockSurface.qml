@@ -6,7 +6,7 @@ import qs.components
 
 // One screen of the lock screen.
 WlSessionLockSurface {
-	color: Theme.notch
+	color: Theme.notchSolid
 
 	AuthScreen {
 		anchors.fill: parent

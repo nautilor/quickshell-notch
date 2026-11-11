@@ -23,7 +23,7 @@ Row {
 
 			width: root.cell
 			height: root.cell
-			radius: mouse.pressed ? 8 : root.cell / 2
+			radius: mouse.pressed ? Theme.radiusInner : Theme.pillRadius(root.cell)
 			color: mouse.containsMouse ? Theme.surfaceContainerHigh : "transparent"
 			Behavior on radius {
 				NumberAnimation {

@@ -50,7 +50,7 @@ Item {
 			id: chip
 			width: Math.max(24, wsText.implicitWidth + 14)
 			height: 24
-			radius: 8
+			radius: Theme.r(8)
 			color: Theme.primaryContainer
 			anchors.verticalCenter: parent.verticalCenter
 
@@ -93,7 +93,7 @@ Item {
 			visible: Media.playing && source != ""
 			width: 24
 			height: 24
-			radius: 8
+			radius: Theme.r(8)
 			anchors.verticalCenter: parent.verticalCenter
 			source: root.player ? root.player.trackArtUrl : ""
 		}
@@ -141,7 +141,7 @@ Item {
 			visible: Notifs.count > 0
 			width: Math.max(18, countText.implicitWidth + 10)
 			height: 18
-			radius: 9
+			radius: Theme.r(9)
 			color: Theme.tertiaryContainer
 			anchors.verticalCenter: parent.verticalCenter
 			Txt {

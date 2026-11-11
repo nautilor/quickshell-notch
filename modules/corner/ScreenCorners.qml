@@ -13,7 +13,7 @@ PanelWindow {
 	screen: modelData
 
 	readonly property real radius: Settings.cornerRadius
-	readonly property color fill: Theme.notch
+	readonly property color fill: Theme.notchSolid
 
 	// with the full bar showing, the corners on its edge sit just inside the bar instead of under it
 	readonly property string barEdge: Settings.placementFor("").split(":")[0]

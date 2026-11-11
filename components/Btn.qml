@@ -12,7 +12,7 @@ Item {
 	// 0 tonal, 1 filled, 2 ghost, 3 error
 	property int variant: 0
 	property real iconSize: 22
-	property real toggledRadius: 18
+	property real toggledRadius: 18  // scaled by the UI style
 	property real idleRadius: 1000
 	property bool vertical: false
 	property bool busy: false
@@ -48,7 +48,9 @@ Item {
 		id: bg
 		anchors.fill: parent
 		color: root.bgColor
-		radius: root.pressed ? Theme.radiusInner : (root.on ? root.toggledRadius : Math.min(height / 2, root.idleRadius))
+		radius: root.pressed ? Theme.radiusInner : (root.on ? Theme.r(root.toggledRadius) : Math.min(Theme.pillRadius(height), root.idleRadius))
+		border.width: root.variant === 0 && !root.on ? Theme.controlBorder : 0
+		border.color: Theme.outlineVariant
 
 		Behavior on color {
 			ColorAnimation {
@@ -76,7 +78,7 @@ Item {
 		}
 	}
 
-	scale: pressed ? 0.96 : 1
+	scale: pressed ? Theme.pressScale : 1
 	Behavior on scale {
 		SpringAnimation {
 			spring: 5

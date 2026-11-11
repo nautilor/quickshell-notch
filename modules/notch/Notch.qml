@@ -119,8 +119,8 @@ PanelWindow {
 	// the ears sit at both ends of the edge the notch hangs from
 	readonly property real targetW: moving ? (vertical ? 4 : 80) : vertical ? contentW : contentW + 2 * topR
 	readonly property real targetH: moving ? (vertical ? 80 : 4) : vertical ? contentH + 2 * topR : contentH
-	readonly property real topR: moving || barIdle ? 0 : mode === "open" ? 24 : mode === "idle" ? 8 : 16
-	readonly property real botR: moving || barIdle ? 0 : mode === "open" ? 34 : mode === "idle" ? 14 : 26
+	readonly property real topR: moving || barIdle ? 0 : Theme.r(mode === "open" ? 24 : mode === "idle" ? 8 : 16)
+	readonly property real botR: moving || barIdle ? 0 : Theme.r(mode === "open" ? 34 : mode === "idle" ? 14 : 26)
 
 	// position along the edge for an item of the given size
 	function alongX(w) {

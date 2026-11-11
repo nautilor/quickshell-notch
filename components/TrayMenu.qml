@@ -85,7 +85,7 @@ Rectangle {
 				Rectangle {
 					visible: !entry.modelData.isSeparator
 					anchors.fill: parent
-					radius: 19
+					radius: Theme.r(19)
 					color: Theme.surfaceFg
 					opacity: area.containsMouse && entry.modelData.enabled ? 0.1 : 0
 				}

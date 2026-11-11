@@ -19,7 +19,7 @@ BarCapsule {
 		signal clicked
 		width: primary ? 28 : 24
 		height: width
-		radius: ctlMouse.pressed ? 6 : width / 2
+		radius: ctlMouse.pressed ? Theme.r(6) : Theme.pillRadius(width)
 		color: primary ? Theme.primary : ctlMouse.containsMouse ? Theme.surfaceContainerHighest : "transparent"
 		opacity: enabled ? 1 : 0.4
 		Behavior on radius {

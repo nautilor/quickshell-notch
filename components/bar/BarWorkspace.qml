@@ -12,7 +12,7 @@ Rectangle {
 
 	width: Math.max(32, wsText.implicitWidth + 18)
 	height: 32
-	radius: 12
+	radius: Theme.r(12)
 	color: Theme.primaryContainer
 
 	Txt {

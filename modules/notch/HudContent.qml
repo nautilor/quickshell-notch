@@ -47,12 +47,12 @@ Item {
 				anchors.verticalCenter: parent.verticalCenter
 				width: parent.width
 				height: 12
-				radius: 6
+				radius: Theme.r(6)
 				color: Theme.surfaceContainerHighest
 				Rectangle {
 					width: Math.max(parent.height, parent.width * Math.min(1, Hud.value))
 					height: parent.height
-					radius: 6
+					radius: Theme.r(6)
 					color: Hud.warn ? Theme.error : Theme.primary
 					Behavior on width {
 						NumberAnimation {

@@ -10,7 +10,7 @@ Rectangle {
 
 	readonly property var player: Media.player
 
-	radius: Math.min(height / 2, 24)
+	radius: Theme.st.pill ? Math.min(height / 2, 24) : Theme.pillRadius(height)
 	color: Theme.surfaceContainer
 	clip: true
 

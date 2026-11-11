@@ -437,7 +437,7 @@ Item {
 		implicitWidth: ghostRow.implicitWidth + 24
 		width: implicitWidth
 		height: 34
-		radius: 17
+		radius: Theme.r(17)
 		color: Theme.primaryContainer
 		opacity: 0.92
 		Row {

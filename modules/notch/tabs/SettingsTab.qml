@@ -110,9 +110,87 @@ Item {
 				SectionLabel {
 					text: "APPEARANCE"
 				}
+				SettingRow {
+					title: "Interface style"
+					subtitle: Theme.st.blurb + " · restyles shapes, motion, font and colours"
+				}
+				Flow {
+					Layout.fillWidth: true
+					spacing: 8
+					Repeater {
+						model: UiStyles.styles
+						Rectangle {
+							id: styleChip
+							required property var modelData
+							readonly property bool current: Settings.uiStyle === modelData.id || (Settings.uiStyle === "" && modelData.id === "expressive")
+							width: 150
+							height: 78
+							radius: current ? Theme.radiusSmall : Theme.radiusMedium
+							color: current ? Theme.primaryContainer : Theme.surfaceContainerHigh
+							border.width: Theme.controlBorder
+							border.color: Theme.outlineVariant
+							Behavior on color {
+								ColorAnimation {
+									duration: Theme.durShort
+								}
+							}
+							Behavior on radius {
+								NumberAnimation {
+									duration: Theme.durShort
+								}
+							}
+							// miniature of the style: surface, a control with the style's corner radius, and the accent
+							Row {
+								anchors.left: parent.left
+								anchors.leftMargin: 12
+								anchors.top: parent.top
+								anchors.topMargin: 10
+								spacing: 5
+								Repeater {
+									model: UiStyles.preview(styleChip.modelData)
+									Rectangle {
+										required property int index
+										required property color modelData
+										width: index === 1 ? 30 : 14
+										height: 14
+										radius: Math.min(7, Math.round(styleChip.modelData.shape * 9))
+										color: modelData
+										border.width: 1
+										border.color: Qt.rgba(1, 1, 1, 0.15)
+									}
+								}
+							}
+							Txt {
+								anchors.left: parent.left
+								anchors.leftMargin: 12
+								anchors.top: parent.top
+								anchors.topMargin: 32
+								text: styleChip.modelData.name
+								font.weight: Font.DemiBold
+								color: styleChip.current ? Theme.primaryContainerFg : Theme.surfaceFg
+							}
+							Txt {
+								anchors.left: parent.left
+								anchors.leftMargin: 12
+								anchors.right: parent.right
+								anchors.rightMargin: 10
+								anchors.top: parent.top
+								anchors.topMargin: 52
+								text: styleChip.modelData.blurb
+								font.pixelSize: 10
+								color: Theme.surfaceVariantFg
+							}
+							MouseArea {
+								anchors.fill: parent
+								cursorShape: Qt.PointingHandCursor
+								onClicked: Settings.uiStyle = styleChip.modelData.id
+							}
+						}
+					}
+				}
 				Item {
 					id: accentWrap
-					readonly property bool shown: Settings.colorscheme === "" && !Settings.wallpaperColors
+					readonly property bool shown: Settings.colorscheme === "" && !Settings.wallpaperColors && Theme.st.accentable
 					property real amount: shown ? 1 : 0
 					Behavior on amount {
 						NumberAnimation {
@@ -234,7 +312,7 @@ Item {
 											required property color modelData
 											width: 14
 											height: 14
-											radius: 7
+											radius: Theme.r(7)
 											color: modelData
 											border.width: 1
 											border.color: Theme.outlineVariant
@@ -308,6 +386,16 @@ Item {
 								}
 							}
 						}
+					}
+				}
+				SettingRow {
+					title: "Transparency"
+					subtitle: Math.round(Settings.surfaceOpacity * 100) + "% opaque · lower it, then add a Hyprland layerrule to blur (see README)"
+					WavySlider {
+						Layout.preferredWidth: 180
+						wavy: false
+						value: (Settings.surfaceOpacity - 0.2) / 0.8
+						onMoved: v => Settings.surfaceOpacity = Math.round((0.2 + v * 0.8) * 20) / 20
 					}
 				}
 				SettingRow {

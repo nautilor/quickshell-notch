@@ -204,7 +204,7 @@ Item {
 							width: adCol.width - 4
 							x: 2
 							height: 20
-							radius: 7
+							radius: Theme.r(7)
 							color: modelData.color
 							Txt {
 								anchors.fill: parent
@@ -333,7 +333,7 @@ Item {
 										z: dragging || (root.selectedEvent && root.selectedEvent.id === ev.id) ? 100 : modelData.lane
 										y: modelData.sm / 60 * root.hourH + 1
 										height: Math.max(18, (modelData.em - modelData.sm) / 60 * root.hourH - 2)
-										radius: 8
+										radius: Theme.r(8)
 										color: ev.color
 										opacity: dragging ? 0.85 : 1
 										// drag to move in time (15 min steps) and between days, like Google Calendar
@@ -451,7 +451,7 @@ Item {
 									Rectangle {
 										width: 10
 										height: 10
-										radius: 5
+										radius: Theme.r(5)
 										x: -5
 										y: -4
 										color: Theme.error

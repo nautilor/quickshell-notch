@@ -82,7 +82,7 @@ Item {
 				y: Math.floor(index / HomeLayout.cols) * root.stepY
 				width: HomeLayout.cellW
 				height: HomeLayout.cellH
-				radius: 14
+				radius: Theme.r(14)
 				color: Theme.surfaceContainerLow
 				opacity: 0.7
 			}
@@ -179,7 +179,7 @@ Item {
 				Rectangle {
 					visible: HomeLayout.editing
 					anchors.fill: parent
-					radius: 18
+					radius: Theme.r(18)
 					color: "transparent"
 					border.width: frame.active ? 3 : 2
 					border.color: frame.active ? Theme.primary : Theme.outline
@@ -245,7 +245,7 @@ Item {
 					visible: HomeLayout.editing
 					width: 26
 					height: 26
-					radius: 13
+					radius: Theme.r(13)
 					color: Theme.primary
 					anchors.right: parent.right
 					anchors.bottom: parent.bottom
@@ -293,7 +293,7 @@ Item {
 			y: root.ghost ? root.ghost.y * root.stepY : 0
 			width: root.ghost ? root.ghost.w * HomeLayout.cellW + (root.ghost.w - 1) * HomeLayout.gap : 0
 			height: root.ghost ? root.ghost.h * HomeLayout.cellH + (root.ghost.h - 1) * HomeLayout.gap : 0
-			radius: 18
+			radius: Theme.r(18)
 			color: root.ghost && root.ghost.valid ? Qt.alpha(Theme.primary, 0.25) : Qt.alpha(Theme.error, 0.25)
 			border.width: 2
 			border.color: root.ghost && root.ghost.valid ? Theme.primary : Theme.error
