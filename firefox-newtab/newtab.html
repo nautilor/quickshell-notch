@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>New Tab</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="blob b1"></div><div class="blob b2"></div>
+
+  <main>
+    <header class="hero">
+      <div class="time" id="time" aria-live="off">00:00</div>
+      <div class="date" id="date"></div>
+      <div class="greet" id="greet"></div>
+    </header>
+
+    <form class="search" id="search" autocomplete="off">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.5 14h-.8l-.3-.3A6.5 6.5 0 1 0 14 15.5l.3.3v.8l5 5 1.5-1.5-5-5zm-6 0a4.5 4.5 0 1 1 0-9 4.5 4.5 0 0 1 0 9z"/></svg>
+      <input id="q" type="text" placeholder="Search or type a URL" autofocus spellcheck="false">
+      <button type="submit" aria-label="Search">
+        <svg viewBox="0 0 24 24"><path d="M12 4l-1.4 1.4 5.6 5.6H4v2h12.2l-5.6 5.6L12 20l8-8z"/></svg>
+      </button>
+    </form>
+
+    <section class="grid" id="grid" aria-label="Shortcuts"></section>
+  </main>
+
+  <button class="fab" id="settingsBtn" aria-label="Customize">
+    <svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 0 0 0 18c1.1 0 1.5-.8 1.5-1.5 0-.4-.2-.7-.4-1-.2-.3-.4-.6-.4-1 0-.8.7-1.5 1.5-1.5H16a5 5 0 0 0 5-5c0-4.4-4-8-9-8zM6.5 12a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm3-4a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm3 4a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/></svg>
+  </button>
+
+  <aside class="sheet" id="sheet" hidden>
+    <div class="sheet-card">
+      <h2>Customize</h2>
+
+      <label class="row">Color
+        <input type="range" id="hue" min="0" max="360">
+      </label>
+
+      <div class="row">Theme
+        <div class="seg" id="themeSeg">
+          <button data-v="auto">Auto</button>
+          <button data-v="light">Light</button>
+          <button data-v="dark">Dark</button>
+        </div>
+      </div>
+
+      <div class="row">24-hour clock
+        <button class="switch" id="h24" role="switch" aria-checked="false"><span></span></button>
+      </div>
+
+      <div class="row">Fill with top sites
+        <button class="switch" id="useTop" role="switch" aria-checked="false"><span></span></button>
+      </div>
+
+      <label class="row">Name
+        <input type="text" id="name" class="txt" placeholder="optional">
+      </label>
+
+      <h3>Add shortcut</h3>
+      <form id="addForm" class="add">
+        <input class="txt" id="addTitle" placeholder="Title" required>
+        <input class="txt" id="addUrl" placeholder="example.com" required>
+        <button class="btn" type="submit">Add</button>
+      </form>
+
+      <button class="btn tonal" id="closeBtn">Done</button>
+    </div>
+  </aside>
+
+  <script src="newtab.js"></script>
+</body>
+</html>

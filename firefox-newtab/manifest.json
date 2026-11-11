@@ -1,0 +1,16 @@
+{
+  "manifest_version": 2,
+  "name": "Expressive New Tab",
+  "version": "1.0.0",
+  "description": "Material 3 Expressive new tab page: clock, search, shortcuts, dynamic color.",
+  "chrome_url_overrides": { "newtab": "newtab.html" },
+  "permissions": ["search", "topSites"],
+  "icons": { "96": "icons/icon.svg" },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "m3e-newtab-edoardozerbo@users.noreply.github.com",
+      "strict_min_version": "140.0",
+      "data_collection_permissions": { "required": ["none"] }
+    }
+  }
+}
