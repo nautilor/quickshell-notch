@@ -49,6 +49,7 @@ Singleton {
 		"visibility_off": 0xf0209,
 		"delete": 0xf01b4,
 		"save": 0xf0193,
+		"bookmark": 0xf00c0,
 		"place": 0xf034e,
 		"schedule": 0xf0150,
 		"apps": 0xf003b,

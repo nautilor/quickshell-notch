@@ -81,7 +81,7 @@ PanelWindow {
 			"calendar": [920, 580],
 			"notifications": [660, 400],
 			"power": [600, 260],
-			"settings": [820, 500]
+			"settings": [820, 560]
 		})
 	readonly property var openSize: sizes[NotchCtl.tab] ?? sizes.home
 

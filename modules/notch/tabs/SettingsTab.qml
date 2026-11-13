@@ -8,7 +8,7 @@ Item {
 	id: root
 
 	property int page: 0
-	readonly property var pages: [{ name: "Appearance", icon: "brightness_7" }, { name: "Notch", icon: "tune" }, { name: "Notifications", icon: "notifications" }, { name: "Date & time", icon: "schedule" }, { name: "Calendar", icon: "calendar_month" }, { name: "Dock", icon: "apps" }, { name: "Wallpaper", icon: "image" }, { name: "Placement", icon: "place" }, { name: "Bar", icon: "web_asset" }]
+	readonly property var pages: [{ name: "Appearance", icon: "brightness_7" }, { name: "Notch", icon: "tune" }, { name: "Notifications", icon: "notifications" }, { name: "Date & time", icon: "schedule" }, { name: "Calendar", icon: "calendar_month" }, { name: "Dock", icon: "apps" }, { name: "Wallpaper", icon: "image" }, { name: "Placement", icon: "place" }, { name: "Bar", icon: "web_asset" }, { name: "Presets", icon: "bookmark" }]
 
 	Component.onCompleted: {
 		Colorschemes.reload();
@@ -16,12 +16,19 @@ Item {
 	}
 
 	// left pane: category list
-	Column {
-		id: sidebar
+	Flickable {
+		id: sideFlick
 		anchors.left: parent.left
 		anchors.top: parent.top
 		anchors.bottom: parent.bottom
 		width: 160
+		contentHeight: sidebar.implicitHeight
+		clip: true
+		boundsBehavior: Flickable.StopAtBounds
+
+	Column {
+		id: sidebar
+		width: sideFlick.width
 		spacing: 4
 		Repeater {
 			model: root.pages
@@ -67,10 +74,11 @@ Item {
 			}
 		}
 	}
+	}
 
 	Rectangle {
 		id: divider
-		anchors.left: sidebar.right
+		anchors.left: sideFlick.right
 		anchors.leftMargin: 8
 		anchors.top: parent.top
 		anchors.bottom: parent.bottom
@@ -883,6 +891,126 @@ Item {
 							onPicked: v => Settings.setPlacement(ctx.modelData.id, v)
 						}
 					}
+				}
+			}
+
+			ColumnLayout {
+				Layout.fillWidth: true
+				visible: root.page === 9
+				spacing: 8
+
+				SectionLabel {
+					text: "PRESETS"
+				}
+				SettingRow {
+					title: "Save current settings"
+					subtitle: "Style, colours, layout, bar, dock, wallpaper and the rest. Saving under an existing name overwrites it"
+				}
+				RowLayout {
+					Layout.fillWidth: true
+					spacing: 8
+					Field {
+						id: presetName
+						Layout.fillWidth: true
+						icon: "bookmark"
+						placeholder: "Preset name"
+						onAccepted: saveBtn.clicked()
+					}
+					Btn {
+						id: saveBtn
+						icon: "save"
+						label: "Save"
+						variant: 1
+						onClicked: {
+							if (Presets.save(presetName.text))
+								presetName.text = "";
+						}
+					}
+				}
+				SectionLabel {
+					text: "SAVED"
+				}
+				Txt {
+					visible: Presets.names.length === 0
+					text: "No presets yet"
+					color: Theme.surfaceVariantFg
+				}
+				Repeater {
+					model: Presets.names
+					ColumnLayout {
+						id: pr
+						required property string modelData
+						readonly property bool current: Presets.active === modelData
+						property bool renaming: false
+						property bool confirmDelete: false
+						Layout.fillWidth: true
+						spacing: 8
+						Timer {
+							running: pr.confirmDelete
+							interval: 3000
+							onTriggered: pr.confirmDelete = false
+						}
+						SettingRow {
+							title: pr.modelData
+							subtitle: pr.current ? "Active" : ""
+							Btn {
+								icon: "check"
+								label: "Apply"
+								variant: pr.current ? 1 : 0
+								onClicked: Presets.apply(pr.modelData)
+							}
+							Btn {
+								icon: "save"
+								implicitWidth: 40
+								implicitHeight: 40
+								iconSize: 18
+								onClicked: Presets.save(pr.modelData)
+							}
+							Btn {
+								icon: "edit"
+								implicitWidth: 40
+								implicitHeight: 40
+								iconSize: 18
+								toggleable: true
+								toggled: pr.renaming
+								onClicked: {
+									pr.renaming = !pr.renaming;
+									renameField.text = pr.modelData;
+									if (pr.renaming)
+										renameField.forceFocus();
+								}
+							}
+							Btn {
+								icon: pr.confirmDelete ? "check" : "delete"
+								variant: pr.confirmDelete ? 3 : 2
+								implicitWidth: 40
+								implicitHeight: 40
+								iconSize: 18
+								onClicked: {
+									if (pr.confirmDelete)
+										Presets.remove(pr.modelData);
+									else
+										pr.confirmDelete = true;
+								}
+							}
+						}
+						Field {
+							id: renameField
+							Layout.fillWidth: true
+							visible: pr.renaming
+							icon: "edit"
+							placeholder: "New name"
+							onAccepted: {
+								if (Presets.rename(pr.modelData, text))
+									pr.renaming = false;
+							}
+						}
+					}
+				}
+				Txt {
+					text: "Save button on a row overwrites it with the current settings"
+					font.pixelSize: 12
+					color: Theme.surfaceVariantFg
 				}
 			}
 		}

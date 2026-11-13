@@ -182,6 +182,7 @@ Open the Settings tab. Everything is saved to `~/.config/quickshell-notch/settin
 | Accent colour | Seed hue for the whole palette |
 | Interface style | Restyle the whole UI: Expressive, Material 3, macOS, GNOME or Windows 11 (shapes, motion, font, colours); see [Interface styles](#interface-styles) |
 | Colour scheme | Pick a ready-made palette instead of the accent; see [Colour schemes](#colour-schemes) |
+| Presets | Save the current settings under a name (Settings → Presets), then apply, overwrite, rename or delete them. Stored in `~/.config/quickshell-notch/presets.json`; `dnd` and app launch counts are not included |
 | Open on hover | Hover opens the notch; otherwise click or IPC |
 | Home on hover or click | Hover or click always opens Home (default on) |
 | Rounded screen corners | Round every screen corner |

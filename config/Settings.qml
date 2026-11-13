@@ -91,11 +91,23 @@ Singleton {
 		onExited: root.dirReady = true
 	}
 
+	// Coalesce writes: changing many settings at once (a preset) must not write and reload
+	// the file once per key, or the reloads clobber keys that were not saved yet.
+	Timer {
+		id: writeTimer
+		interval: 60
+		onTriggered: file.writeAdapter()
+	}
+
 	FileView {
+		id: file
 		path: root.dirReady ? root.configDir + "/settings.json" : ""
 		watchChanges: true
-		onFileChanged: reload()
-		onAdapterUpdated: writeAdapter()
+		onFileChanged: {
+			if (!writeTimer.running)
+				reload();
+		}
+		onAdapterUpdated: writeTimer.restart()
 		onLoadFailed: error => {
 			if (error === FileViewError.FileNotFound)
 				writeAdapter();
