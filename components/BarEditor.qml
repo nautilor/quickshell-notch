@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
+import Quickshell
 import qs.config
 import qs.services
 import qs.components
@@ -12,6 +13,7 @@ Item {
 
 	property string selZone: ""
 	property int selIdx: -1
+	property string browseKey: ""   // icon field currently browsing for an image file
 
 	// ---- drag and drop ----
 	property bool dragging: false
@@ -189,6 +191,7 @@ Item {
 	function select(zone, i) {
 		selZone = zone;
 		selIdx = i;
+		browseKey = "";
 	}
 
 	ColumnLayout {
@@ -392,7 +395,59 @@ Item {
 								onClicked: BarLayout.setConfig(root.selZone, root.selIdx, row.field.key, modelData)
 							}
 						}
+						Row {
+							spacing: 6
+							Btn {
+								implicitHeight: 36
+								id: imgBtn
+								icon: "image"
+								label: "Image…"
+								toggleable: true
+								toggled: typeof row.current === "string" && (row.current.startsWith("/") || row.current.startsWith("file:"))
+								toggledRadius: 12
+								onClicked: root.browseKey = row.field.key
+							}
+							Field {
+								id: pathField
+								readonly property bool isPath: typeof row.current === "string" && (row.current.startsWith("/") || row.current.startsWith("file:"))
+								width: 320 - imgBtn.width - 6
+								implicitHeight: 36
+								color: Theme.surfaceContainerHighest
+								placeholder: "Image path, e.g. /home/me/icon.svg"
+								input.font.pixelSize: 12
+								// show the path only for image icons; editing it sets the icon
+								Component.onCompleted: text = isPath ? row.current : ""
+								Connections {
+									target: row
+									function onCurrentChanged() {
+										pathField.text = pathField.isPath ? row.current : "";
+									}
+								}
+								onAccepted: {
+									const v = text.trim().replace(/^~/, Quickshell.env("HOME"));
+									if (v !== "")
+										BarLayout.setConfig(root.selZone, root.selIdx, row.field.key, v);
+								}
+							}
+						}
 					}
+				}
+			}
+
+			Rectangle {
+				visible: root.browseKey !== ""
+				Layout.fillWidth: true
+				Layout.preferredHeight: 320
+				radius: Theme.radiusMedium
+				color: Theme.surfaceContainerHighest
+				FilePicker {
+					anchors.fill: parent
+					anchors.margins: 10
+					onPicked: path => {
+						BarLayout.setConfig(root.selZone, root.selIdx, root.browseKey, path);
+						root.browseKey = "";
+					}
+					onCancelled: root.browseKey = ""
 				}
 			}
 		}

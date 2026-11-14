@@ -13,12 +13,27 @@ Item {
 
 	// folder chooser mode: only directories are listed and a button picks the current one
 	property bool dirsOnly: false
+	property bool showHidden: false
 
 	signal picked(string path)
 	signal cancelled
 
 	function pathOf(url) {
 		return decodeURIComponent(url.toString().replace(/^file:\/\//, ""));
+	}
+
+	// Enter in the path field: an image file is picked, anything else is opened as a folder
+	function go(raw) {
+		let p = raw.trim();
+		if (p.startsWith("~"))
+			p = Quickshell.env("HOME") + p.slice(1);
+		if (p === "")
+			return;
+		const isFile = !root.dirsOnly && !p.endsWith("/") && root.filters.some(f => p.toLowerCase().endsWith(f.slice(1)));
+		if (isFile)
+			root.picked(p);
+		else
+			folders.folder = "file://" + p;
 	}
 
 	FolderListModel {
@@ -29,7 +44,7 @@ Item {
 		showDirs: true
 		showDirsFirst: true
 		showDotAndDotDot: false
-		showHidden: false
+		showHidden: root.showHidden
 		sortField: FolderListModel.Name
 	}
 
@@ -46,12 +61,29 @@ Item {
 				implicitHeight: 36
 				onClicked: folders.folder = folders.parentFolder
 			}
-			Txt {
+			Field {
+				id: pathField
 				Layout.fillWidth: true
-				text: root.pathOf(folders.folder)
-				elide: Text.ElideLeft
-				font.pixelSize: 12
-				color: Theme.surfaceVariantFg
+				implicitHeight: 36
+				color: Theme.surfaceContainerHighest
+				placeholder: "Type a path and press Enter"
+				input.font.pixelSize: 12
+				Component.onCompleted: text = root.pathOf(folders.folder)
+				onAccepted: root.go(text)
+				Connections {
+					target: folders
+					function onFolderChanged() {
+						pathField.text = root.pathOf(folders.folder);
+					}
+				}
+			}
+			Btn {
+				icon: root.showHidden ? "visibility" : "visibility_off"
+				implicitWidth: 36
+				implicitHeight: 36
+				toggleable: true
+				toggled: root.showHidden
+				onClicked: root.showHidden = !root.showHidden
 			}
 			Btn {
 				visible: root.dirsOnly

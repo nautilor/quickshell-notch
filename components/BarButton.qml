@@ -11,6 +11,9 @@ Rectangle {
 	property bool active: false
 	signal clicked
 
+	// an icon starting with "/" or "file:" is an image file (png, svg, ...) instead of a Material symbol name
+	readonly property bool isImage: icon.startsWith("/") || icon.startsWith("file:")
+
 	implicitHeight: 32
 	implicitWidth: Math.max(32, row.implicitWidth + (label !== "" ? 24 : 14))
 	radius: mouse.pressed ? Theme.radiusInner : active ? 12 : height / 2
@@ -32,8 +35,18 @@ Rectangle {
 		id: row
 		anchors.centerIn: parent
 		spacing: 6
+		Image {
+			visible: root.isImage
+			width: 18
+			height: 18
+			fillMode: Image.PreserveAspectFit
+			asynchronous: true
+			sourceSize: Qt.size(36, 36)
+			source: root.isImage ? (root.icon.startsWith("/") ? "file://" + root.icon : root.icon) : ""
+			anchors.verticalCenter: parent.verticalCenter
+		}
 		Icon {
-			visible: root.icon !== ""
+			visible: root.icon !== "" && !root.isImage
 			name: root.icon
 			size: 18
 			fill: root.active ? 1 : 0
