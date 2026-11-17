@@ -53,6 +53,11 @@ Singleton {
 	property alias dockIconSize: adapter.dockIconSize
 	property alias dockPinned: adapter.dockPinned
 	property alias dockIcons: adapter.dockIcons
+	property alias dockIconStyle: adapter.dockIconStyle
+	property alias dockIconTint: adapter.dockIconTint
+	property alias dockIconColor: adapter.dockIconColor
+	property alias dockTintShadow: adapter.dockTintShadow
+	property alias dockTintContrast: adapter.dockTintContrast
 	property alias wallpaper: adapter.wallpaper
 	property alias wallpaperColors: adapter.wallpaperColors
 	property alias wallpaperTintBg: adapter.wallpaperTintBg
@@ -139,6 +144,15 @@ Singleton {
 			property var dockPinned: []
 			// per-app custom icon: desktop entry id / app id -> icon theme name or image path
 			property var dockIcons: ({})
+			// icon look: default | dark | tinted | mono | clear
+			property string dockIconStyle: "default"
+			// tint of the "tinted" style: primary | secondary | tertiary | wallpaper | custom
+			property string dockIconTint: "primary"
+			// tinted style: brightness of the darkest parts (0 - 0.8) and contrast of the glyph (0.5 - 2.5)
+			property real dockTintShadow: 0.28
+			property real dockTintContrast: 1.5
+			// colour used when dockIconTint is "custom"
+			property string dockIconColor: "#8ab4f8"
 			// id (file name without .json) of a colour scheme; empty = tonal palette from hue
 			property string colorscheme: ""
 			// UI style (shapes, motion, font, colours): expressive | material | macos | gnome | windows11

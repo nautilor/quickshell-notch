@@ -20,3 +20,6 @@ quickshell:
   colorschemes:
     source: ./colorschemes/
     destination: ~/.config/quickshell/colorschemes/
+  shaders:
+    source: ./shaders/
+    destination: ~/.config/quickshell/shaders/

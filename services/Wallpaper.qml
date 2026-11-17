@@ -18,6 +18,8 @@ Singleton {
 	readonly property var filtered: folderFilter === "" ? files : files.filter(f => f.folder === folderFilter)
 	// palette of Theme roles generated from Settings.wallpaper, or null
 	property var pixels: []
+	// the dock's tinted icons can use the wallpaper colour even when the theme does not
+	readonly property bool needsColors: Settings.wallpaperColors || Settings.dockIconTint === "wallpaper"
 	readonly property var palette: pixels.length > 0 ? paletteFrom(pixels, Settings.wallpaperTintBg) : null
 
 	function reload() {
@@ -28,7 +30,7 @@ Singleton {
 	function apply(path) {
 		Settings.wallpaper = path;
 		show(path);
-		if (Settings.wallpaperColors)
+		if (needsColors)
 			extract(path);
 	}
 
@@ -108,7 +110,7 @@ Singleton {
 	}
 
 	Component.onCompleted: {
-		if (Settings.wallpaper !== "" && Settings.wallpaperColors)
+		if (Settings.wallpaper !== "" && needsColors)
 			extract(Settings.wallpaper);
 		if (Settings.wallpaper !== "")
 			restore.start();
@@ -124,7 +126,11 @@ Singleton {
 	Connections {
 		target: Settings
 		function onWallpaperColorsChanged() {
-			if (Settings.wallpaperColors && Settings.wallpaper !== "")
+			if (root.needsColors && Settings.wallpaper !== "" && root.pixels.length === 0)
+				root.extract(Settings.wallpaper);
+		}
+		function onDockIconTintChanged() {
+			if (root.needsColors && Settings.wallpaper !== "" && root.pixels.length === 0)
 				root.extract(Settings.wallpaper);
 		}
 	}

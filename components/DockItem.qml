@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Effects
 import Quickshell
 import qs.config
 import qs.services
@@ -16,6 +17,16 @@ Item {
 	property bool menuOpen: false
 
 	readonly property real cell: size + 14
+	readonly property string iconStyle: Settings.dockIconStyle
+	readonly property bool styled: iconStyle !== "default" && (info.type === "app" || info.type === "folder")
+	readonly property color tintColor: {
+		const t = Settings.dockIconTint;
+		if (t === "custom")
+			return Qt.color(Settings.dockIconColor).valid ? Settings.dockIconColor : Theme.primary;
+		if (t === "wallpaper")
+			return Wallpaper.palette ? Wallpaper.palette.primary : Theme.primary;
+		return t === "tertiary" ? Theme.tertiary : t === "secondary" ? Theme.secondaryContainerFg : Theme.primary;
+	}
 	readonly property real along: info.type === "sep" ? 14 : info.type === "widget" ? info.cells * cell - 6 : cell
 	readonly property real center: (vertical ? y : x) + along / 2
 	readonly property real bump: dragging ? 0.6 : mouseAxis < 0 || info.type === "sep" || info.type === "widget" ? 0 : Math.max(0, 1 - Math.abs(mouseAxis - center) / (cell * 2.2))
@@ -89,20 +100,43 @@ Item {
 			}
 		}
 
-		Image {
-			visible: root.info.type === "app"
+		// recoloured icons (Tahoe-style): a tile behind the artwork, which is desaturated and tinted
+		Rectangle {
+			visible: root.styled
 			anchors.fill: parent
-			sourceSize: Qt.size(root.size * 2, root.size * 2)
-			asynchronous: true
-			source: root.info.type === "app" ? Dock.iconSource(root.info.key, root.info.icon) : ""
+			radius: root.size * 0.28
+			color: root.iconStyle === "clear" ? Qt.rgba(1, 1, 1, 0.16) : Qt.darker(Theme.surfaceContainerHigh, 1.25)
+			border.width: root.iconStyle === "clear" ? 1 : 0
+			border.color: Qt.rgba(1, 1, 1, 0.28)
 		}
-
 		Image {
-			visible: root.info.type === "folder"
+			id: appImg
+			visible: root.info.type === "app" || root.info.type === "folder"
 			anchors.fill: parent
+			anchors.margins: root.styled ? root.size * 0.14 : 0
 			sourceSize: Qt.size(root.size * 2, root.size * 2)
 			asynchronous: true
-			source: root.info.type === "folder" ? Dock.iconSource(root.info.key, root.info.icon) : ""
+			source: root.info.type === "app" || root.info.type === "folder" ? Dock.iconSource(root.info.key, root.info.icon) : ""
+			layer.enabled: root.styled
+			layer.effect: root.iconStyle === "tinted" ? tintEffect : otherEffect
+		}
+		Component {
+			id: tintEffect
+			ShaderEffect {
+				property color tint: root.tintColor
+				property real shadow: Settings.dockTintShadow
+				property real contrast: Settings.dockTintContrast
+				fragmentShader: Qt.resolvedUrl("../shaders/tint.frag.qsb")
+			}
+		}
+		Component {
+			id: otherEffect
+			MultiEffect {
+				saturation: root.iconStyle === "dark" ? -0.15 : -1
+				brightness: root.iconStyle === "dark" ? -0.3 : root.iconStyle === "mono" ? 0.1 : 0.15
+				contrast: root.iconStyle === "dark" ? 0 : 0.2
+				opacity: root.iconStyle === "clear" ? 0.85 : 1
+			}
 		}
 		Rectangle {
 			visible: root.info.type === "add" || root.info.type === "trash"

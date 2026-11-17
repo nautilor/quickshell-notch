@@ -671,6 +671,144 @@ Item {
 					}
 				}
 				SettingRow {
+					title: "Icon style"
+					subtitle: "Recolour app icons, like macOS Tahoe"
+				}
+				Flow {
+					Layout.fillWidth: true
+					spacing: 8
+					Repeater {
+						model: [{ id: "default", name: "Default", icon: "palette" }, { id: "dark", name: "Dark", icon: "dark_mode" }, { id: "tinted", name: "Tinted", icon: "format_color_fill" }, { id: "mono", name: "Mono", icon: "contrast" }, { id: "clear", name: "Clear", icon: "blur_on" }]
+						Rectangle {
+							id: iconChip
+							required property var modelData
+							readonly property bool current: Settings.dockIconStyle === modelData.id
+							width: 92
+							height: 64
+							radius: current ? Theme.radiusSmall : Theme.radiusMedium
+							color: current ? Theme.primaryContainer : Theme.surfaceContainerHigh
+							border.width: Theme.controlBorder
+							border.color: Theme.outlineVariant
+							Behavior on color {
+								ColorAnimation {
+									duration: Theme.durShort
+								}
+							}
+							Behavior on radius {
+								NumberAnimation {
+									duration: Theme.durShort
+								}
+							}
+							Column {
+								anchors.centerIn: parent
+								spacing: 4
+								Icon {
+									anchors.horizontalCenter: parent.horizontalCenter
+									name: iconChip.modelData.icon
+									size: 22
+									color: iconChip.current ? Theme.primaryContainerFg : Theme.surfaceFg
+								}
+								Txt {
+									anchors.horizontalCenter: parent.horizontalCenter
+									text: iconChip.modelData.name
+									font.pixelSize: 12
+									color: iconChip.current ? Theme.primaryContainerFg : Theme.surfaceFg
+								}
+							}
+							MouseArea {
+								anchors.fill: parent
+								cursorShape: Qt.PointingHandCursor
+								onClicked: Settings.dockIconStyle = iconChip.modelData.id
+							}
+						}
+					}
+				}
+				SettingRow {
+					visible: Settings.dockIconStyle === "tinted"
+					title: "Tint colour"
+					subtitle: "Accent used to recolour the icons"
+					Repeater {
+						model: [{ id: "primary", c: Theme.primary }, { id: "secondary", c: Theme.secondaryContainerFg }, { id: "tertiary", c: Theme.tertiary }, { id: "wallpaper", c: Wallpaper.palette ? Wallpaper.palette.primary : Theme.surfaceContainerHighest, icon: "image" }, { id: "custom", c: Qt.color(Settings.dockIconColor).valid ? Settings.dockIconColor : Theme.primary, icon: "colorize" }]
+						Rectangle {
+							id: tintDot
+							required property var modelData
+							width: 32
+							height: 32
+							radius: Settings.dockIconTint === modelData.id ? 10 : 16
+							color: modelData.c
+							border.width: Settings.dockIconTint === modelData.id ? 3 : 0
+							border.color: Theme.surfaceFg
+							Behavior on radius {
+								NumberAnimation {
+									duration: Theme.durShort
+								}
+							}
+							Icon {
+								visible: tintDot.modelData.icon !== undefined
+								anchors.centerIn: parent
+								name: tintDot.modelData.icon ?? ""
+								size: 16
+								color: Theme.surfaceFg
+							}
+							MouseArea {
+								anchors.fill: parent
+								cursorShape: Qt.PointingHandCursor
+								onClicked: Settings.dockIconTint = tintDot.modelData.id
+							}
+						}
+					}
+				}
+				SettingRow {
+					visible: Settings.dockIconStyle === "tinted" && Settings.dockIconTint === "custom"
+					title: "Custom colour"
+					subtitle: "Hex value, e.g. #ff6b81"
+					Field {
+						implicitWidth: 140
+						text: Settings.dockIconColor
+						onEdited: v => {
+							const c = v.trim().startsWith("#") ? v.trim() : "#" + v.trim();
+							if (/^#([0-9a-fA-F]{6})$/.test(c))
+								Settings.dockIconColor = c;
+						}
+					}
+				}
+				SettingRow {
+					visible: Settings.dockIconStyle === "tinted" && Settings.dockIconTint === "wallpaper"
+					title: "Wallpaper colour"
+					subtitle: Settings.wallpaper === "" ? "Pick a wallpaper on the Wallpaper page first (needs ImageMagick)" : Wallpaper.palette ? "Extracted from the current wallpaper" : "Extracting…"
+				}
+				SettingRow {
+					visible: Settings.dockIconStyle === "tinted"
+					title: "Tint brightness"
+					subtitle: Math.round(Settings.dockTintShadow * 100) + "% · how bright the dark parts of the icon stay"
+					WavySlider {
+						Layout.preferredWidth: 180
+						wavy: false
+						value: Settings.dockTintShadow / 0.8
+						onMoved: v => Settings.dockTintShadow = Math.round(v * 0.8 * 100) / 100
+					}
+				}
+				SettingRow {
+					visible: Settings.dockIconStyle === "tinted"
+					title: "Tint contrast"
+					subtitle: Settings.dockTintContrast.toFixed(1) + "× · separation between light and dark parts"
+					WavySlider {
+						Layout.preferredWidth: 180
+						wavy: false
+						value: (Settings.dockTintContrast - 0.5) / 2
+						onMoved: v => Settings.dockTintContrast = Math.round((0.5 + v * 2) * 10) / 10
+					}
+					Btn {
+						icon: "restart_alt"
+						implicitWidth: 40
+						implicitHeight: 40
+						onClicked: {
+							Settings.dockTintShadow = 0.28;
+							Settings.dockTintContrast = 1.5;
+						}
+					}
+				}
+				SettingRow {
 					title: "Icon size"
 					subtitle: Settings.dockIconSize + " px"
 					Btn {
