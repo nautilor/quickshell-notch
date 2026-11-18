@@ -69,7 +69,9 @@ PanelWindow {
 	}
 
 	WlrLayershell.namespace: "notch"
-	WlrLayershell.layer: WlrLayer.Overlay
+	// idle full bar sits on the Top layer like the dock, so true fullscreen windows cover it;
+	// anything else (popups, open notch, idle notch) stays on Overlay
+	WlrLayershell.layer: barIdle ? WlrLayer.Top : WlrLayer.Overlay
 	WlrLayershell.keyboardFocus: isOpen ? (NotchCtl.keyboard ? WlrKeyboardFocus.Exclusive : WlrKeyboardFocus.OnDemand) : WlrKeyboardFocus.None
 
 	// ---- state ----
