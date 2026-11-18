@@ -37,7 +37,8 @@ PanelWindow {
 	mask: Region {}
 
 	WlrLayershell.namespace: "notch-corners"
-	WlrLayershell.layer: WlrLayer.Overlay
+	// with the full bar showing, corners go to Top like the bar so true fullscreen windows cover them
+	WlrLayershell.layer: NotchCtl.barOn[screen.name] ? WlrLayer.Top : WlrLayer.Overlay
 
 	component CornerShape: Shape {
 		id: shape
