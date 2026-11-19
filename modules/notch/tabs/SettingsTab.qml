@@ -347,6 +347,14 @@ Item {
 					}
 				}
 				SettingRow {
+					title: "Matugen"
+					subtitle: "Run matugen on every change: the wallpaper (when matching colours to it), else the colour scheme, else the accent. Needs matugen installed"
+					Switch {
+						checked: Settings.matugen
+						onToggled: v => Settings.matugen = v
+					}
+				}
+				SettingRow {
 					title: "Home layout"
 					subtitle: "Grid is editable; the others are fixed. All keep Wi-Fi, Bluetooth, power profile, tray and next event"
 				}

@@ -61,6 +61,7 @@ Singleton {
 	property alias wallpaper: adapter.wallpaper
 	property alias wallpaperColors: adapter.wallpaperColors
 	property alias wallpaperTintBg: adapter.wallpaperTintBg
+	property alias matugen: adapter.matugen
 	property alias recordDir: adapter.recordDir
 	property alias recordEncoder: adapter.recordEncoder
 	property alias launchCounts: adapter.launchCounts
@@ -134,6 +135,8 @@ Singleton {
 			property bool wallpaperColors: false
 			// with wallpaperColors: tint the near-black background with the wallpaper colour
 			property bool wallpaperTintBg: false
+			// run matugen (accent / colour scheme / wallpaper as the source) whenever the theme changes
+			property bool matugen: false
 			// dock
 			property bool dockEnabled: true
 			property string dockEdge: "bottom"
