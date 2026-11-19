@@ -23,3 +23,6 @@ quickshell:
   shaders:
     source: ./shaders/
     destination: ~/.config/quickshell/shaders/
+  fonts:
+    source: ./fonts/
+    destination: ~/.config/quickshell/fonts/
