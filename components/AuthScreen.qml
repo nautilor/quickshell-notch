@@ -28,6 +28,12 @@ Item {
 	signal submitted
 
 	readonly property bool hasWallpaper: wallpaper !== ""
+
+	// Google Sans Flex, rounded axis maxed for the big clock (bundled, so it also works on the greeter)
+	FontLoader {
+		id: clockFont
+		source: Qt.resolvedUrl("../fonts/GoogleSansFlex.ttf")
+	}
 	readonly property bool hasAvatar: avatar !== ""
 	readonly property bool keyboardFocused: kb.activeFocus
 	// shrink everything on small screens
@@ -123,12 +129,38 @@ Item {
 		anchors.verticalCenterOffset: -parent.height * 0.2
 		spacing: 4
 
-		Txt {
+		// Two-tone clock: first hour digit and last minute digit share one color, the
+		// other two digits (and the colon) share the second.
+		Row {
+			id: timeRow
 			anchors.horizontalCenter: parent.horizontalCenter
-			text: Qt.formatTime(clock.date, Settings.use24h ? "HH:mm" : "h:mm")
-			font.pixelSize: Math.min(root.height * 0.2, 180)
-			font.weight: Font.Light
-			color: Theme.surfaceFg
+			readonly property color toneA: Theme.tertiaryContainerFg
+			readonly property color toneB: Theme.primaryContainerFg
+			readonly property string hh: Qt.formatTime(clock.date, Settings.use24h ? "HH" : "h")
+			readonly property string mm: Qt.formatTime(clock.date, "mm")
+			// [{t: char, c: color}] : hour digits, colon, minute digits
+			readonly property var glyphs: {
+				const out = [];
+				for (let i = 0; i < hh.length; i++)
+					out.push({t: hh[i], c: (hh.length === 1 || i === 0) ? toneA : toneB});
+				out.push({t: ":", c: toneB});
+				out.push({t: mm[0], c: toneB});
+				out.push({t: mm[1], c: toneA});
+				return out;
+			}
+
+			Repeater {
+				model: timeRow.glyphs
+				Txt {
+					required property var modelData
+					text: modelData.t
+					color: modelData.c
+					elide: Text.ElideNone
+					font.family: clockFont.status === FontLoader.Ready ? clockFont.name : Theme.font
+					font.pixelSize: Math.min(root.height * 0.2, 180)
+					font.variableAxes: ({"wght": 800, "ROND": 100, "wdth": 100, "opsz": 72})
+				}
+			}
 		}
 		Txt {
 			anchors.horizontalCenter: parent.horizontalCenter
