@@ -28,20 +28,32 @@ Singleton {
 	onKeyChanged: if (key !== "")
 		debounce.restart()
 
+	// never two runs at once: matugen's post-hooks share output directories and race each other
+	property bool queued: false
+
+	function run() {
+		if (!args)
+			return;
+		if (proc.running) {
+			queued = true;
+			return;
+		}
+		proc.command = ["matugen"].concat(args, ["-m", "dark"]);
+		proc.running = true;
+	}
+
 	Timer {
 		id: debounce
 		interval: 400
-		onTriggered: {
-			if (!root.args)
-				return;
-			proc.command = ["matugen"].concat(root.args, ["-m", "dark"]);
-			proc.running = false;
-			proc.running = true;
-		}
+		onTriggered: root.run()
 	}
 
 	Process {
 		id: proc
+		onExited: if (root.queued) {
+			root.queued = false;
+			root.run();
+		}
 		stderr: StdioCollector {
 			onStreamFinished: if (text.trim() !== "")
 				console.warn("matugen: " + text.trim())
