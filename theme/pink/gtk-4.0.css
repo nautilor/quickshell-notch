@@ -1,40 +1,40 @@
 
 /* quickshell-notch: pink */
 /* GTK 3 named colours */
-@define-color theme_bg_color #191216;
-@define-color theme_fg_color #ede9eb;
-@define-color theme_base_color #120d0f;
-@define-color theme_text_color #ede9eb;
+@define-color theme_bg_color #1f0c15;
+@define-color theme_fg_color #efe7eb;
+@define-color theme_base_color #16090f;
+@define-color theme_text_color #efe7eb;
 @define-color theme_selected_bg_color #e3a0c0;
-@define-color theme_selected_fg_color #3b0c23;
-@define-color theme_tooltip_bg_color #2d1f26;
-@define-color theme_tooltip_fg_color #ede9eb;
-@define-color theme_unfocused_bg_color #191216;
-@define-color theme_unfocused_fg_color #c3b6bc;
-@define-color theme_unfocused_base_color #120d0f;
-@define-color theme_unfocused_text_color #c3b6bc;
-@define-color theme_unfocused_selected_bg_color #602441;
+@define-color theme_selected_fg_color #321523;
+@define-color theme_tooltip_bg_color #361625;
+@define-color theme_tooltip_fg_color #efe7eb;
+@define-color theme_unfocused_bg_color #1f0c15;
+@define-color theme_unfocused_fg_color #caafbc;
+@define-color theme_unfocused_base_color #16090f;
+@define-color theme_unfocused_text_color #caafbc;
+@define-color theme_unfocused_selected_bg_color #5e2641;
 @define-color theme_unfocused_selected_fg_color #f4cde0;
-@define-color insensitive_bg_color #20181c;
-@define-color insensitive_fg_color #84717a;
-@define-color insensitive_base_color #120d0f;
-@define-color theme_unfocused_insensitive_bg_color #20181c;
-@define-color borders #46393f;
-@define-color unfocused_borders #46393f;
+@define-color insensitive_bg_color #28101b;
+@define-color insensitive_fg_color #995c79;
+@define-color insensitive_base_color #16090f;
+@define-color theme_unfocused_insensitive_bg_color #28101b;
+@define-color borders #5a253e;
+@define-color unfocused_borders #5a253e;
 @define-color warning_color #e8c26a;
 @define-color error_color #f2b8b5;
 @define-color success_color #7bd88f;
 @define-color link_color #e3a0c0;
 @define-color link_visited_color #e4c8af;
-@define-color content_view_bg #120d0f;
-@define-color text_view_bg #120d0f;
+@define-color content_view_bg #16090f;
+@define-color text_view_bg #16090f;
 @define-color osd_bg rgba(10, 8, 9, 0.92);
-@define-color osd_fg #ede9eb;
-@define-color osd_border #46393f;
-@define-color wm_bg_a #22181d;
-@define-color wm_bg_b #22181d;
-@define-color wm_title #ede9eb;
-@define-color wm_unfocused_title #c3b6bc;
+@define-color osd_fg #efe7eb;
+@define-color osd_border #5a253e;
+@define-color wm_bg_a #29111c;
+@define-color wm_bg_b #29111c;
+@define-color wm_title #efe7eb;
+@define-color wm_unfocused_title #caafbc;
 
 /* libadwaita named colours, derived from the quickshell-notch palette */
 @define-color accent_color #e3a0c0;
@@ -52,38 +52,38 @@
 @define-color error_color #f2b8b5;
 @define-color error_bg_color #8c1d18;
 @define-color error_fg_color #f9dedc;
-@define-color window_bg_color #191216;
-@define-color window_fg_color #ede9eb;
-@define-color view_bg_color #120d0f;
-@define-color view_fg_color #ede9eb;
-@define-color headerbar_bg_color #22181d;
-@define-color headerbar_fg_color #ede9eb;
-@define-color headerbar_border_color #46393f;
-@define-color headerbar_backdrop_color #191216;
+@define-color window_bg_color #1f0c15;
+@define-color window_fg_color #efe7eb;
+@define-color view_bg_color #16090f;
+@define-color view_fg_color #efe7eb;
+@define-color headerbar_bg_color #29111c;
+@define-color headerbar_fg_color #efe7eb;
+@define-color headerbar_border_color #5a253e;
+@define-color headerbar_backdrop_color #1f0c15;
 @define-color headerbar_shade_color rgba(0, 0, 0, 0.36);
 @define-color headerbar_darker_shade_color rgba(0, 0, 0, 0.36);
-@define-color sidebar_bg_color #1e1519;
-@define-color sidebar_fg_color #ede9eb;
-@define-color sidebar_backdrop_color #191216;
-@define-color sidebar_border_color #46393f;
+@define-color sidebar_bg_color #240f19;
+@define-color sidebar_fg_color #efe7eb;
+@define-color sidebar_backdrop_color #1f0c15;
+@define-color sidebar_border_color #5a253e;
 @define-color sidebar_shade_color rgba(0, 0, 0, 0.36);
-@define-color secondary_sidebar_bg_color #191216;
-@define-color secondary_sidebar_fg_color #ede9eb;
-@define-color secondary_sidebar_backdrop_color #191216;
-@define-color secondary_sidebar_border_color #46393f;
+@define-color secondary_sidebar_bg_color #1f0c15;
+@define-color secondary_sidebar_fg_color #efe7eb;
+@define-color secondary_sidebar_backdrop_color #1f0c15;
+@define-color secondary_sidebar_border_color #5a253e;
 @define-color secondary_sidebar_shade_color rgba(0, 0, 0, 0.36);
-@define-color card_bg_color #271c21;
-@define-color card_fg_color #ede9eb;
+@define-color card_bg_color #301321;
+@define-color card_fg_color #efe7eb;
 @define-color card_shade_color rgba(0, 0, 0, 0.36);
-@define-color dialog_bg_color #2d1f26;
-@define-color dialog_fg_color #ede9eb;
-@define-color popover_bg_color #2d1f26;
-@define-color popover_fg_color #ede9eb;
+@define-color dialog_bg_color #361625;
+@define-color dialog_fg_color #efe7eb;
+@define-color popover_bg_color #361625;
+@define-color popover_fg_color #efe7eb;
 @define-color popover_shade_color rgba(0, 0, 0, 0.36);
 @define-color shade_color rgba(0, 0, 0, 0.36);
-@define-color scrollbar_outline_color #191216;
-@define-color thumbnail_bg_color #2d1f26;
-@define-color thumbnail_fg_color #ede9eb;
+@define-color scrollbar_outline_color #1f0c15;
+@define-color thumbnail_bg_color #361625;
+@define-color thumbnail_fg_color #efe7eb;
 
 :root {
   --accent-color: #e3a0c0;
@@ -101,38 +101,54 @@
   --error-color: #f2b8b5;
   --error-bg-color: #8c1d18;
   --error-fg-color: #f9dedc;
-  --window-bg-color: #191216;
-  --window-fg-color: #ede9eb;
-  --view-bg-color: #120d0f;
-  --view-fg-color: #ede9eb;
-  --headerbar-bg-color: #22181d;
-  --headerbar-fg-color: #ede9eb;
-  --headerbar-border-color: #46393f;
-  --headerbar-backdrop-color: #191216;
+  --window-bg-color: #1f0c15;
+  --window-fg-color: #efe7eb;
+  --view-bg-color: #16090f;
+  --view-fg-color: #efe7eb;
+  --headerbar-bg-color: #29111c;
+  --headerbar-fg-color: #efe7eb;
+  --headerbar-border-color: #5a253e;
+  --headerbar-backdrop-color: #1f0c15;
   --headerbar-shade-color: rgba(0, 0, 0, 0.36);
   --headerbar-darker-shade-color: rgba(0, 0, 0, 0.36);
-  --sidebar-bg-color: #1e1519;
-  --sidebar-fg-color: #ede9eb;
-  --sidebar-backdrop-color: #191216;
-  --sidebar-border-color: #46393f;
+  --sidebar-bg-color: #240f19;
+  --sidebar-fg-color: #efe7eb;
+  --sidebar-backdrop-color: #1f0c15;
+  --sidebar-border-color: #5a253e;
   --sidebar-shade-color: rgba(0, 0, 0, 0.36);
-  --secondary-sidebar-bg-color: #191216;
-  --secondary-sidebar-fg-color: #ede9eb;
-  --secondary-sidebar-backdrop-color: #191216;
-  --secondary-sidebar-border-color: #46393f;
+  --secondary-sidebar-bg-color: #1f0c15;
+  --secondary-sidebar-fg-color: #efe7eb;
+  --secondary-sidebar-backdrop-color: #1f0c15;
+  --secondary-sidebar-border-color: #5a253e;
   --secondary-sidebar-shade-color: rgba(0, 0, 0, 0.36);
-  --card-bg-color: #271c21;
-  --card-fg-color: #ede9eb;
+  --card-bg-color: #301321;
+  --card-fg-color: #efe7eb;
   --card-shade-color: rgba(0, 0, 0, 0.36);
-  --dialog-bg-color: #2d1f26;
-  --dialog-fg-color: #ede9eb;
-  --popover-bg-color: #2d1f26;
-  --popover-fg-color: #ede9eb;
+  --dialog-bg-color: #361625;
+  --dialog-fg-color: #efe7eb;
+  --popover-bg-color: #361625;
+  --popover-fg-color: #efe7eb;
   --popover-shade-color: rgba(0, 0, 0, 0.36);
   --shade-color: rgba(0, 0, 0, 0.36);
-  --scrollbar-outline-color: #191216;
-  --thumbnail-bg-color: #2d1f26;
-  --thumbnail-fg-color: #ede9eb;
+  --scrollbar-outline-color: #1f0c15;
+  --thumbnail-bg-color: #361625;
+  --thumbnail-fg-color: #efe7eb;
+}
+
+/* Accent tint: sidebar, rows and headerbar pick up the accent */
+.navigation-sidebar > row:selected, .navigation-sidebar > row:selected:hover,
+.navigation-sidebar > row:selected:focus, placessidebar row:selected, placessidebar row:selected:hover {
+  background-color: alpha(@accent_bg_color, 0.24);
+  color: @accent_bg_color;
+}
+.navigation-sidebar > row:hover:not(:selected), placessidebar row:hover:not(:selected) {
+  background-color: alpha(@accent_bg_color, 0.10);
+}
+headerbar, .titlebar { background-image: none; background-color: @headerbar_bg_color; border-bottom: 1px solid alpha(@accent_bg_color, 0.18); }
+.sidebar, .navigation-sidebar, placessidebar, .sidebar-pane { border-color: alpha(@accent_bg_color, 0.18); }
+row:selected, .view:selected, iconview:selected, flowboxchild:selected, listview > row:selected {
+  background-color: alpha(@accent_bg_color, 0.28);
+  color: @window_fg_color;
 }
 
 /* Expressive shapes */

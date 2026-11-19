@@ -15,38 +15,38 @@
 @define-color error_color #f2b8b5;
 @define-color error_bg_color #8c1d18;
 @define-color error_fg_color #f9dedc;
-@define-color window_bg_color #191712;
-@define-color window_fg_color #edebe9;
-@define-color view_bg_color #12100d;
-@define-color view_fg_color #edebe9;
-@define-color headerbar_bg_color #222018;
-@define-color headerbar_fg_color #edebe9;
-@define-color headerbar_border_color #464339;
-@define-color headerbar_backdrop_color #191712;
+@define-color window_bg_color #1f1a0c;
+@define-color window_fg_color #efede7;
+@define-color view_bg_color #161309;
+@define-color view_fg_color #efede7;
+@define-color headerbar_bg_color #292311;
+@define-color headerbar_fg_color #efede7;
+@define-color headerbar_border_color #5a4c25;
+@define-color headerbar_backdrop_color #1f1a0c;
 @define-color headerbar_shade_color rgba(0, 0, 0, 0.36);
 @define-color headerbar_darker_shade_color rgba(0, 0, 0, 0.36);
-@define-color sidebar_bg_color #1e1b15;
-@define-color sidebar_fg_color #edebe9;
-@define-color sidebar_backdrop_color #191712;
-@define-color sidebar_border_color #464339;
+@define-color sidebar_bg_color #241e0f;
+@define-color sidebar_fg_color #efede7;
+@define-color sidebar_backdrop_color #1f1a0c;
+@define-color sidebar_border_color #5a4c25;
 @define-color sidebar_shade_color rgba(0, 0, 0, 0.36);
-@define-color secondary_sidebar_bg_color #191712;
-@define-color secondary_sidebar_fg_color #edebe9;
-@define-color secondary_sidebar_backdrop_color #191712;
-@define-color secondary_sidebar_border_color #464339;
+@define-color secondary_sidebar_bg_color #1f1a0c;
+@define-color secondary_sidebar_fg_color #efede7;
+@define-color secondary_sidebar_backdrop_color #1f1a0c;
+@define-color secondary_sidebar_border_color #5a4c25;
 @define-color secondary_sidebar_shade_color rgba(0, 0, 0, 0.36);
-@define-color card_bg_color #27241c;
-@define-color card_fg_color #edebe9;
+@define-color card_bg_color #302813;
+@define-color card_fg_color #efede7;
 @define-color card_shade_color rgba(0, 0, 0, 0.36);
-@define-color dialog_bg_color #2d291f;
-@define-color dialog_fg_color #edebe9;
-@define-color popover_bg_color #2d291f;
-@define-color popover_fg_color #edebe9;
+@define-color dialog_bg_color #362d16;
+@define-color dialog_fg_color #efede7;
+@define-color popover_bg_color #362d16;
+@define-color popover_fg_color #efede7;
 @define-color popover_shade_color rgba(0, 0, 0, 0.36);
 @define-color shade_color rgba(0, 0, 0, 0.36);
-@define-color scrollbar_outline_color #191712;
-@define-color thumbnail_bg_color #2d291f;
-@define-color thumbnail_fg_color #edebe9;
+@define-color scrollbar_outline_color #1f1a0c;
+@define-color thumbnail_bg_color #362d16;
+@define-color thumbnail_fg_color #efede7;
 
 :root {
   --accent-color: #e3d1a0;
@@ -64,38 +64,54 @@
   --error-color: #f2b8b5;
   --error-bg-color: #8c1d18;
   --error-fg-color: #f9dedc;
-  --window-bg-color: #191712;
-  --window-fg-color: #edebe9;
-  --view-bg-color: #12100d;
-  --view-fg-color: #edebe9;
-  --headerbar-bg-color: #222018;
-  --headerbar-fg-color: #edebe9;
-  --headerbar-border-color: #464339;
-  --headerbar-backdrop-color: #191712;
+  --window-bg-color: #1f1a0c;
+  --window-fg-color: #efede7;
+  --view-bg-color: #161309;
+  --view-fg-color: #efede7;
+  --headerbar-bg-color: #292311;
+  --headerbar-fg-color: #efede7;
+  --headerbar-border-color: #5a4c25;
+  --headerbar-backdrop-color: #1f1a0c;
   --headerbar-shade-color: rgba(0, 0, 0, 0.36);
   --headerbar-darker-shade-color: rgba(0, 0, 0, 0.36);
-  --sidebar-bg-color: #1e1b15;
-  --sidebar-fg-color: #edebe9;
-  --sidebar-backdrop-color: #191712;
-  --sidebar-border-color: #464339;
+  --sidebar-bg-color: #241e0f;
+  --sidebar-fg-color: #efede7;
+  --sidebar-backdrop-color: #1f1a0c;
+  --sidebar-border-color: #5a4c25;
   --sidebar-shade-color: rgba(0, 0, 0, 0.36);
-  --secondary-sidebar-bg-color: #191712;
-  --secondary-sidebar-fg-color: #edebe9;
-  --secondary-sidebar-backdrop-color: #191712;
-  --secondary-sidebar-border-color: #464339;
+  --secondary-sidebar-bg-color: #1f1a0c;
+  --secondary-sidebar-fg-color: #efede7;
+  --secondary-sidebar-backdrop-color: #1f1a0c;
+  --secondary-sidebar-border-color: #5a4c25;
   --secondary-sidebar-shade-color: rgba(0, 0, 0, 0.36);
-  --card-bg-color: #27241c;
-  --card-fg-color: #edebe9;
+  --card-bg-color: #302813;
+  --card-fg-color: #efede7;
   --card-shade-color: rgba(0, 0, 0, 0.36);
-  --dialog-bg-color: #2d291f;
-  --dialog-fg-color: #edebe9;
-  --popover-bg-color: #2d291f;
-  --popover-fg-color: #edebe9;
+  --dialog-bg-color: #362d16;
+  --dialog-fg-color: #efede7;
+  --popover-bg-color: #362d16;
+  --popover-fg-color: #efede7;
   --popover-shade-color: rgba(0, 0, 0, 0.36);
   --shade-color: rgba(0, 0, 0, 0.36);
-  --scrollbar-outline-color: #191712;
-  --thumbnail-bg-color: #2d291f;
-  --thumbnail-fg-color: #edebe9;
+  --scrollbar-outline-color: #1f1a0c;
+  --thumbnail-bg-color: #362d16;
+  --thumbnail-fg-color: #efede7;
+}
+
+/* Accent tint: sidebar, rows and headerbar pick up the accent */
+.navigation-sidebar > row:selected, .navigation-sidebar > row:selected:hover,
+.navigation-sidebar > row:selected:focus, placessidebar row:selected, placessidebar row:selected:hover {
+  background-color: alpha(@accent_bg_color, 0.24);
+  color: @accent_bg_color;
+}
+.navigation-sidebar > row:hover:not(:selected), placessidebar row:hover:not(:selected) {
+  background-color: alpha(@accent_bg_color, 0.10);
+}
+headerbar, .titlebar { background-image: none; background-color: @headerbar_bg_color; border-bottom: 1px solid alpha(@accent_bg_color, 0.18); }
+.sidebar, .navigation-sidebar, placessidebar, .sidebar-pane { border-color: alpha(@accent_bg_color, 0.18); }
+row:selected, .view:selected, iconview:selected, flowboxchild:selected, listview > row:selected {
+  background-color: alpha(@accent_bg_color, 0.28);
+  color: @window_fg_color;
 }
 
 /* Expressive shapes */
