@@ -302,26 +302,6 @@ PanelWindow {
 			}
 		}
 
-		// keeps the focused window's thumbnail fresh while it is on screen, so it is still there once scrolled away
-		ScreencopyView {
-			id: activeCap
-			x: -5000
-			width: preview.cardW * 2
-			height: preview.cardH * 2
-			captureSource: ToplevelManager.activeToplevel
-			live: true
-			Timer {
-				interval: 2000
-				running: activeCap.hasContent && ToplevelManager.activeToplevel !== null
-				repeat: true
-				triggeredOnStart: true
-				onTriggered: {
-					const tl = ToplevelManager.activeToplevel;
-					activeCap.grabToImage(r => Dock.setThumb(tl, r), Qt.size(preview.cardW * 2, preview.cardH * 2));
-				}
-			}
-		}
-
 		// ---- window previews ----
 		Rectangle {
 			id: preview
@@ -385,7 +365,7 @@ PanelWindow {
 							cache: false
 							source: Dock.thumbUrl(card.modelData, Dock.thumbRev)
 						}
-						// fresh frame when available; every second it is also saved as the new last good frame
+						// fresh frame when available (no grabToImage: it crashed Qt in QQuickItemGrabResult::render)
 						ScreencopyView {
 							id: sv
 							anchors.left: parent.left
@@ -398,13 +378,6 @@ PanelWindow {
 							live: true
 							opacity: hasContent ? 1 : 0
 							constraintSize: Qt.size(preview.cardW * 2, preview.cardH * 2)
-							Timer {
-								interval: 1000
-		running: sv.hasContent
-		repeat: true
-		triggeredOnStart: true
-								onTriggered: sv.grabToImage(r => Dock.setThumb(card.modelData, r), Qt.size(preview.cardW * 2, preview.cardH * 2))
-							}
 						}
 						MouseArea {
 							id: cardArea
