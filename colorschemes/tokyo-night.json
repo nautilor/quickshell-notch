@@ -5,5 +5,6 @@
 	"primary": "#7aa2f7",
 	"secondary": "#7dcfff",
 	"tertiary": "#bb9af7",
-	"error": "#f7768e"
+	"error": "#f7768e",
+	"accents": ["#f7768e", "#ff9e64", "#e0af68", "#9ece6a", "#73daca", "#b4f9f8", "#2ac3de"]
 }

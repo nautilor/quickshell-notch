@@ -256,6 +256,68 @@ Item {
 						}
 					}
 				}
+				Item {
+					id: schemeAccentWrap
+					readonly property bool shown: Colorschemes.current !== null && !Settings.wallpaperColors
+					property real amount: shown ? 1 : 0
+					Behavior on amount {
+						NumberAnimation {
+							duration: Theme.durMedium
+							easing.type: Easing.OutCubic
+						}
+					}
+					Layout.fillWidth: true
+					Layout.preferredHeight: schemeAccentRow.implicitHeight * amount
+					Layout.bottomMargin: -col.spacing * (1 - amount)
+					visible: amount > 0
+					clip: true
+					opacity: amount
+					SettingRow {
+						id: schemeAccentRow
+						width: parent.width
+						y: -8 * (1 - schemeAccentWrap.amount)
+						title: "Scheme accent"
+						subtitle: "Pick the accent from the colour scheme's palette"
+						Flow {
+							Layout.preferredWidth: 36 * Math.min(7, Colorschemes.current ? Colorschemes.current.accents.length : 1)
+							Repeater {
+								model: Colorschemes.current ? Colorschemes.current.accents : []
+								Item {
+									id: scell
+									required property color modelData
+									readonly property bool current: Colorschemes.accent ? String(Colorschemes.accent) === String(modelData) : String(Colorschemes.current.accents[0]) === String(modelData)
+									width: 36
+									height: 36
+									Rectangle {
+										anchors.centerIn: parent
+										width: scell.current ? 32 : 26
+										height: width
+										radius: scell.current ? 11 : width / 2
+										color: scell.modelData
+										border.width: scell.current ? 3 : 0
+										border.color: Theme.surfaceFg
+										Behavior on width {
+											NumberAnimation {
+												duration: Theme.durShort
+												easing.type: Easing.OutBack
+											}
+										}
+										Behavior on radius {
+											NumberAnimation {
+												duration: Theme.durShort
+											}
+										}
+									}
+									MouseArea {
+										anchors.fill: parent
+										cursorShape: Qt.PointingHandCursor
+										onClicked: Settings.schemeAccent = String(scell.modelData)
+									}
+								}
+							}
+						}
+					}
+				}
 				SettingRow {
 					title: "Colour scheme"
 					subtitle: (Colorschemes.current ? Colorschemes.current.name : "Accent") + " · your own .json files go in ~/.config/quickshell-notch/colorschemes/"

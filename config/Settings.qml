@@ -12,6 +12,7 @@ Singleton {
 
 	property alias hue: adapter.hue
 	property alias colorscheme: adapter.colorscheme
+	property alias schemeAccent: adapter.schemeAccent
 	property alias uiStyle: adapter.uiStyle
 	property alias surfaceOpacity: adapter.surfaceOpacity
 	property alias builtinLock: adapter.builtinLock
@@ -158,6 +159,8 @@ Singleton {
 			property string dockIconColor: "#8ab4f8"
 			// id (file name without .json) of a colour scheme; empty = tonal palette from hue
 			property string colorscheme: ""
+			// accent picked from the colour scheme's own colours (hex); empty = the scheme's primary
+			property string schemeAccent: ""
 			// UI style (shapes, motion, font, colours): expressive | material | macos | gnome | windows11
 			property string uiStyle: "expressive"
 			// 0.2 - 1: opacity of the notch, bar and dock surfaces; below 1 they can be blurred with a Hyprland layerrule

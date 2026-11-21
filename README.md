@@ -245,7 +245,7 @@ Add your own: drop a `.json` file into `~/.config/quickshell-notch/colorschemes/
 }
 ```
 
-`background`, `foreground` and `primary` are required; `name`, `secondary`, `tertiary` and `error` are optional. Surfaces, containers and outlines are mixed from background and foreground. To override any single role, add its `Theme` name as a key (`notch`, `surfaceContainer`, `primaryContainer`, `outline`, ...). The scheme is stored as `colorscheme` in `settings.json`; the login screen reads the same key from its `greeter.json`.
+`background`, `foreground` and `primary` are required; `name`, `secondary`, `tertiary`, `error` and `accents` (a list of extra hex colours) are optional. With a scheme selected, Settings → Scheme accent lets you pick the accent from its `primary`, `secondary`, `tertiary` and `accents` colours; the pick replaces `primary` and everything derived from it. Surfaces, containers and outlines are mixed from background and foreground. To override any single role, add its `Theme` name as a key (`notch`, `surfaceContainer`, `primaryContainer`, `outline`, ...). The scheme is stored as `colorscheme` in `settings.json`; the login screen reads the same key from its `greeter.json`.
 
 ## Google Calendar setup
 Uses `scripts/gcal.py` (Python standard library only, OAuth with PKCE on a local loopback port).
@@ -293,6 +293,7 @@ Settings live in `/etc/quickshell-notch/greeter.json` (or the file named by `$QS
 | `surfaceOpacity` | Opacity of notch, bar and dock surfaces, 0.2 to 1 (see [Transparency and blur](#transparency-and-blur)) |
 | `uiStyle` | `expressive`, `material`, `macos`, `gnome` or `windows11` |
 | `colorscheme` | Colour scheme id, e.g. `dracula` (overrides `hue`) |
+| `schemeAccent` | Hex accent picked from the scheme's colours; empty = its `primary` |
 | `user` | User selected when nothing is remembered |
 | `session` | Session name selected when nothing is remembered |
 | `sessions` | `[{ "name": "Hyprland", "command": "start-hyprland" }]`, to skip scanning `wayland-sessions` |
@@ -468,4 +469,5 @@ Opened this way the notch stays until you press Escape, click outside, or toggle
 - `modules/notch/`: the notch window, its shape, idle/peek/message content and the tabs.
 - `modules/corner/`: rounded screen corners.
 - `scripts/gcal.py`: Google Calendar client.
+- `scripts/matugen-scheme.py`: runs matugen for a colour scheme (accent seeds the tonal colours, the scheme keeps surfaces and text).
 - `docs/screenshots/`: images used above.

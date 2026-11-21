@@ -8,7 +8,7 @@ import qs.config
 // Colour schemes: JSON files from the bundled colorschemes/ folder and from
 // ~/.config/quickshell-notch/colorschemes/ (user files win on the same file name).
 // A scheme needs "background", "foreground" and "primary"; "secondary", "tertiary",
-// "error", "name" and any Theme role (e.g. "surfaceContainer") are optional.
+// "error", "name", "accents" (extra accent colours to offer, a list of hex strings) and any Theme role (e.g. "surfaceContainer") are optional.
 Singleton {
 	id: root
 
@@ -19,7 +19,9 @@ Singleton {
 	property var schemes: []
 	readonly property var current: schemes.find(s => s.id === Settings.colorscheme) ?? null
 	// the wallpaper palette, when enabled, wins over the selected scheme
-	readonly property var palette: Settings.wallpaperColors && Wallpaper.palette ? Wallpaper.palette : current ? current.palette : null
+	// the accent picked in Settings, when the scheme offers it; else null (use the scheme's primary)
+	readonly property var accent: current && Settings.schemeAccent !== "" && current.accents.some(c => String(c) === String(Qt.color(Settings.schemeAccent))) ? Qt.color(Settings.schemeAccent) : null
+	readonly property var palette: Settings.wallpaperColors && Wallpaper.palette ? Wallpaper.palette : current ? (accent ? build(current.id, current.json, accent).palette : current.palette) : null
 
 	function reload() {
 		if (!loader.running)
@@ -34,10 +36,10 @@ Singleton {
 		return 0.299 * c.r + 0.587 * c.g + 0.114 * c.b;
 	}
 
-	function build(id, json) {
+	function build(id, json, accentOverride) {
 		const bg = Qt.color(json.background);
 		const fg = Qt.color(json.foreground);
-		const primary = Qt.color(json.primary);
+		const primary = accentOverride ?? Qt.color(json.primary);
 		const secondary = json.secondary ? Qt.color(json.secondary) : mix(primary, fg, 0.5);
 		const tertiary = json.tertiary ? Qt.color(json.tertiary) : mix(primary, secondary, 0.5);
 		const error = json.error ? Qt.color(json.error) : Qt.color("#f2b8b5");
@@ -68,12 +70,25 @@ Singleton {
 			outlineVariant: mix(bg, fg, 0.18)
 		};
 		for (const k in p) {
+			// a picked accent replaces primary, so the scheme's own primary must not override it back
+			if (accentOverride && k === "primary")
+				continue;
 			if (typeof json[k] === "string")
 				p[k] = Qt.color(json[k]);
+		}
+		const accents = [];
+		for (const c of [json.primary, json.secondary, json.tertiary].concat(Array.isArray(json.accents) ? json.accents : [])) {
+			if (typeof c !== "string")
+				continue;
+			const q = Qt.color(c);
+			if (!accents.some(a => String(a) === String(q)))
+				accents.push(q);
 		}
 		return {
 			id: id,
 			name: json.name || id,
+			json: json,
+			accents: accents,
 			preview: [p.surfaceContainerHigh, primary, secondary, tertiary],
 			palette: p
 		};
