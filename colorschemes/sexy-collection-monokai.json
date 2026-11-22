@@ -1,0 +1,13 @@
+{
+	"name": "Monokai (collection)",
+	"background": "#272822",
+	"foreground": "#f1ebeb",
+	"primary": "#55bcce",
+	"secondary": "#8fc029",
+	"tertiary": "#9358fe",
+	"error": "#dc2566",
+	"accents": [
+		"#d4c96e",
+		"#56b7a5"
+	]
+}

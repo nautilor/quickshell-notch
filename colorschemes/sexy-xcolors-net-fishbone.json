@@ -1,0 +1,13 @@
+{
+	"name": "Fishbone (xcolors.net)",
+	"background": "#000000",
+	"foreground": "#ffffff",
+	"primary": "#416ea5",
+	"secondary": "#41a551",
+	"tertiary": "#bf6053",
+	"error": "#bf5357",
+	"accents": [
+		"#aea64f",
+		"#714da5"
+	]
+}

@@ -1,0 +1,13 @@
+{
+	"name": "Chalk (dark) (base16)",
+	"background": "#151515",
+	"foreground": "#d0d0d0",
+	"primary": "#6fc2ef",
+	"secondary": "#acc267",
+	"tertiary": "#e1a3ee",
+	"error": "#fb9fb1",
+	"accents": [
+		"#ddb26f",
+		"#12cfc0"
+	]
+}

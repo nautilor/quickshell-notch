@@ -1,0 +1,13 @@
+{
+	"name": "Muse (xcolors.net)",
+	"background": "#000000",
+	"foreground": "#ffffff",
+	"primary": "#425387",
+	"secondary": "#447241",
+	"tertiary": "#965d98",
+	"error": "#a31604",
+	"accents": [
+		"#c1951a",
+		"#06989a"
+	]
+}

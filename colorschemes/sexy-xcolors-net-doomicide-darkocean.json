@@ -1,0 +1,13 @@
+{
+	"name": "Dark Ocean (xcolors.net)",
+	"background": "#000000",
+	"foreground": "#ffffff",
+	"primary": "#385a70",
+	"secondary": "#14db49",
+	"tertiary": "#384894",
+	"error": "#571dc2",
+	"accents": [
+		"#403d70",
+		"#4f3a5e"
+	]
+}

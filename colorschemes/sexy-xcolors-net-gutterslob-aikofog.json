@@ -1,0 +1,13 @@
+{
+	"name": "aikofog (xcolors.net)",
+	"background": "#f1eee9",
+	"foreground": "#b2b3b8",
+	"primary": "#6e7291",
+	"secondary": "#668462",
+	"tertiary": "#846887",
+	"error": "#936a6f",
+	"accents": [
+		"#7f7b62",
+		"#637e7b"
+	]
+}

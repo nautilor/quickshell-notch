@@ -1,0 +1,13 @@
+{
+	"name": "Catch Me If You Can (xcolors.net)",
+	"background": "#170f0d",
+	"foreground": "#f9f9f9",
+	"primary": "#aa8d70",
+	"secondary": "#8d7f85",
+	"tertiary": "#b9a38d",
+	"error": "#604c38",
+	"accents": [
+		"#907256",
+		"#c4bfbf"
+	]
+}

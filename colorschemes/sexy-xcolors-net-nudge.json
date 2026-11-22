@@ -1,0 +1,13 @@
+{
+	"name": "Nudge (xcolors.net)",
+	"background": "#000000",
+	"foreground": "#ffffff",
+	"primary": "#304465",
+	"secondary": "#184a31",
+	"tertiary": "#330801",
+	"error": "#822f5d",
+	"accents": [
+		"#9d4500",
+		"#175552"
+	]
+}

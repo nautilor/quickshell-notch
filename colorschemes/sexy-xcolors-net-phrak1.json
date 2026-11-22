@@ -1,0 +1,13 @@
+{
+	"name": "Phrak1 (xcolors.net)",
+	"background": "#000000",
+	"foreground": "#a8a8a8",
+	"primary": "#0000a8",
+	"secondary": "#00a800",
+	"tertiary": "#a800a8",
+	"error": "#a80000",
+	"accents": [
+		"#a85400",
+		"#00a8a8"
+	]
+}

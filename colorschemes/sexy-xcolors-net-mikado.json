@@ -1,0 +1,13 @@
+{
+	"name": "Mikado (xcolors.net)",
+	"background": "#000000",
+	"foreground": "#ffffff",
+	"primary": "#6a8c8c",
+	"secondary": "#9b9329",
+	"tertiary": "#856774",
+	"error": "#a04363",
+	"accents": [
+		"#bf7a29",
+		"#757978"
+	]
+}

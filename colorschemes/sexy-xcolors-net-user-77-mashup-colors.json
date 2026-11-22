@@ -1,0 +1,13 @@
+{
+	"name": "Mashup Colors (xcolors.net)",
+	"background": "#171717",
+	"foreground": "#b2a191",
+	"primary": "#627a92",
+	"secondary": "#707d22",
+	"tertiary": "#75507b",
+	"error": "#bf3f34",
+	"accents": [
+		"#bf7a29",
+		"#757978"
+	]
+}

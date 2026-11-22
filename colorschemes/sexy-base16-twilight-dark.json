@@ -1,0 +1,13 @@
+{
+	"name": "Twilight (dark) (base16)",
+	"background": "#1e1e1e",
+	"foreground": "#a7a7a7",
+	"primary": "#7587a6",
+	"secondary": "#8f9d6a",
+	"tertiary": "#9b859d",
+	"error": "#cf6a4c",
+	"accents": [
+		"#f9ee98",
+		"#afc4db"
+	]
+}

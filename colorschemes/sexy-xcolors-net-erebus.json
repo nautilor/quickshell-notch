@@ -1,0 +1,13 @@
+{
+	"name": "Erebus (xcolors.net)",
+	"background": "#000000",
+	"foreground": "#ffffff",
+	"primary": "#af5fd7",
+	"secondary": "#de8a36",
+	"tertiary": "#ff87d7",
+	"error": "#ff5f5f",
+	"accents": [
+		"#d78787",
+		"#dea3e5"
+	]
+}

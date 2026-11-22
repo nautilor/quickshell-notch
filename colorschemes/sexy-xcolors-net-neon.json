@@ -1,0 +1,13 @@
+{
+	"name": "Neon (xcolors.net)",
+	"background": "#171717",
+	"foreground": "#f8f8f8",
+	"primary": "#16b1fb",
+	"secondary": "#97d01a",
+	"tertiary": "#ff2491",
+	"error": "#d81765",
+	"accents": [
+		"#ffa800",
+		"#0fdcb6"
+	]
+}

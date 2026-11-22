@@ -1,0 +1,13 @@
+{
+	"name": "FarSide (xcolors.net)",
+	"background": "#000000",
+	"foreground": "#919191",
+	"primary": "#6751a6",
+	"secondary": "#006ca5",
+	"tertiary": "#913e88",
+	"error": "#a43261",
+	"accents": [
+		"#007086",
+		"#0061b1"
+	]
+}

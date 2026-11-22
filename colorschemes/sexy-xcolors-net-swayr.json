@@ -1,0 +1,13 @@
+{
+	"name": "Swayr (xcolors.net)",
+	"background": "#1c1709",
+	"foreground": "#c2b9a1",
+	"primary": "#315094",
+	"secondary": "#787200",
+	"tertiary": "#5c2e40",
+	"error": "#8e4317",
+	"accents": [
+		"#945c00",
+		"#00617d"
+	]
+}

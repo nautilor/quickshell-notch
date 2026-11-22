@@ -1,0 +1,13 @@
+{
+	"name": "Canvased Pastel (xcolors.net)",
+	"background": "#170f0d",
+	"foreground": "#746c48",
+	"primary": "#534d35",
+	"secondary": "#3d4339",
+	"tertiary": "#646756",
+	"error": "#323027",
+	"accents": [
+		"#443b2c",
+		"#7b8574"
+	]
+}

@@ -1,0 +1,13 @@
+{
+	"name": "Hybrid (xcolors.net)",
+	"background": "#000000",
+	"foreground": "#ffffff",
+	"primary": "#6d9cbe",
+	"secondary": "#9acc79",
+	"tertiary": "#9f5079",
+	"error": "#da4939",
+	"accents": [
+		"#d0d26b",
+		"#435d75"
+	]
+}

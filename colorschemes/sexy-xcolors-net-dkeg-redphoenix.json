@@ -1,0 +1,13 @@
+{
+	"name": "Red Phoenix (xcolors.net)",
+	"background": "#111111",
+	"foreground": "#ffffff",
+	"primary": "#6f6f6f",
+	"secondary": "#4c3a3d",
+	"tertiary": "#909090",
+	"error": "#2d2d2d",
+	"accents": [
+		"#4e4e4e",
+		"#aaa998"
+	]
+}

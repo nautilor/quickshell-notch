@@ -1,0 +1,13 @@
+{
+	"name": "Monokai (light) (base16)",
+	"background": "#f9f8f5",
+	"foreground": "#49483e",
+	"primary": "#66d9ef",
+	"secondary": "#a6e22e",
+	"tertiary": "#ae81ff",
+	"error": "#f92672",
+	"accents": [
+		"#f4bf75",
+		"#a1efe4"
+	]
+}

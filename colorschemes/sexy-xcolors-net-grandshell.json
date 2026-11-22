@@ -1,0 +1,13 @@
+{
+	"name": "Grandshell (xcolors.net)",
+	"background": "#000000",
+	"foreground": "#bebebe",
+	"primary": "#5555dd",
+	"secondary": "#77bb33",
+	"tertiary": "#c350ff",
+	"error": "#f25a5a",
+	"accents": [
+		"#efc334",
+		"#5af2ee"
+	]
+}

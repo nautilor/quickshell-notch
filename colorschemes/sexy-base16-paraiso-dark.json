@@ -1,0 +1,13 @@
+{
+	"name": "Paraiso (dark) (base16)",
+	"background": "#2f1e2e",
+	"foreground": "#a39e9b",
+	"primary": "#06b6ef",
+	"secondary": "#48b685",
+	"tertiary": "#815ba4",
+	"error": "#ef6155",
+	"accents": [
+		"#fec418",
+		"#5bc4bf"
+	]
+}

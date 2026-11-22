@@ -1,0 +1,13 @@
+{
+	"name": "Splurge (xcolors.net)",
+	"background": "#000000",
+	"foreground": "#ffffff",
+	"primary": "#6985d7",
+	"secondary": "#80d468",
+	"tertiary": "#c86ad4",
+	"error": "#d7699a",
+	"accents": [
+		"#d7a169",
+		"#6fccd1"
+	]
+}

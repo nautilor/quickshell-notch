@@ -1,0 +1,13 @@
+{
+	"name": "Pastel White (xcolors.net)",
+	"background": "#000000",
+	"foreground": "#ffffff",
+	"primary": "#69b2d6",
+	"secondary": "#a7e160",
+	"tertiary": "#a073d6",
+	"error": "#db7464",
+	"accents": [
+		"#dbd560",
+		"#69e1d3"
+	]
+}

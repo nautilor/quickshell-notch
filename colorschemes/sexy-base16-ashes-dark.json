@@ -1,0 +1,13 @@
+{
+	"name": "Ashes (dark) (base16)",
+	"background": "#1c2023",
+	"foreground": "#c7ccd1",
+	"primary": "#ae95c7",
+	"secondary": "#95c7ae",
+	"tertiary": "#c795ae",
+	"error": "#c7ae95",
+	"accents": [
+		"#aec795",
+		"#95aec7"
+	]
+}

@@ -1,0 +1,13 @@
+{
+	"name": "Railscasts (dark) (base16)",
+	"background": "#2b2b2b",
+	"foreground": "#e6e1dc",
+	"primary": "#6d9cbe",
+	"secondary": "#a5c261",
+	"tertiary": "#b6b3eb",
+	"error": "#da4939",
+	"accents": [
+		"#ffc66d",
+		"#519f50"
+	]
+}

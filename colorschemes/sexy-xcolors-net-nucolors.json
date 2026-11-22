@@ -1,0 +1,13 @@
+{
+	"name": "Nucolors (xcolors.net)",
+	"background": "#000000",
+	"foreground": "#ffffff",
+	"primary": "#a8ceea",
+	"secondary": "#e2ffc7",
+	"tertiary": "#e2b5cc",
+	"error": "#ff9f95",
+	"accents": [
+		"#ffffb9",
+		"#c2efff"
+	]
+}

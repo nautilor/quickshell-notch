@@ -1,0 +1,13 @@
+{
+	"name": "Ocean (light) (base16)",
+	"background": "#eff1f5",
+	"foreground": "#4f5b66",
+	"primary": "#8fa1b3",
+	"secondary": "#a3be8c",
+	"tertiary": "#b48ead",
+	"error": "#bf616a",
+	"accents": [
+		"#ebcb8b",
+		"#96b5b4"
+	]
+}

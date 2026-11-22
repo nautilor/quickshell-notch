@@ -1,0 +1,13 @@
+{
+	"name": "Eldorado dark (xcolors.net)",
+	"background": "#292929",
+	"foreground": "#a2a2a2",
+	"primary": "#5879af",
+	"secondary": "#468459",
+	"tertiary": "#9c6594",
+	"error": "#a9635d",
+	"accents": [
+		"#84763d",
+		"#008592"
+	]
+}

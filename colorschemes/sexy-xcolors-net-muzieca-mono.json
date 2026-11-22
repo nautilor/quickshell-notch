@@ -1,0 +1,13 @@
+{
+	"name": "Mono (xcolors.net)",
+	"background": "#000000",
+	"foreground": "#ffffff",
+	"primary": "#444444",
+	"secondary": "#222222",
+	"tertiary": "#555555",
+	"error": "#111111",
+	"accents": [
+		"#333333",
+		"#666666"
+	]
+}

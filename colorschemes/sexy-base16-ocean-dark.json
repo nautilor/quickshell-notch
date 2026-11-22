@@ -1,0 +1,13 @@
+{
+	"name": "Ocean (dark) (base16)",
+	"background": "#2b303b",
+	"foreground": "#c0c5ce",
+	"primary": "#8fa1b3",
+	"secondary": "#a3be8c",
+	"tertiary": "#b48ead",
+	"error": "#bf616a",
+	"accents": [
+		"#ebcb8b",
+		"#96b5b4"
+	]
+}

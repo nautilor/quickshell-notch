@@ -1,0 +1,13 @@
+{
+	"name": "Mocha (dark) (base16)",
+	"background": "#3b3228",
+	"foreground": "#d0c8c6",
+	"primary": "#8ab3b5",
+	"secondary": "#beb55b",
+	"tertiary": "#a89bb9",
+	"error": "#cb6077",
+	"accents": [
+		"#f4bc87",
+		"#7bbda4"
+	]
+}

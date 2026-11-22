@@ -1,0 +1,13 @@
+{
+	"name": "Tartan (xcolors.net)",
+	"background": "#2b2b2b",
+	"foreground": "#dedede",
+	"primary": "#3465a4",
+	"secondary": "#4e9a06",
+	"tertiary": "#75507b",
+	"error": "#cc0000",
+	"accents": [
+		"#c4a000",
+		"#06989a"
+	]
+}

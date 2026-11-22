@@ -1,0 +1,13 @@
+{
+	"name": "Grayscale (dark) (base16)",
+	"background": "#101010",
+	"foreground": "#b9b9b9",
+	"primary": "#686868",
+	"secondary": "#8e8e8e",
+	"tertiary": "#747474",
+	"error": "#7c7c7c",
+	"accents": [
+		"#a0a0a0",
+		"#868686"
+	]
+}

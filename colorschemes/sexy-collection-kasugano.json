@@ -1,0 +1,13 @@
+{
+	"name": "Kasugano (collection)",
+	"background": "#1b1b1b",
+	"foreground": "#ffffff",
+	"primary": "#31658C",
+	"secondary": "#3EA290",
+	"tertiary": "#596196",
+	"error": "#6673BF",
+	"accents": [
+		"#B0EAD9",
+		"#8292B2"
+	]
+}

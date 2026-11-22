@@ -1,0 +1,13 @@
+{
+	"name": "theme2 (xcolors.net)",
+	"background": "#000000",
+	"foreground": "#ffffff",
+	"primary": "#23ffa8",
+	"secondary": "#66b61a",
+	"tertiary": "#ff00da",
+	"error": "#eb3d51",
+	"accents": [
+		"#d98e1d",
+		"#68a783"
+	]
+}

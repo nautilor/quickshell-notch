@@ -1,0 +1,13 @@
+{
+	"name": "X::DotShare (collection)",
+	"background": "#151515",
+	"foreground": "#D7D0C7",
+	"primary": "#7DC1CF",
+	"secondary": "#B8D68C",
+	"tertiary": "#9B64FB",
+	"error": "#E84F4F",
+	"accents": [
+		"#E1AA5D",
+		"#6D878D"
+	]
+}

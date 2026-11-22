@@ -1,0 +1,13 @@
+{
+	"name": "Digerati (xcolors.net)",
+	"background": "#000000",
+	"foreground": "#ffffff",
+	"primary": "#426870",
+	"secondary": "#b1d631",
+	"tertiary": "#6d506d",
+	"error": "#c03000",
+	"accents": [
+		"#fecf35",
+		"#4bb5c1"
+	]
+}

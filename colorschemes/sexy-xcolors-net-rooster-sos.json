@@ -1,0 +1,13 @@
+{
+	"name": "SOS (xcolors.net)",
+	"background": "#373b43",
+	"foreground": "#78796f",
+	"primary": "#afb171",
+	"secondary": "#fbfd59",
+	"tertiary": "#b387e7",
+	"error": "#fdcd39",
+	"accents": [
+		"#deac40",
+		"#63e860"
+	]
+}

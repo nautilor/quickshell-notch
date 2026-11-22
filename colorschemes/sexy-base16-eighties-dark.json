@@ -1,0 +1,13 @@
+{
+	"name": "Eighties (dark) (base16)",
+	"background": "#2d2d2d",
+	"foreground": "#d3d0c8",
+	"primary": "#6699cc",
+	"secondary": "#99cc99",
+	"tertiary": "#cc99cc",
+	"error": "#f2777a",
+	"accents": [
+		"#ffcc66",
+		"#66cccc"
+	]
+}

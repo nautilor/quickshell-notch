@@ -1,0 +1,13 @@
+{
+	"name": "Yousai (collection)",
+	"background": "#F5E7DE",
+	"foreground": "#34302D",
+	"primary": "#4C7399",
+	"secondary": "#4C3226",
+	"tertiary": "#BF9986",
+	"error": "#992E2E",
+	"accents": [
+		"#A67C53",
+		"#D97742"
+	]
+}

@@ -1,0 +1,13 @@
+{
+	"name": "Sex Colors (xcolors.net)",
+	"background": "#000000",
+	"foreground": "#ffffff",
+	"primary": "#435e87",
+	"secondary": "#a6e22e",
+	"tertiary": "#789ec6",
+	"error": "#ff9f95",
+	"accents": [
+		"#fd971f",
+		"#5e7175"
+	]
+}

@@ -1,0 +1,13 @@
+{
+	"name": "Embers (dark) (base16)",
+	"background": "#16130f",
+	"foreground": "#a39a90",
+	"primary": "#6d5782",
+	"secondary": "#57826d",
+	"tertiary": "#82576d",
+	"error": "#826d57",
+	"accents": [
+		"#6d8257",
+		"#576d82"
+	]
+}

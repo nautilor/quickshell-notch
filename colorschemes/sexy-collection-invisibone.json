@@ -1,0 +1,13 @@
+{
+	"name": "Invisibone (collection)",
+	"background": "#232323",
+	"foreground": "#A0A0A0",
+	"primary": "#6095C5",
+	"secondary": "#6D9E3F",
+	"tertiary": "#AC7BDE",
+	"error": "#D370A3",
+	"accents": [
+		"#B58858",
+		"#3BA275"
+	]
+}

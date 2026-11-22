@@ -1,0 +1,13 @@
+{
+	"name": "Tomorrow (dark) (base16)",
+	"background": "#1d1f21",
+	"foreground": "#c5c8c6",
+	"primary": "#81a2be",
+	"secondary": "#b5bd68",
+	"tertiary": "#b294bb",
+	"error": "#cc6666",
+	"accents": [
+		"#f0c674",
+		"#8abeb7"
+	]
+}

@@ -1,0 +1,13 @@
+{
+	"name": "Vacuous 2 (collection)",
+	"background": "#101010",
+	"foreground": "#d2c5bc",
+	"primary": "#356579",
+	"secondary": "#81957c",
+	"tertiary": "#2d2031",
+	"error": "#b91e2e",
+	"accents": [
+		"#f9bb80",
+		"#0b3452"
+	]
+}

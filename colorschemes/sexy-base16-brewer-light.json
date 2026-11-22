@@ -1,0 +1,13 @@
+{
+	"name": "Brewer (light) (base16)",
+	"background": "#fcfdfe",
+	"foreground": "#515253",
+	"primary": "#3182bd",
+	"secondary": "#31a354",
+	"tertiary": "#756bb1",
+	"error": "#e31a1c",
+	"accents": [
+		"#dca060",
+		"#80b1d3"
+	]
+}

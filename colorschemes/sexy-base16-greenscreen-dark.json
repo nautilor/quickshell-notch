@@ -1,0 +1,13 @@
+{
+	"name": "Greenscreen (dark) (base16)",
+	"background": "#001100",
+	"foreground": "#00bb00",
+	"primary": "#009900",
+	"secondary": "#00bb00",
+	"tertiary": "#00bb00",
+	"error": "#007700",
+	"accents": [
+		"#007700",
+		"#005500"
+	]
+}

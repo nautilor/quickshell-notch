@@ -1,0 +1,13 @@
+{
+	"name": "Atelierforest (dark) (base16)",
+	"background": "#1b1918",
+	"foreground": "#a8a19f",
+	"primary": "#407ee7",
+	"secondary": "#5ab738",
+	"tertiary": "#6666ea",
+	"error": "#f22c40",
+	"accents": [
+		"#d5911a",
+		"#00ad9c"
+	]
+}

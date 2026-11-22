@@ -1,0 +1,13 @@
+{
+	"name": "Sweet Love (collection)",
+	"background": "#1F1F1F",
+	"foreground": "#C0B18B",
+	"primary": "#535C5C",
+	"secondary": "#7B8748",
+	"tertiary": "#775759",
+	"error": "#D17B49",
+	"accents": [
+		"#AF865A",
+		"#6D715E"
+	]
+}

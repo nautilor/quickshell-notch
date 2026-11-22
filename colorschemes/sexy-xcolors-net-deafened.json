@@ -1,0 +1,13 @@
+{
+	"name": "Deafened (xcolors.net)",
+	"background": "#000000",
+	"foreground": "#ffffff",
+	"primary": "#5b6976",
+	"secondary": "#68755a",
+	"tertiary": "#755b76",
+	"error": "#755a5b",
+	"accents": [
+		"#756e5a",
+		"#465457"
+	]
+}

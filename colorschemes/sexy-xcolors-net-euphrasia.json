@@ -1,0 +1,13 @@
+{
+	"name": "Euphrasia (xcolors.net)",
+	"background": "#cfcfd9",
+	"foreground": "#1c2027",
+	"primary": "#355c9a",
+	"secondary": "#38912b",
+	"tertiary": "#7c4f9f",
+	"error": "#a62a3e",
+	"accents": [
+		"#b27d12",
+		"#258f8f"
+	]
+}

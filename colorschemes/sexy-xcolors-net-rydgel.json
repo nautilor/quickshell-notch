@@ -1,0 +1,13 @@
+{
+	"name": "Rydgel (xcolors.net)",
+	"background": "#000000",
+	"foreground": "#ffffff",
+	"primary": "#86a2be",
+	"secondary": "#97b26b",
+	"tertiary": "#d9b798",
+	"error": "#bf7979",
+	"accents": [
+		"#cdcdc1",
+		"#a1b5cd"
+	]
+}

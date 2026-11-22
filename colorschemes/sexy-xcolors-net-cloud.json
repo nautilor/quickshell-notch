@@ -1,0 +1,13 @@
+{
+	"name": "Cloud (xcolors.net)",
+	"background": "#000000",
+	"foreground": "#ffffff",
+	"primary": "#654a96",
+	"secondary": "#9c75dd",
+	"tertiary": "#625566",
+	"error": "#d5a8e3",
+	"accents": [
+		"#9898ae",
+		"#a9d1df"
+	]
+}

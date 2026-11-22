@@ -1,0 +1,13 @@
+{
+	"name": "Atelierdune (light) (base16)",
+	"background": "#fefbec",
+	"foreground": "#6e6b5e",
+	"primary": "#6684e1",
+	"secondary": "#60ac39",
+	"tertiary": "#b854d4",
+	"error": "#d73737",
+	"accents": [
+		"#cfb017",
+		"#1fad83"
+	]
+}

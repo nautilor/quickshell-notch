@@ -1,0 +1,13 @@
+{
+	"name": "Marrakesh (light) (base16)",
+	"background": "#faf0a5",
+	"foreground": "#5f5b17",
+	"primary": "#477ca1",
+	"secondary": "#18974e",
+	"tertiary": "#8868b3",
+	"error": "#c35359",
+	"accents": [
+		"#a88339",
+		"#75a738"
+	]
+}

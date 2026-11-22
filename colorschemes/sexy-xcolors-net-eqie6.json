@@ -1,0 +1,13 @@
+{
+	"name": "Eqie6 (xcolors.net)",
+	"background": "#111111",
+	"foreground": "#cccccc",
+	"primary": "#66a9b9",
+	"secondary": "#b7ce42",
+	"tertiary": "#b7416e",
+	"error": "#e84f4f",
+	"accents": [
+		"#fea63c",
+		"#6d878d"
+	]
+}

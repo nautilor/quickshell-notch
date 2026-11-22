@@ -1,0 +1,13 @@
+{
+	"name": "Codeschool (light) (base16)",
+	"background": "#b5d8f6",
+	"foreground": "#2a343a",
+	"primary": "#484d79",
+	"secondary": "#237986",
+	"tertiary": "#c59820",
+	"error": "#2a5491",
+	"accents": [
+		"#a03b1e",
+		"#b02f30"
+	]
+}

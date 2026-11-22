@@ -1,0 +1,13 @@
+{
+	"name": "Isotope (light) (base16)",
+	"background": "#ffffff",
+	"foreground": "#606060",
+	"primary": "#0066ff",
+	"secondary": "#33ff00",
+	"tertiary": "#cc00ff",
+	"error": "#ff0000",
+	"accents": [
+		"#ff0099",
+		"#00ffff"
+	]
+}

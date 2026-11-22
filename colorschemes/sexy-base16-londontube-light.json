@@ -1,0 +1,13 @@
+{
+	"name": "Londontube (light) (base16)",
+	"background": "#ffffff",
+	"foreground": "#5a5758",
+	"primary": "#009ddc",
+	"secondary": "#00853e",
+	"tertiary": "#98005d",
+	"error": "#ee2e24",
+	"accents": [
+		"#ffd204",
+		"#85cebc"
+	]
+}

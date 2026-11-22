@@ -1,0 +1,13 @@
+{
+	"name": "Colorful Colors (xcolors.net)",
+	"background": "#000000",
+	"foreground": "#ffffff",
+	"primary": "#a6e2f0",
+	"secondary": "#a6e25f",
+	"tertiary": "#e85b92",
+	"error": "#ff8eaf",
+	"accents": [
+		"#f8e578",
+		"#5f868f"
+	]
+}

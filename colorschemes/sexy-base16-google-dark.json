@@ -1,0 +1,13 @@
+{
+	"name": "Google (dark) (base16)",
+	"background": "#1d1f21",
+	"foreground": "#c5c8c6",
+	"primary": "#3971ed",
+	"secondary": "#198844",
+	"tertiary": "#a36ac7",
+	"error": "#cc342b",
+	"accents": [
+		"#fba922",
+		"#3971ed"
+	]
+}
