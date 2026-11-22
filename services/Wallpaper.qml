@@ -29,6 +29,7 @@ Singleton {
 
 	function apply(path) {
 		Settings.wallpaper = path;
+		Settings.lockWallpaper = path;
 		show(path);
 		if (needsColors)
 			extract(path);
