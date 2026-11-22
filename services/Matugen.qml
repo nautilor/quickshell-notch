@@ -48,13 +48,21 @@ Singleton {
 		return m;
 	}
 
+	// the scheme's own accent colours, which the script sorts into red/orange/yellow/green/cyan/blue/purple
+	readonly property var schemeHues: {
+		const j = Colorschemes.current ? Colorschemes.current.json : null;
+		if (!j)
+			return [];
+		return [j.error, j.primary, j.secondary, j.tertiary].concat(Array.isArray(j.accents) ? j.accents : []).filter(c => typeof c === "string");
+	}
+
 	readonly property var args: {
 		if (!Settings.matugen)
 			return null;
 		if (Settings.wallpaperColors && Settings.wallpaper !== "")
 			return ["image", Settings.wallpaper, "--prefer", "saturation"];
 		if (Colorschemes.current)
-			return [Quickshell.shellDir + "/scripts/matugen-scheme.py", String(Colorschemes.palette.primary), JSON.stringify(schemeRoles)];
+			return [Quickshell.shellDir + "/scripts/matugen-scheme.py", String(Colorschemes.palette.primary), JSON.stringify(schemeRoles), JSON.stringify(schemeHues)];
 		return ["color", "hex", String(Qt.hsla(Settings.hue, 0.55, 0.62, 1))];
 	}
 	readonly property string key: args ? args.join(" ") : ""
