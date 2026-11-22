@@ -1,0 +1,13 @@
+{
+	"name": "Edge",
+	"background": "#2c2e34",
+	"foreground": "#c5cdd9",
+	"primary": "#6cb6eb",
+	"secondary": "#a1bf78",
+	"tertiary": "#d38aea",
+	"error": "#ec7279",
+	"accents": [
+		"#deb974",
+		"#5dbbc1"
+	]
+}

@@ -1,0 +1,13 @@
+{
+	"name": "Tokyodark",
+	"background": "#11121d",
+	"foreground": "#a0a8cd",
+	"primary": "#7199ee",
+	"secondary": "#95c561",
+	"tertiary": "#a485dd",
+	"error": "#ee6d85",
+	"accents": [
+		"#d7a65f",
+		"#38a89d"
+	]
+}

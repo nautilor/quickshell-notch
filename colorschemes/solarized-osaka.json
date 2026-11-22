@@ -1,0 +1,13 @@
+{
+	"name": "Solarized Osaka",
+	"background": "#001419",
+	"foreground": "#839496",
+	"primary": "#268bd2",
+	"secondary": "#849900",
+	"tertiary": "#d33682",
+	"error": "#db302d",
+	"accents": [
+		"#b28500",
+		"#2aa198"
+	]
+}

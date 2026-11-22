@@ -1,0 +1,13 @@
+{
+	"name": "Nightfox",
+	"background": "#192330",
+	"foreground": "#cdcecf",
+	"primary": "#719cd6",
+	"secondary": "#81b29a",
+	"tertiary": "#9d79d6",
+	"error": "#c94f6d",
+	"accents": [
+		"#dbc074",
+		"#63cdcf"
+	]
+}

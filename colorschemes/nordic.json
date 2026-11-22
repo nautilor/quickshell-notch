@@ -1,0 +1,13 @@
+{
+	"name": "Nordic",
+	"background": "#242933",
+	"foreground": "#c0c8d8",
+	"primary": "#81a1c1",
+	"secondary": "#a3be8c",
+	"tertiary": "#b48ead",
+	"error": "#bf616a",
+	"accents": [
+		"#ebcb8b",
+		"#88c0d0"
+	]
+}

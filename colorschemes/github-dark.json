@@ -1,0 +1,13 @@
+{
+	"name": "GitHub Dark",
+	"background": "#0d1117",
+	"foreground": "#c9d1d9",
+	"primary": "#58a6ff",
+	"secondary": "#3fb950",
+	"tertiary": "#bc8cff",
+	"error": "#ff7b72",
+	"accents": [
+		"#d29922",
+		"#39c5cf"
+	]
+}

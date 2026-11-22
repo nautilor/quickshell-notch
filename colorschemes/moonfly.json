@@ -1,0 +1,13 @@
+{
+	"name": "Moonfly",
+	"background": "#080808",
+	"foreground": "#bdbdbd",
+	"primary": "#80a0ff",
+	"secondary": "#8cc85f",
+	"tertiary": "#cf87e8",
+	"error": "#ff5d5d",
+	"accents": [
+		"#e3c78a",
+		"#79dac8"
+	]
+}

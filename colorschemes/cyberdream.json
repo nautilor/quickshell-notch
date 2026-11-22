@@ -1,0 +1,13 @@
+{
+	"name": "Cyberdream",
+	"background": "#16181a",
+	"foreground": "#ffffff",
+	"primary": "#5ea1ff",
+	"secondary": "#5eff6c",
+	"tertiary": "#ff5ef1",
+	"error": "#ff6e5e",
+	"accents": [
+		"#f1ff5e",
+		"#5ef1ff"
+	]
+}

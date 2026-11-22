@@ -1,0 +1,13 @@
+{
+	"name": "Gruvbox Material",
+	"background": "#282828",
+	"foreground": "#d4be98",
+	"primary": "#7daea3",
+	"secondary": "#a9b665",
+	"tertiary": "#d3869b",
+	"error": "#ea6962",
+	"accents": [
+		"#d8a657",
+		"#89b482"
+	]
+}

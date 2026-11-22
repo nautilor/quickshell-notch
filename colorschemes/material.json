@@ -1,0 +1,13 @@
+{
+	"name": "Material",
+	"background": "#0f111a",
+	"foreground": "#8f93a2",
+	"primary": "#82aaff",
+	"secondary": "#c3e88d",
+	"tertiary": "#c792ea",
+	"error": "#f07178",
+	"accents": [
+		"#ffcb6b",
+		"#89ddff"
+	]
+}

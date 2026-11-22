@@ -1,0 +1,13 @@
+{
+	"name": "Melange",
+	"background": "#292522",
+	"foreground": "#ece1d7",
+	"primary": "#7f91b2",
+	"secondary": "#78997a",
+	"tertiary": "#b380b0",
+	"error": "#d47766",
+	"accents": [
+		"#ebc06d",
+		"#7b9695"
+	]
+}

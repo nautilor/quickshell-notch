@@ -1,0 +1,13 @@
+{
+	"name": "Sonokai",
+	"background": "#2c2e34",
+	"foreground": "#e2e2e3",
+	"primary": "#76cce0",
+	"secondary": "#9ed072",
+	"tertiary": "#b39df3",
+	"error": "#fc5d7c",
+	"accents": [
+		"#e7c664",
+		"#f39660"
+	]
+}
