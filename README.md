@@ -471,3 +471,6 @@ Opened this way the notch stays until you press Escape, click outside, or toggle
 - `scripts/gcal.py`: Google Calendar client.
 - `scripts/matugen-scheme.py`: runs matugen for a colour scheme (accent seeds the tonal colours, the scheme keeps surfaces and text).
 - `docs/screenshots/`: images used above.
+
+## More colorschemes
+You can find more coloschemes in the [quickshell-colorschemes](https://github.com/nautilor/quickshell-notch-colorschemes) repo. Drop the `.json` files into `~/.config/quickshell-notch/colorschemes/` and they appear in Settings → Colour scheme.
