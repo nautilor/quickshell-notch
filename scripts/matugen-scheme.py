@@ -17,6 +17,7 @@ import tempfile
 
 # canonical hues (degrees) of the custom colour slots
 SLOTS = {"red": 355, "orange": 28, "yellow": 50, "green": 100, "cyan": 182, "blue": 215, "purple": 285}
+BORROW_RANGE = 75  # an unmatched slot reuses the scheme colour nearest in hue within this range
 MATCH_RANGE = 36  # max hue distance for a scheme colour to claim a slot
 MIN_SAT = 0.15  # below this a colour is grey and carries no hue
 
@@ -38,7 +39,7 @@ def hue_dist(a, b):
 
 def classify(colors, error=None):
     """Map each slot to a hex: scheme colours where one is close in hue (closest pairs first, one
-    slot per colour), otherwise a colour at the canonical hue with the matched colours' average
+    slot per colour), otherwise the nearest scheme colour, or failing that a colour at the canonical hue with the matched colours' average
     saturation and lightness, so the palette stays coherent (and grey schemes stay grey)."""
     cands = []
     for c in colors:
@@ -73,7 +74,12 @@ def classify(colors, error=None):
     sat = sum(c[1] for c in ref) / len(ref)
     lig = sum(c[2] for c in ref) / len(ref)
     for slot, hue in SLOTS.items():
-        out.setdefault(slot, to_hex(hue, sat, lig))
+        if slot in out:
+            continue
+        # prefer a colour the scheme really has (gruvbox has no vivid blue or purple, so
+        # inventing one would look foreign) and only synthesize when nothing is near
+        near = min(coloured, key=lambda c: hue_dist(c[1], hue))
+        out[slot] = near[0] if hue_dist(near[1], hue) <= BORROW_RANGE else to_hex(hue, sat, lig)
     return out
 
 
