@@ -27,7 +27,23 @@ Singleton {
 			scan.running = true;
 	}
 
+	readonly property string bundledDir: Quickshell.shellDir + "/wallpapers"
+	readonly property string userDir: Settings.configDir + "/wallpapers"
+	property string schemePending: ""
+
+	// wallpaper for a colour scheme: <id>.(jpg|jpeg|png|webp) in ~/.config/quickshell-notch/wallpapers/ (wins)
+	// or in the bundled wallpapers/ folder. Skipped when a custom wallpaper was picked
+	function applyScheme(id) {
+		if (id === "" || !Settings.schemeWallpaper || Settings.wallpaperCustom)
+			return;
+		schemePending = id;
+		resolve.running = false;
+		resolve.running = true;
+	}
+
+	// picked by hand: from now on colour schemes leave it alone until "Match wallpaper to scheme" is toggled again
 	function apply(path) {
+		Settings.wallpaperCustom = true;
 		Settings.wallpaper = path;
 		Settings.lockWallpaper = path;
 		show(path);
@@ -156,6 +172,23 @@ Singleton {
 			if (root.pending !== root.started) {
 				root.started = root.pending;
 				running = true;
+			}
+		}
+	}
+
+	Process {
+		id: resolve
+		command: ["sh", "-c", 'for d in "$2" "$3"; do for e in jpg jpeg png webp; do [ -f "$d/$1.$e" ] && { echo "$d/$1.$e"; exit 0; }; done; done', "sh", root.schemePending, root.userDir, root.bundledDir]
+		stdout: StdioCollector {
+			onStreamFinished: {
+				const path = text.trim();
+				if (path === "" || Settings.wallpaperCustom || Settings.colorscheme !== root.schemePending)
+					return;
+				Settings.wallpaper = path;
+				Settings.lockWallpaper = path;
+				root.show(path);
+				if (root.needsColors)
+					root.extract(path);
 			}
 		}
 	}

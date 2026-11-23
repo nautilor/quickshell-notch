@@ -472,5 +472,8 @@ Opened this way the notch stays until you press Escape, click outside, or toggle
 - `scripts/matugen-scheme.py`: runs matugen for a colour scheme (accent seeds the tonal colours, the scheme keeps surfaces and text).
 - `docs/screenshots/`: images used above.
 
+## Scheme wallpapers
+`wallpapers/<scheme id>.jpg` (or `.jpeg`/`.png`/`.webp`; also looked up in `~/.config/quickshell-notch/wallpapers/`, which wins) is applied when you pick that colour scheme (Settings → Wallpaper → "Wallpaper follows colour scheme"). Choosing a wallpaper yourself makes it custom: schemes leave it alone until you toggle the option again. Add your own by dropping a `<id>.jpg` into `wallpapers/`.
+
 ## More colorschemes
 You can find more coloschemes in the [quickshell-colorschemes](https://github.com/nautilor/quickshell-notch-colorschemes) repo. Drop the `.json` files into `~/.config/quickshell-notch/colorschemes/` and they appear in Settings → Colour scheme.

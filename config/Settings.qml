@@ -61,6 +61,8 @@ Singleton {
 	property alias dockTintContrast: adapter.dockTintContrast
 	property alias wallpaper: adapter.wallpaper
 	property alias wallpaperColors: adapter.wallpaperColors
+	property alias schemeWallpaper: adapter.schemeWallpaper
+	property alias wallpaperCustom: adapter.wallpaperCustom
 	property alias wallpaperTintBg: adapter.wallpaperTintBg
 	property alias matugen: adapter.matugen
 	property alias recordDir: adapter.recordDir
@@ -134,6 +136,10 @@ Singleton {
 			// wallpaper chosen from ~/Pictures/Wallpapers; with wallpaperColors the theme is generated from it
 			property string wallpaper: ""
 			property bool wallpaperColors: false
+			// picking a colour scheme also sets its bundled wallpaper (wallpapers/<scheme id>.jpg), unless wallpaperCustom
+			property bool schemeWallpaper: true
+			// the current wallpaper was picked by hand: colour scheme changes leave it alone
+			property bool wallpaperCustom: false
 			// with wallpaperColors: tint the near-black background with the wallpaper colour
 			property bool wallpaperTintBg: false
 			// run matugen (accent / colour scheme / wallpaper as the source) whenever the theme changes

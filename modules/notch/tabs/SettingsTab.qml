@@ -402,7 +402,10 @@ Item {
 								MouseArea {
 									anchors.fill: parent
 									cursorShape: Qt.PointingHandCursor
-									onClicked: Settings.colorscheme = chip.modelData.id
+									onClicked: {
+										Settings.colorscheme = chip.modelData.id;
+										Wallpaper.applyScheme(chip.modelData.id);
+									}
 								}
 							}
 						}
@@ -903,6 +906,19 @@ Item {
 
 				SectionLabel {
 					text: "WALLPAPER"
+				}
+				SettingRow {
+					title: "Wallpaper follows colour scheme"
+					subtitle: Settings.wallpaperCustom ? "Custom wallpaper picked: scheme changes leave it alone. Toggle to go back to the scheme's own" : "Picking a colour scheme also sets its bundled wallpaper. Picking one below makes it custom"
+					Switch {
+						checked: Settings.schemeWallpaper && !Settings.wallpaperCustom
+						onToggled: v => {
+							Settings.schemeWallpaper = v;
+							Settings.wallpaperCustom = false;
+							if (v)
+								Wallpaper.applyScheme(Settings.colorscheme);
+						}
+					}
 				}
 				SettingRow {
 					title: "Match colours to wallpaper"

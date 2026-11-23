@@ -26,3 +26,6 @@ quickshell:
   fonts:
     source: ./fonts/
     destination: ~/.config/quickshell/fonts/
+  wallappers:
+    source: ./wallpapers/
+    destination: ~/.config/quickshell/wallpapers/
