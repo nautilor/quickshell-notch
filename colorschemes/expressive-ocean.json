@@ -1,0 +1,96 @@
+{
+	"name": "Expressive Ocean",
+	"background": "#051119",
+	"foreground": "#dfeaf1",
+	"primary": "#60c7fe",
+	"secondary": "#60dbd4",
+	"tertiary": "#d8a5fe",
+	"error": "#ffb4ab",
+	"accents": [
+		"#f2d855",
+		"#fea760",
+		"#81e591",
+		"#76e2e7",
+		"#8eb8fe",
+		"#fc9ac9"
+	],
+	"roles_source": "original: Material 3 Expressive inspired (OKLCH tonal palette, hue 235)",
+	"roles": {
+		"attribute": "#fea760",
+		"boolean": {
+			"fg": "#fea760",
+			"bold": true
+		},
+		"comment": {
+			"fg": "#617886",
+			"italic": true
+		},
+		"conditional": {
+			"fg": "#60c7fe",
+			"bold": true
+		},
+		"constant": "#fea760",
+		"constant_builtin": {
+			"fg": "#fea760",
+			"bold": true
+		},
+		"constructor": "#d8a5fe",
+		"exception": "#ffb4ab",
+		"function": "#60dbd4",
+		"function_builtin": {
+			"fg": "#60dbd4",
+			"bold": true
+		},
+		"function_call": "#60dbd4",
+		"keyword": {
+			"fg": "#60c7fe",
+			"bold": true
+		},
+		"keyword_function": {
+			"fg": "#60c7fe",
+			"bold": true
+		},
+		"keyword_import": "#d8a5fe",
+		"keyword_operator": "#60c7fe",
+		"keyword_return": {
+			"fg": "#60c7fe",
+			"bold": true
+		},
+		"label": "#f2d855",
+		"loop": {
+			"fg": "#60c7fe",
+			"bold": true
+		},
+		"macro": "#fc9ac9",
+		"method": "#60dbd4",
+		"method_call": "#60dbd4",
+		"module": "#f2d855",
+		"number": "#fea760",
+		"operator": "#99aebb",
+		"parameter": {
+			"fg": "#b2e3df",
+			"italic": true
+		},
+		"preproc": "#fc9ac9",
+		"property": "#76e2e7",
+		"punctuation_bracket": "#99aebb",
+		"punctuation_delimiter": "#99aebb",
+		"punctuation_special": "#60c7fe",
+		"regexp": "#76e2e7",
+		"string": "#81e591",
+		"string_escape": "#76e2e7",
+		"tag": "#60c7fe",
+		"tag_attribute": "#fea760",
+		"tag_delimiter": "#99aebb",
+		"type": "#d8a5fe",
+		"type_builtin": {
+			"fg": "#d8a5fe",
+			"italic": true
+		},
+		"variable": "#dfeaf1",
+		"variable_builtin": {
+			"fg": "#60c7fe",
+			"italic": true
+		}
+	}
+}

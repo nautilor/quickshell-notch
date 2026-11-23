@@ -1,0 +1,96 @@
+{
+	"name": "Expressive Lime",
+	"background": "#0c1106",
+	"foreground": "#e5eadf",
+	"primary": "#9cce4f",
+	"secondary": "#e7be6d",
+	"tertiary": "#13d6e4",
+	"error": "#ffb4ab",
+	"accents": [
+		"#f2d855",
+		"#fea760",
+		"#81e591",
+		"#76e2e7",
+		"#8eb8fe",
+		"#fc9ac9"
+	],
+	"roles_source": "original: Material 3 Expressive inspired (OKLCH tonal palette, hue 128)",
+	"roles": {
+		"attribute": "#fea760",
+		"boolean": {
+			"fg": "#fea760",
+			"bold": true
+		},
+		"comment": {
+			"fg": "#6e7963",
+			"italic": true
+		},
+		"conditional": {
+			"fg": "#9cce4f",
+			"bold": true
+		},
+		"constant": "#fea760",
+		"constant_builtin": {
+			"fg": "#fea760",
+			"bold": true
+		},
+		"constructor": "#13d6e4",
+		"exception": "#ffb4ab",
+		"function": "#e7be6d",
+		"function_builtin": {
+			"fg": "#e7be6d",
+			"bold": true
+		},
+		"function_call": "#e7be6d",
+		"keyword": {
+			"fg": "#9cce4f",
+			"bold": true
+		},
+		"keyword_function": {
+			"fg": "#9cce4f",
+			"bold": true
+		},
+		"keyword_import": "#13d6e4",
+		"keyword_operator": "#9cce4f",
+		"keyword_return": {
+			"fg": "#9cce4f",
+			"bold": true
+		},
+		"label": "#f2d855",
+		"loop": {
+			"fg": "#9cce4f",
+			"bold": true
+		},
+		"macro": "#fc9ac9",
+		"method": "#e7be6d",
+		"method_call": "#e7be6d",
+		"module": "#f2d855",
+		"number": "#fea760",
+		"operator": "#a5af9b",
+		"parameter": {
+			"fg": "#e8d5b3",
+			"italic": true
+		},
+		"preproc": "#fc9ac9",
+		"property": "#76e2e7",
+		"punctuation_bracket": "#a5af9b",
+		"punctuation_delimiter": "#a5af9b",
+		"punctuation_special": "#9cce4f",
+		"regexp": "#76e2e7",
+		"string": "#81e591",
+		"string_escape": "#76e2e7",
+		"tag": "#9cce4f",
+		"tag_attribute": "#fea760",
+		"tag_delimiter": "#a5af9b",
+		"type": "#13d6e4",
+		"type_builtin": {
+			"fg": "#13d6e4",
+			"italic": true
+		},
+		"variable": "#e5eadf",
+		"variable_builtin": {
+			"fg": "#9cce4f",
+			"italic": true
+		}
+	}
+}

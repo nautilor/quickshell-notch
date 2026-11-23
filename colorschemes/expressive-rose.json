@@ -1,0 +1,96 @@
+{
+	"name": "Expressive Rose",
+	"background": "#180b0f",
+	"foreground": "#f1e4e8",
+	"primary": "#fd96ba",
+	"secondary": "#ddaff7",
+	"tertiary": "#f4ae4a",
+	"error": "#ffb4ab",
+	"accents": [
+		"#f2d855",
+		"#fea760",
+		"#81e591",
+		"#76e2e7",
+		"#8eb8fe",
+		"#fc9ac9"
+	],
+	"roles_source": "original: Material 3 Expressive inspired (OKLCH tonal palette, hue 358)",
+	"roles": {
+		"attribute": "#fea760",
+		"boolean": {
+			"fg": "#fea760",
+			"bold": true
+		},
+		"comment": {
+			"fg": "#866c74",
+			"italic": true
+		},
+		"conditional": {
+			"fg": "#fd96ba",
+			"bold": true
+		},
+		"constant": "#fea760",
+		"constant_builtin": {
+			"fg": "#fea760",
+			"bold": true
+		},
+		"constructor": "#f4ae4a",
+		"exception": "#ffb4ab",
+		"function": "#ddaff7",
+		"function_builtin": {
+			"fg": "#ddaff7",
+			"bold": true
+		},
+		"function_call": "#ddaff7",
+		"keyword": {
+			"fg": "#fd96ba",
+			"bold": true
+		},
+		"keyword_function": {
+			"fg": "#fd96ba",
+			"bold": true
+		},
+		"keyword_import": "#f4ae4a",
+		"keyword_operator": "#fd96ba",
+		"keyword_return": {
+			"fg": "#fd96ba",
+			"bold": true
+		},
+		"label": "#f2d855",
+		"loop": {
+			"fg": "#fd96ba",
+			"bold": true
+		},
+		"macro": "#fc9ac9",
+		"method": "#ddaff7",
+		"method_call": "#ddaff7",
+		"module": "#f2d855",
+		"number": "#fea760",
+		"operator": "#bca3ab",
+		"parameter": {
+			"fg": "#e3cef0",
+			"italic": true
+		},
+		"preproc": "#fc9ac9",
+		"property": "#76e2e7",
+		"punctuation_bracket": "#bca3ab",
+		"punctuation_delimiter": "#bca3ab",
+		"punctuation_special": "#fd96ba",
+		"regexp": "#76e2e7",
+		"string": "#81e591",
+		"string_escape": "#76e2e7",
+		"tag": "#fd96ba",
+		"tag_attribute": "#fea760",
+		"tag_delimiter": "#bca3ab",
+		"type": "#f4ae4a",
+		"type_builtin": {
+			"fg": "#f4ae4a",
+			"italic": true
+		},
+		"variable": "#f1e4e8",
+		"variable_builtin": {
+			"fg": "#fd96ba",
+			"italic": true
+		}
+	}
+}

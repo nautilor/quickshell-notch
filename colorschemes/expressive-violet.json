@@ -1,0 +1,96 @@
+{
+	"name": "Expressive Violet",
+	"background": "#110d19",
+	"foreground": "#e9e6f1",
+	"primary": "#c7a8fe",
+	"secondary": "#9dc7fe",
+	"tertiary": "#fe9fa6",
+	"error": "#ffb4ab",
+	"accents": [
+		"#f2d855",
+		"#fea760",
+		"#81e591",
+		"#76e2e7",
+		"#8eb8fe",
+		"#fc9ac9"
+	],
+	"roles_source": "original: Material 3 Expressive inspired (OKLCH tonal palette, hue 300)",
+	"roles": {
+		"attribute": "#fea760",
+		"boolean": {
+			"fg": "#fea760",
+			"bold": true
+		},
+		"comment": {
+			"fg": "#777086",
+			"italic": true
+		},
+		"conditional": {
+			"fg": "#c7a8fe",
+			"bold": true
+		},
+		"constant": "#fea760",
+		"constant_builtin": {
+			"fg": "#fea760",
+			"bold": true
+		},
+		"constructor": "#fe9fa6",
+		"exception": "#ffb4ab",
+		"function": "#9dc7fe",
+		"function_builtin": {
+			"fg": "#9dc7fe",
+			"bold": true
+		},
+		"function_call": "#9dc7fe",
+		"keyword": {
+			"fg": "#c7a8fe",
+			"bold": true
+		},
+		"keyword_function": {
+			"fg": "#c7a8fe",
+			"bold": true
+		},
+		"keyword_import": "#fe9fa6",
+		"keyword_operator": "#c7a8fe",
+		"keyword_return": {
+			"fg": "#c7a8fe",
+			"bold": true
+		},
+		"label": "#f2d855",
+		"loop": {
+			"fg": "#c7a8fe",
+			"bold": true
+		},
+		"macro": "#fc9ac9",
+		"method": "#9dc7fe",
+		"method_call": "#9dc7fe",
+		"module": "#f2d855",
+		"number": "#fea760",
+		"operator": "#ada7bb",
+		"parameter": {
+			"fg": "#c2daf9",
+			"italic": true
+		},
+		"preproc": "#fc9ac9",
+		"property": "#76e2e7",
+		"punctuation_bracket": "#ada7bb",
+		"punctuation_delimiter": "#ada7bb",
+		"punctuation_special": "#c7a8fe",
+		"regexp": "#76e2e7",
+		"string": "#81e591",
+		"string_escape": "#76e2e7",
+		"tag": "#c7a8fe",
+		"tag_attribute": "#fea760",
+		"tag_delimiter": "#ada7bb",
+		"type": "#fe9fa6",
+		"type_builtin": {
+			"fg": "#fe9fa6",
+			"italic": true
+		},
+		"variable": "#e9e6f1",
+		"variable_builtin": {
+			"fg": "#c7a8fe",
+			"italic": true
+		}
+	}
+}

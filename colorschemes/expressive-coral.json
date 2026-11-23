@@ -1,0 +1,96 @@
+{
+	"name": "Expressive Coral",
+	"background": "#190b09",
+	"foreground": "#f2e4e2",
+	"primary": "#fd9d8a",
+	"secondary": "#f9a7d2",
+	"tertiary": "#c8c34c",
+	"error": "#ffb4ab",
+	"accents": [
+		"#f2d855",
+		"#fea760",
+		"#81e591",
+		"#76e2e7",
+		"#8eb8fe",
+		"#fc9ac9"
+	],
+	"roles_source": "original: Material 3 Expressive inspired (OKLCH tonal palette, hue 32)",
+	"roles": {
+		"attribute": "#fea760",
+		"boolean": {
+			"fg": "#fea760",
+			"bold": true
+		},
+		"comment": {
+			"fg": "#886d68",
+			"italic": true
+		},
+		"conditional": {
+			"fg": "#fd9d8a",
+			"bold": true
+		},
+		"constant": "#fea760",
+		"constant_builtin": {
+			"fg": "#fea760",
+			"bold": true
+		},
+		"constructor": "#c8c34c",
+		"exception": "#ffb4ab",
+		"function": "#f9a7d2",
+		"function_builtin": {
+			"fg": "#f9a7d2",
+			"bold": true
+		},
+		"function_call": "#f9a7d2",
+		"keyword": {
+			"fg": "#fd9d8a",
+			"bold": true
+		},
+		"keyword_function": {
+			"fg": "#fd9d8a",
+			"bold": true
+		},
+		"keyword_import": "#c8c34c",
+		"keyword_operator": "#fd9d8a",
+		"keyword_return": {
+			"fg": "#fd9d8a",
+			"bold": true
+		},
+		"label": "#f2d855",
+		"loop": {
+			"fg": "#fd9d8a",
+			"bold": true
+		},
+		"macro": "#fc9ac9",
+		"method": "#f9a7d2",
+		"method_call": "#f9a7d2",
+		"module": "#f2d855",
+		"number": "#fea760",
+		"operator": "#bda49f",
+		"parameter": {
+			"fg": "#f2cbde",
+			"italic": true
+		},
+		"preproc": "#fc9ac9",
+		"property": "#76e2e7",
+		"punctuation_bracket": "#bda49f",
+		"punctuation_delimiter": "#bda49f",
+		"punctuation_special": "#fd9d8a",
+		"regexp": "#76e2e7",
+		"string": "#81e591",
+		"string_escape": "#76e2e7",
+		"tag": "#fd9d8a",
+		"tag_attribute": "#fea760",
+		"tag_delimiter": "#bda49f",
+		"type": "#c8c34c",
+		"type_builtin": {
+			"fg": "#c8c34c",
+			"italic": true
+		},
+		"variable": "#f2e4e2",
+		"variable_builtin": {
+			"fg": "#fd9d8a",
+			"italic": true
+		}
+	}
+}
