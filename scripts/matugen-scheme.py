@@ -48,11 +48,16 @@ def classify(colors, error=None):
     if not cands:
         return {}
     coloured = [c for c in cands if c[2] >= MIN_SAT] or cands
-    pairs = sorted(
-        (hue_dist(c[1], hue), c[0], slot)
-        for c in coloured for slot, hue in SLOTS.items()
-        if hue_dist(c[1], hue) <= MATCH_RANGE
-    )
+    # closest hue first; very pale colours rank behind vivid ones of similar hue
+    # (tokyo night's #b4f9f8 must not beat its #2ac3de for cyan)
+    def pairs_for(slots, pool):
+        return sorted(
+            (hue_dist(c[1], hue) + 250 * max(0, c[3] - 0.78), c[0], slot)
+            for c in pool for slot, hue in slots.items()
+            if hue_dist(c[1], hue) <= MATCH_RANGE
+        )
+
+    pairs = pairs_for(SLOTS, coloured)
     out, used = {}, set()
     # the scheme's error colour is its red, even when another colour is a hair closer
     if error and error.lower() in (c[0] for c in coloured):
