@@ -17,6 +17,8 @@ Singleton {
 	// instead of being tinted by the accent
 	readonly property var schemeRoles: {
 		const p = Colorschemes.palette;
+		if (!p)
+			return ({});
 		const m = {
 			background: p.notch,
 			surface: p.notch,
@@ -61,7 +63,7 @@ Singleton {
 			return null;
 		if (Settings.wallpaperColors && Settings.wallpaper !== "")
 			return ["image", Settings.wallpaper, "--prefer", "saturation"];
-		if (Colorschemes.current)
+		if (Colorschemes.current && Colorschemes.palette)
 			return [Quickshell.shellDir + "/scripts/matugen-scheme.py", String(Colorschemes.palette.primary), JSON.stringify(schemeRoles), JSON.stringify(schemeHues), JSON.stringify(Colorschemes.current.json.roles ?? {})];
 		return ["color", "hex", String(Qt.hsla(Settings.hue, 0.55, 0.62, 1))];
 	}
