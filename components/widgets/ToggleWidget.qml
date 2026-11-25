@@ -13,6 +13,10 @@ Item {
 	readonly property var c: WidgetTypes.resolve("toggle", cfg)
 	readonly property string kind: c.kind
 
+	// wide enough for a chevron beside the label
+	readonly property bool canConnect: kind === "wifi" || kind === "bluetooth"
+	readonly property bool hasArrow: canConnect && width >= 150
+
 	Btn {
 		anchors.fill: parent
 		vertical: true
@@ -25,5 +29,26 @@ Item {
 		toggled: Toggles.on(root.kind)
 		enabled: !root.editing
 		onClicked: Toggles.toggle(root.kind)
+		// no room for the arrow: right click opens the picker instead
+		onRightClicked: if (root.canConnect)
+			HomeLayout.connect = root.kind
+	}
+
+	// opens the connect panel
+	MouseArea {
+		visible: root.hasArrow
+		enabled: !root.editing
+		width: 40
+		anchors.top: parent.top
+		anchors.bottom: parent.bottom
+		anchors.right: parent.right
+		cursorShape: Qt.PointingHandCursor
+		onClicked: HomeLayout.connect = root.kind
+		Icon {
+			anchors.centerIn: parent
+			name: "chevron_right"
+			size: 22
+			color: Toggles.on(root.kind) ? Theme.primaryFg : Theme.surfaceVariantFg
+		}
 	}
 }

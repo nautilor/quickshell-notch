@@ -314,6 +314,25 @@ Item {
 		onClosed: HomeLayout.trayItem = null
 	}
 
+	// click outside the picker closes it
+	MouseArea {
+		visible: HomeLayout.connect !== "" && !HomeLayout.editing
+		anchors.fill: parent
+		z: 19
+		onClicked: HomeLayout.connect = ""
+	}
+
+	ConnectPanel {
+		visible: HomeLayout.connect !== "" && !HomeLayout.editing
+		anchors.top: parent.top
+		anchors.bottom: parent.bottom
+		anchors.right: parent.right
+		width: parent.width / 2
+		z: 20
+		kind: HomeLayout.connect === "" ? "wifi" : HomeLayout.connect
+		onClosed: HomeLayout.connect = ""
+	}
+
 	WidgetAddPanel {
 		visible: HomeLayout.editing && HomeLayout.panel === "add"
 		anchors.fill: parent
@@ -331,5 +350,6 @@ Item {
 		HomeLayout.editing = false;
 		HomeLayout.panel = "";
 		HomeLayout.trayItem = null;
+		HomeLayout.connect = "";
 	}
 }

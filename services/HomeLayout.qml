@@ -20,6 +20,7 @@ Singleton {
 	property string panel: ""        // "" | "add" | "config"
 	property string selected: ""     // widget being configured
 	property var trayItem: null      // tray item whose menu is open
+	property string connect: ""      // "wifi" | "bluetooth" while its picker is open
 	property string message: ""
 
 	property int usedRows: 4

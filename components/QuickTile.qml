@@ -11,7 +11,11 @@ Item {
 	property string subtitle
 	property bool toggled: false
 
+	// shows a chevron on the right that opens the details
+	property bool arrow: false
+
 	signal clicked
+	signal arrowClicked
 
 	implicitHeight: 72
 
@@ -72,7 +76,7 @@ Item {
 		anchors.left: chip.right
 		anchors.leftMargin: 10
 		anchors.right: parent.right
-		anchors.rightMargin: 14
+		anchors.rightMargin: root.arrow ? 38 : 14
 		anchors.verticalCenter: parent.verticalCenter
 		Txt {
 			width: parent.width
@@ -105,5 +109,21 @@ Item {
 		hoverEnabled: true
 		cursorShape: Qt.PointingHandCursor
 		onClicked: root.clicked()
+	}
+
+	MouseArea {
+		visible: root.arrow
+		width: 36
+		anchors.top: parent.top
+		anchors.bottom: parent.bottom
+		anchors.right: parent.right
+		cursorShape: Qt.PointingHandCursor
+		onClicked: root.arrowClicked()
+		Icon {
+			anchors.centerIn: parent
+			name: "chevron_right"
+			size: 22
+			color: root.toggled ? Theme.primaryContainerFg : Theme.surfaceVariantFg
+		}
 	}
 }

@@ -87,6 +87,8 @@ Item {
 						subtitle: Toggles.on(modelData) ? "On" : "Off"
 						toggled: Toggles.on(modelData)
 						onClicked: Toggles.toggle(modelData)
+						arrow: modelData === "wifi" || modelData === "bluetooth"
+						onArrowClicked: HomeLayout.connect = modelData
 					}
 				}
 				TrayPill {
