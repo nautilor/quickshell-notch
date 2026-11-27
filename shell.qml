@@ -4,6 +4,7 @@ import qs.modules.notch
 import qs.modules.corner
 import qs.modules.dock
 import qs.modules.lock
+import qs.modules.net
 import qs.services
 import qs.config
 
@@ -30,6 +31,12 @@ ShellRoot {
 		model: !(Settings.fullBar && !Settings.autohide) ? [] : Settings.allScreens ? Quickshell.screens : [Quickshell.screens.find(s => s.name === Settings.screenName) ?? Quickshell.screens[0]]
 
 		BarReserve {}
+	}
+
+	Variants {
+		model: Quickshell.screens
+
+		NetWindow {}
 	}
 
 	Variants {
@@ -105,6 +112,13 @@ ShellRoot {
 		// lock the session (for hypridle's lock_cmd and keybinds)
 		function lock(): void {
 			LockCtl.lock();
+		}
+		// centered Wi-Fi / Bluetooth settings
+		function network(): void {
+			NetCtl.toggle("wifi");
+		}
+		function bluetooth(): void {
+			NetCtl.toggle("bluetooth");
 		}
 		function dnd(): void {
 			Settings.dnd = !Settings.dnd;

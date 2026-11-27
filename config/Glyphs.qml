@@ -7,6 +7,14 @@ import Quickshell
 Singleton {
 	readonly property var codes: ({
 		"add": 0xf0415,
+		"vpn": 0xf0582,
+		"lan": 0xf0317,
+		"info": 0xf02fc,
+		"access_point": 0xf0003,
+		"open_in_new": 0xf03cc,
+		"bluetooth_connect": 0xf00b1,
+		"block": 0xf073a,
+		"send": 0xf048a,
 		"videocam": 0xf0567,
 		"stop": 0xf04db,
 		"fiber_manual_record": 0xf044a,

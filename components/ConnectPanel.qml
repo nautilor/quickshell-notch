@@ -155,6 +155,17 @@ Rectangle {
 				font.pixelSize: 11
 				color: Theme.surfaceVariantFg
 			}
+			Btn {
+				icon: "open_in_new"
+				variant: 2
+				iconSize: 18
+				implicitWidth: 34
+				implicitHeight: 34
+				onClicked: {
+					NetCtl.show(root.kind);
+					root.closed();
+				}
+			}
 			Switch {
 				checked: Toggles.on(root.kind)
 				onToggled: Toggles.toggle(root.kind)
